@@ -5,14 +5,23 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<VBox xmlns:fx="http://javafx.com/fxml/1" id="AnchorPane" prefHeight="400.0" prefWidth="600.0" fx:controller="controller.CreateJournalController" spacing = "10" alignment = "CENTER">
-    <Label text = "Create Journal"/>
-    <HBox alignment = "CENTER">
-        <Label text = "Name of Journal: " />
-        <TextField fx:id="journalName" />
-    </HBox>
-    <Button defaultButton="true" onAction="#handleCreateJournal" text = "Create" /> 
-    <Hyperlink fx:id="Back" layoutY="24.0" onAction= "#processBack" text="Back"/>
-    <Label fx:id="errorMessage" textFill = "red"/>
+<VBox id="AnchorPane" alignment="CENTER" prefHeight="400.0" prefWidth="600.0" spacing="10.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="controller.CreateJournalController">
+  <Label text="Create Journal">
+    <font>
+      <Font name="System Bold" size="24.0" />
+    </font>
+  </Label>
+  <HBox alignment="CENTER">
+    <Label text="Journal Name:" />
+    <TextField fx:id="journalName" />
+  </HBox>
+  <Button defaultButton="true" onAction="#handleCreateJournal" text="Create" />
+  <Hyperlink fx:id="Back" onAction="#processBack" text="Go Back" textFill="RED">
+    <font>
+      <Font name="System Bold" size="12.0" />
+    </font>
+  </Hyperlink>
+  <Label fx:id="errorMessage" textFill="RED" />
 </VBox>

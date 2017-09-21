@@ -10,19 +10,23 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<VBox xmlns:fx="http://javafx.com/fxml/1" id="AnchorPane" prefHeight="400.0" prefWidth="600.0" fx:controller="controller.CreateEntryController" spacing = "10" alignment = "CENTER">
-    <Label id = "title" text = "Create Entry"/>
-    <HBox alignment = "CENTER">
-        <Label text = "Name of Entry: " />
-        <TextField fx:id="entryName" />
-    </HBox>
-    <HBox alignment = "CENTER">
-        <Label text = "Contents: "/>
-        <TextArea fx:id="entryContents" />
-    </HBox>
-    <Button defaultButton="true" onAction="#handleCreateEntry" text = "Create" /> 
-    <Hyperlink fx:id="Back" layoutY="24.0" onAction= "#processBack" text="Back"/>
-    <stylesheets>
+<VBox id="AnchorPane" alignment="CENTER" prefHeight="400.0" prefWidth="600.0" spacing="10.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="controller.CreateEntryController">
+  <Label id="title" text="Create Entry" />
+  <HBox alignment="CENTER">
+    <Label text="Name of Entry: " />
+    <TextField fx:id="entryName" />
+  </HBox>
+  <HBox alignment="CENTER">
+    <Label text="Contents: " />
+    <TextArea fx:id="entryContents" />
+  </HBox>
+  <Button defaultButton="true" onAction="#handleCreateEntry" text="Create" />
+  <Hyperlink fx:id="Back" onAction="#processBack" text="Go Back" textFill="RED">
+    <font>
+      <Font name="System Bold" size="12.0" />
+    </font>
+  </Hyperlink>
+  <stylesheets>
     <URL value="@Login.css" />
-    </stylesheets>
+  </stylesheets>
 </VBox>
