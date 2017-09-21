@@ -22,7 +22,7 @@ public class CreateEntryController implements Initializable{
     //Test
     @FXML TextField entryName;
     @FXML TextArea entryContents;
-    
+    //further testing
     public void handleCreateEntry(){
         Entry entry = new Entry(entryName.getText(), entryContents.getText());
         JournalTest1.getInstance().getJournal().addEntry(entry);
