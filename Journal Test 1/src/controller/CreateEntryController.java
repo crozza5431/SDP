@@ -14,7 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import journal.test.pkg1.JournalTest1;
 import model.Entry;
-
+//test
 /**
  *
  * @author User
