@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1" id="AnchorPane" prefHeight="400.0" prefWidth="600.0" fx:controller="controller.CreateJournalController" spacing = "10" alignment = "CENTER">
+    <Label text = "Create Journal"/>
+    <HBox alignment = "CENTER">
+        <Label text = "Name of Journal: " />
+        <TextField fx:id="journalName" />
+    </HBox>
+    <Button defaultButton="true" onAction="#handleCreateJournal" text = "Create" /> 
+    <Hyperlink fx:id="Back" layoutY="24.0" onAction= "#processBack" text="Back"/>
+    <Label fx:id="errorMessage" textFill = "red"/>
+</VBox>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+ 
+<VBox id="VBox" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.JournalController">
+    <HBox alignment="CENTER" >
+        <Label id="title" fx:id="userJournal" text="${controller.journal.name}"/>
+        <Label id="title" text="'s Entries" />
+    </HBox>
+    <Hyperlink fx:id="logout" layoutY="24.0" onAction= "#processLogout" text="logout" AnchorPane.rightAnchor="52.0" />
+    <TableView fx:id="entryTable">
+        <columns>
+            <TableColumn text = "Entry Name" fx:id="nameClm"/>
+            <TableColumn text = "Summary" fx:id="summaryClm"/>
+            <TableColumn text = "Date Created" fx:id="dateClm" />
+        </columns>
+    </TableView>
+    <Button text="Create Entry" onAction="#handleCreateEntry" />
+    <Hyperlink fx:id="Back" layoutY="24.0" onAction= "#processBack" text="Back"/>
+    <stylesheets>
+    <URL value="@Login.css" />
+    </stylesheets>
+</VBox>

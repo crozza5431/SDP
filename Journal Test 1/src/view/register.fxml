@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1" id="AnchorPane" prefHeight="400.0" prefWidth="600.0" fx:controller="controller.RegisterController" spacing = "10" alignment = "CENTER">
+    <Label id="title" text = "New user registration"/>
+    <HBox alignment = "CENTER">
+        <Label text = "*Username: " />
+        <TextField fx:id="username" />
+    </HBox>
+    <HBox alignment = "CENTER">
+        <Label text = "*Password: " />
+        <PasswordField fx:id="password" />
+    </HBox>
+    <HBox alignment = "CENTER">
+        <Label text = "*Confirm Password: " />
+        <PasswordField fx:id="confirmedPassword" />
+    </HBox>
+    <Button fx:id="register" defaultButton="true" onAction="#handleRegister" text = "Register" /> 
+    <Hyperlink fx:id="Back" layoutY="24.0" onAction= "#processBack" text="Back"/>
+    <Label fx:id="errorMessage" textFill = "red"/>
+    <stylesheets>
+    <URL value="@Login.css" />
+    </stylesheets>
+</VBox>
