@@ -18,7 +18,7 @@ import model.Entry;
  * @author User
  */
 public class CreateEntryController implements Initializable{
-    
+    //Test
     @FXML TextField entryName;
     @FXML TextArea entryContents;
     
