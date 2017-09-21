@@ -4,6 +4,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+//dragonphlegm test
 package controller;
 //ass
 
@@ -14,7 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import journal.test.pkg1.JournalTest1;
 import model.Entry;
-
+//test
 /**
  *
  * @author User
@@ -23,7 +24,7 @@ public class CreateEntryController implements Initializable{
     //Test
     @FXML TextField entryName;
     @FXML TextArea entryContents;
-    
+    //further testing
     public void handleCreateEntry(){
         Entry entry = new Entry(entryName.getText(), entryContents.getText());
         JournalTest1.getInstance().getJournal().addEntry(entry);
