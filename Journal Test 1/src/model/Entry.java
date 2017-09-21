@@ -13,6 +13,7 @@ import javafx.beans.property.*;
  * @author User
  */
 public class Entry {
+    //Github test!
     private StringProperty name = new SimpleStringProperty();
     private final Date date;
     private StringProperty entry = new SimpleStringProperty();
