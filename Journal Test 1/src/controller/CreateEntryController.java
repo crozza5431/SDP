@@ -4,6 +4,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+//dragonphlegm test
 package controller;
 
 import java.net.URL;
@@ -13,7 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import journal.test.pkg1.JournalTest1;
 import model.Entry;
-
+//test
 /**
  *
  * @author User
