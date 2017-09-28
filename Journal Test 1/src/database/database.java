@@ -82,6 +82,18 @@ public class database {
         return (r.next());
     }
     
+    public static String [] getPasswordSalt(String uName) throws SQLException {
+        String arrPasSalt[] = null;
+        Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        ResultSet r = s.executeQuery("SELECT password, salt FROM users WHERE username='" + uName + "'");
+        r.next();
+        arrPasSalt[0] = r.getString("password");
+        arrPasSalt[1] = r.getString("salt");
+        //make sure only one row returned
+        return arrPasSalt;
+    }
+            
+    
     public static String getHint(Connection conn, String uName) throws SQLException {
         Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         ResultSet r = s.executeQuery("SELECT Hint FROM users WHERE username='" + uName + "'");
@@ -121,4 +133,6 @@ public class database {
         r.last();
         return r.getInt("ID");
     }
+    
+    
 }
