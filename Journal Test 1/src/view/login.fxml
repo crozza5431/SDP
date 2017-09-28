@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <?import java.lang.*?>
 <?import java.net.*?>
 <?import java.util.*?>
@@ -8,20 +10,20 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<StackPane id="Login" styleClass="login" xmlns:fx="http://javafx.com/fxml" fx:controller="controller.LoginController">
-    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity">
-        <Label id= "title" text="Journal Login" layoutX="160.0" />
-        <!-- Prevent AnchorPane so that it's max = pref. This causes it to center in StackPane -->
-        <TextField fx:id="userName" layoutX="68.0" layoutY="58.0" onAction="#handleLogin" prefWidth="126.0" />
-        <PasswordField fx:id="password" layoutX="327.0" layoutY="58.0" onAction="#handleLogin" prefWidth="126.0" />
-        <Label layoutX="229.0" layoutY="61.0" text="Password:" />
-        <Label layoutX="16.0" layoutY="61.0" text="User:" />
-        <Button fx:id="login" defaultButton="true" layoutX="200.0" layoutY="125.0" onAction="#handleLogin" text="Login" />
-        <Button fx:id="register" defaultButton="true" layoutX="200.0" layoutY="160.0" onAction="#handleRegister" text="Register" />
-        <Label fx:id="errorMessage" layoutX="80.0" layoutY="200.0" textFill="RED" />
-    </AnchorPane>
-    
-    <stylesheets>
+<StackPane id="Login" prefHeight="276.0" prefWidth="467.0" styleClass="login" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="controller.LoginController">
+  <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="242.0" prefWidth="294.0">
+    <Label id="title" layoutX="69.0" layoutY="-14.0" text="Journal Buddy" />
+    <!-- Prevent AnchorPane so that it's max = pref. This causes it to center in StackPane -->
+    <TextField fx:id="userName" layoutX="85.0" layoutY="55.0" onAction="#handleLogin" prefWidth="126.0" />
+    <PasswordField fx:id="password" layoutX="84.0" layoutY="81.0" onAction="#handleLogin" prefWidth="126.0" />
+    <Label layoutX="23.0" layoutY="84.0" text="Password:" />
+    <Label layoutX="20.0" layoutY="58.0" text="Username:" />
+    <Button fx:id="login" defaultButton="true" layoutX="120.0" layoutY="153.0" onAction="#handleLogin" text="Login" />
+    <Button fx:id="register" defaultButton="true" layoutX="113.0" layoutY="180.0" onAction="#handleRegister" text="Register" />
+    <Label fx:id="errorMessage" layoutX="80.0" layoutY="200.0" textFill="RED" />
+    <Text layoutX="72.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your Personal Problem Book" />
+  </AnchorPane>
+  <stylesheets>
     <URL value="@Login.css" />
-    </stylesheets>
+  </stylesheets>
 </StackPane>

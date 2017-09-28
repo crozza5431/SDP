@@ -9,23 +9,27 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
- 
-<VBox id="VBox" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.JournalController">
-    <HBox alignment="CENTER" >
-        <Label id="title" fx:id="userJournal" text="${controller.journal.name}"/>
-        <Label id="title" text="'s Entries" />
-    </HBox>
-    <Hyperlink fx:id="logout" layoutY="24.0" onAction= "#processLogout" text="logout" AnchorPane.rightAnchor="52.0" />
-    <TableView fx:id="entryTable">
-        <columns>
-            <TableColumn text = "Entry Name" fx:id="nameClm"/>
-            <TableColumn text = "Summary" fx:id="summaryClm"/>
-            <TableColumn text = "Date Created" fx:id="dateClm" />
-        </columns>
-    </TableView>
-    <Button text="Create Entry" onAction="#handleCreateEntry" />
-    <Hyperlink fx:id="Back" layoutY="24.0" onAction= "#processBack" text="Back"/>
-    <stylesheets>
+
+<VBox id="VBox" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="controller.JournalController">
+  <HBox alignment="CENTER">
+    <Label id="title" fx:id="userJournal" text="${controller.journal.name}" />
+    <Label id="title" text="'s Entries" />
+  </HBox>
+  <Hyperlink fx:id="logout" onAction="#processLogout" text="Logout" textFill="RED">
+    <font>
+      <Font name="System Bold" size="12.0" fx:id="x1" />
+    </font>
+  </Hyperlink>
+  <TableView fx:id="entryTable">
+    <columns>
+      <TableColumn text="Entry Name" fx:id="nameClm" />
+      <TableColumn text="Summary" fx:id="summaryClm" />
+      <TableColumn text="Date Created" fx:id="dateClm" />
+    </columns>
+  </TableView>
+  <Button onAction="#handleCreateEntry" text="Create Entry" />
+  <Hyperlink fx:id="Back" font="$x1" onAction="#processBack" text="Go Back" textFill="RED" />
+  <stylesheets>
     <URL value="@Login.css" />
-    </stylesheets>
+  </stylesheets>
 </VBox>

@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <?import java.lang.*?>
 <?import java.net.*?>
 <?import java.util.*?>
@@ -7,22 +9,21 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
- 
-<VBox id="VBox" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProfileController">
-    <HBox alignment="CENTER" >
-        <Label id="title" fx:id="userProfile" text="${controller.user.username}"/>
-        <Label id="title" text="'s Journals" />
-    </HBox>
-    <Hyperlink fx:id="logout" layoutY="24.0" onAction= "#processLogout" text="logout" AnchorPane.rightAnchor="52.0" />
-    <TableView fx:id="journalTable">
-        <columns>
-            <TableColumn text = "Journal Name" fx:id="nameClm"/>
-            <TableColumn text = "Date Created" fx:id="dateClm" />
-        </columns>
-    </TableView>     
-    <Button text="New Journal" onAction="#handleCreateJournal" />   
-    <stylesheets>
-    <URL value="@Login.css" />
-    </stylesheets>  
-</VBox>
 
+<VBox id="VBox" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="controller.ProfileController">
+  <HBox alignment="CENTER">
+    <Label id="title" fx:id="userProfile" text="${controller.user.username}" />
+    <Label id="title" text="'s Journals" />
+  </HBox>
+  <Hyperlink fx:id="logout" onAction="#processLogout" text="Logout" />
+  <TableView fx:id="journalTable">
+    <columns>
+      <TableColumn text="Journal Name" fx:id="nameClm" />
+      <TableColumn text="Date Created" fx:id="dateClm" />
+    </columns>
+  </TableView>
+  <Button onAction="#handleCreateJournal" text="Add New Journal" />
+  <stylesheets>
+    <URL value="@Login.css" />
+  </stylesheets>
+</VBox>
