@@ -14,7 +14,7 @@ import java.util.Scanner;
 
 /**
  *
- * @author tony9
+ * @author DeZHONG
  */
 public class database {
     public static Connection conn;
