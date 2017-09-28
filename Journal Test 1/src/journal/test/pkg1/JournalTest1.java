@@ -34,8 +34,8 @@ public class JournalTest1 extends Application {
     private static database db;
     
     public JournalTest1() {
-        instance = this;
-        Users.add(new User("c", "c"));
+        //instance = this;
+        //Users.add(new User("c", "c"));
     }
     
     public static JournalTest1 getInstance() {
@@ -70,10 +70,7 @@ public class JournalTest1 extends Application {
         return currentJournal;
     }
 
-    public boolean userLogging(String username, String password) {
-        
-        
-        // without db
+    public boolean userLogging(String username , String password) {
         if (checkCredentials(username, password)) {
             loggedUser = User.of(username);
             gotoProfile();

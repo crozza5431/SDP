@@ -21,12 +21,29 @@ public class LoginController {
     @FXML private TextField userName;
     @FXML private PasswordField password;
     @FXML private Label errorMessage;
+    private int count = 0;
     
+    
+    // login ###need to create an extra hint line as "Incorrect Login Details" 
+    // will replace hint when hint activates
     @FXML protected void handleLogin(ActionEvent event) throws SQLException {
-        if (!database.checkPassword(userName.getText(), password.getText())) {
-            errorMessage.setText("Incorrect Login Details");
+        String uName = userName.getText();
+        String uPass = password.getText();
+        
+        if (!database.checkUser(uName)) {
+            errorMessage.setText("User Does Not Exist!");
         } else {
-            System.out.println("Correct");
+            if (count >= 3) {
+                errorMessage.setText(database.getHint(uName));
+            }
+            if (!database.checkPassword(uName, uPass)) {
+                count++;
+                errorMessage.setText("Incorrect Login Details");
+            } else {
+                count = 0;
+                //userLogging(database.getID(uName));
+                System.out.println("Correct");
+            }
         }
         //without db
         /**
