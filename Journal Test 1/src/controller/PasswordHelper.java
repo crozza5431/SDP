@@ -8,9 +8,6 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 import java.util.Random;
 
-/**
- * Created by teigan.penna on 28/09/2017.
- */
 public class PasswordHelper
 {
 	private static final Random RANDOM = new SecureRandom();
