@@ -14,18 +14,13 @@ import java.util.Scanner;
 
 /**
  *
- * @author DeSHUN CHECK
+ * @author tony9
  */
 public class database {
     public static Connection conn;
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws SQLException {
-        
-
-        login();
-    }
     
     // Establishes connection with the SQL database AZURE
     public static void establishCon() {
@@ -39,35 +34,7 @@ public class database {
         }
     }
     
-    public static void login() throws SQLException {
-        Scanner in = new Scanner(System.in);
-        String uName;
-        String uPass;
-        
-        System.out.println("Enter Username: ");
-        uName = in.nextLine();
-        
-        System.out.println("Enter Password: ");
-        uPass = in.nextLine();
-        
-        if (checkUser(uName)) {
-            int count = 0;
-            while (!checkPassword(uName, uPass)) {
-                ++count;
-                System.out.println("Login Failed");
-                if (count >= 3) {
-                    System.out.println("HINT: " + getHint(conn, uName));
-                }
-                System.out.println("Enter Password: ");
-                uPass = in.nextLine();
-            }
-            System.out.println("Login Success");
-        } else { 
-            System.out.println("User Does Not Exist");
-        }
-
-    }
-    
+    //Checks if there is that user
     public static Boolean checkUser(String uName) throws SQLException {
         Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         ResultSet r = s.executeQuery("SELECT username FROM users WHERE username='" + uName + "'");
@@ -76,61 +43,52 @@ public class database {
         return (count != 0);
     }
     
+    //Checks Password with username - may not be needed
     public static Boolean checkPassword(String uName, String uPass) throws SQLException {
         Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         ResultSet r = s.executeQuery("SELECT username, password FROM users WHERE username='" + uName + "' AND password='" + uPass + "'");
         return (r.next());
     }
     
+    //Returns Password and Salt associated with username
     public static String [] getPasswordSalt(String uName) throws SQLException {
-        String arrPasSalt[] = null;
+        String passSalt[] = null;
         Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         ResultSet r = s.executeQuery("SELECT password, salt FROM users WHERE username='" + uName + "'");
         r.next();
-        arrPasSalt[0] = r.getString("password");
-        arrPasSalt[1] = r.getString("salt");
+        passSalt[0] = r.getString("password");
+        passSalt[1] = r.getString("salt");
         //make sure only one row returned
-        return arrPasSalt;
+        return passSalt;
     }
-            
     
-    public static String getHint(Connection conn, String uName) throws SQLException {
+    //Gets hint
+    public static String getHint(String uName) throws SQLException {
         Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         ResultSet r = s.executeQuery("SELECT Hint FROM users WHERE username='" + uName + "'");
         r.next();
         return r.getString("Hint");
     }
 
-    public static void newUser(Connection conn) throws SQLException {
-        Scanner in = new Scanner(System.in);
-        String uName;
-        String uPass;
-        
-        System.out.println("Enter Username: ");
-        uName = in.nextLine();
-        
-        while (checkUser(uName)) {
-            System.out.println("Username Taken, Please Enter Another Username: ");
-            uName = in.nextLine();
-        }
-        System.out.println("Enter Password: ");
-        uPass = in.nextLine();
-        
-        System.out.println("Enter Hint: ");
-        String uHint = in.nextLine();
-        
+    //Inserts new user into database
+    public static void newUser(String uName, String uPass, String uHint, String uSalt) throws SQLException {
         int uID = nextID() + 1;
-        
         Statement s = conn.createStatement();
-        
-        s.executeUpdate("INSERT INTO Users VALUES ('" + uID + "', '" + uName + "', '" + uPass + "', '" + uHint + "')");
-
+        s.executeUpdate("INSERT INTO Users VALUES ('" + uID + "', '" + uName + "', '" + uPass + "', '" + uHint + "', " + uSalt + "')");
     }
     
+    //Searches for the next available ID
     public static int nextID() throws SQLException {
         Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         ResultSet r = s.executeQuery("SELECT ID FROM Users");
         r.last();
+        return r.getInt("ID");
+    }
+    
+    public static int getID(String uName) throws SQLException {
+        Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        ResultSet r = s.executeQuery("SELECT ID FROM Users WHERE username='" + uName + "'");
+        r.next();
         return r.getInt("ID");
     }
     
