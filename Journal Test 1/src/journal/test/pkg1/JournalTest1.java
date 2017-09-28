@@ -5,6 +5,8 @@
  */
 package journal.test.pkg1;
 
+import database.database;
+import java.sql.Connection;
 import java.util.List;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -29,6 +31,7 @@ public class JournalTest1 extends Application {
     private Journal currentJournal;
     private ObservableList<User> Users = FXCollections.observableArrayList();
     private static JournalTest1 instance;
+    private static database db;
     
     public JournalTest1() {
         instance = this;
@@ -44,6 +47,7 @@ public class JournalTest1 extends Application {
     }
     
     public static void main(String[] args) {
+        database.establishCon();
         launch(args);
     }
      @Override
@@ -67,6 +71,9 @@ public class JournalTest1 extends Application {
     }
 
     public boolean userLogging(String username, String password) {
+        
+        
+        // without db
         if (checkCredentials(username, password)) {
             loggedUser = User.of(username);
             gotoProfile();
@@ -82,6 +89,7 @@ public class JournalTest1 extends Application {
                 return true;
             }
         }
+        
         return false;
     }
     
