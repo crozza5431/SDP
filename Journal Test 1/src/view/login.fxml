@@ -18,10 +18,11 @@
     <PasswordField fx:id="password" layoutX="84.0" layoutY="81.0" onAction="#handleLogin" prefWidth="126.0" />
     <Label layoutX="23.0" layoutY="84.0" text="Password:" />
     <Label layoutX="20.0" layoutY="58.0" text="Username:" />
-    <Button fx:id="login" defaultButton="true" layoutX="120.0" layoutY="153.0" onAction="#handleLogin" text="Login" />
-    <Button fx:id="register" defaultButton="true" layoutX="113.0" layoutY="180.0" onAction="#handleRegister" text="Register" />
+    <Button fx:id="login" defaultButton="true" layoutX="124.0" layoutY="153.0" onAction="#handleLogin" text="Login" />
+    <Button fx:id="register" defaultButton="true" layoutX="117.0" layoutY="180.0" onAction="#handleRegister" text="Register" />
     <Label fx:id="errorMessage" layoutX="80.0" layoutY="200.0" textFill="RED" />
-    <Text layoutX="72.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your Personal Problem Book" />
+    <Text layoutX="72.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your Personal Problem Book" />
+    <Button layoutX="113.0" layoutY="208.0" mnemonicParsing="false" text="Show Hint" />
   </AnchorPane>
   <stylesheets>
     <URL value="@Login.css" />
