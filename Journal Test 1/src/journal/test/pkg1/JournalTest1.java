@@ -34,7 +34,7 @@ public class JournalTest1 extends Application {
     private static database db;
     
     public JournalTest1() {
-        //instance = this;
+        instance = this;
         //Users.add(new User("c", "c"));
     }
     

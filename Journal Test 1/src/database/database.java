@@ -74,9 +74,13 @@ public class database {
     public static void newUser(String uName, String uPass, String uHint, String uSalt) throws SQLException {
         int uID = nextID() + 1;
         Statement s = conn.createStatement();
-        s.executeUpdate("INSERT INTO Users VALUES ('" + uID + "', '" + uName + "', '" + uPass + "', '" + uHint + "', " + uSalt + "')");
+        try {
+            s.executeUpdate("INSERT INTO Users VALUES ('" + uID + "', '" + uName + "', '" + uPass + "', '" + uHint + "', '" + uSalt + "')");    
+        }
+        catch ( SQLException err ) {
+            System.out.println(err);
+        }
     }
-    
     //Searches for the next available ID
     public static int nextID() throws SQLException {
         Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);

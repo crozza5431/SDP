@@ -18,6 +18,7 @@ import journal.test.pkg1.JournalTest1;
  */
 public class User {
     
+    private int ID;
     private StringProperty username = new SimpleStringProperty();
     private String password;
     private ObservableList<Journal> journals = FXCollections.observableArrayList();
@@ -27,6 +28,8 @@ public class User {
         this.password = password;
         journals.add(new Journal("Welcome Journal"));
     }
+    
+
     
     public static User of(String username) {
         List<User> searchList = JournalTest1.getInstance().getUserList();

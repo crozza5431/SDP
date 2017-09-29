@@ -5,6 +5,8 @@
  */
 package controller;
 
+import database.database;
+import java.sql.SQLException;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import journal.test.pkg1.JournalTest1;
@@ -19,16 +21,23 @@ public class RegisterController {
     @FXML private PasswordField confirmedPassword;
     @FXML private Label errorMessage;
     
-    @FXML protected void handleRegister() {
+    @FXML protected void handleRegister() throws SQLException {
         if (errorCheck()) {
+            String uName = username.getText();
+            String uPass = password.getText();
+            String uHint = "HINT";
+            String uSalt = "SALT";
+            
+            database.newUser(uName, uPass, uHint, uSalt);
+            /*
             if (JournalTest1.getInstance().addUser(username.getText(), password.getText())) {
                 errorMessage.setText("Account successfully created!");
                 JournalTest1.getInstance().gotoLogin();
             }
             
             else errorMessage.setText("Username already taken, please choose another!");
+        */
         }
-        
         
     }
     
