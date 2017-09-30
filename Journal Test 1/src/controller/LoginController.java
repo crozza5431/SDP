@@ -54,13 +54,15 @@ public class LoginController {
                 errorMessage.setText("Incorrect Username or Password");
 
                 // make sure we're not showing hints for the wrong user
-                if (user.getID() == previousUserID && count >= 3)
+                if (user.getID() == previousUserID && count >= 2)
                 {
-                    errorMessage.setText("Hint: " + user.getHint());
+                    hintMessage.setText("Hint: " + user.getHint());
+                    count = 0;
                 }
                 else
                 {
                     previousUserID = user.getID();
+                    hintMessage.setText("");
                     count++;
                 }
             }
