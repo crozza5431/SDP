@@ -84,4 +84,11 @@ public class Database
         r.last();
         return r.getInt("ID");
     }
+    
+    //returns a result set of a users journals
+    public ResultSet getJournals(int id) throws SQLException {
+        Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        ResultSet r = s.executeQuery("SELECT * FROM journal Where user_id='" + id + "'");
+        return r;
+    }
 }
