@@ -154,16 +154,17 @@ public class JournalTest1 extends Application {
         stage.sizeToScene();
         return page;
     }
-    
-    public boolean addUser(String username, String password) {
-        User user = new User(username, password);
-        
-        if (!user.userExists(username)) {
-            Users.add(user);
-            return true;
-        }
-        return false;
-    }
+
+    // Deprecated
+//    public boolean addUser(String username, String password) {
+//        User user = new User(username, password);
+//
+//        if (!user.userExists(username)) {
+//            Users.add(user);
+//            return true;
+//        }
+//        return false;
+//    }
     
     public void gotoCreateJournal() {
         try {

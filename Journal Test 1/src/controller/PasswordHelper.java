@@ -20,7 +20,7 @@ public class PasswordHelper
 		return salt;
 	}
 
-	private static byte[] getHash(char[] password, byte[] salt)
+	public static byte[] getHash(char[] password, byte[] salt)
 	{
 		PBEKeySpec spec = new PBEKeySpec(password, salt, 65536, 128);
 		Arrays.fill(password, Character.MIN_VALUE);

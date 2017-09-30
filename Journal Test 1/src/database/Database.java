@@ -5,6 +5,8 @@
  */
 package database;
 
+import model.User;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -36,41 +38,22 @@ public class Database
     }
 
     Connection conn;
-    
-    //Checks if there is that user
-    public Boolean checkUser(String uName) throws SQLException {
+
+    //Get user info or null
+    public User tryGetUser(String uName) throws SQLException {
         Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-        ResultSet r = s.executeQuery("SELECT username FROM users WHERE username='" + uName + "'");
+        ResultSet r = s.executeQuery("SELECT * FROM users WHERE username ='" + uName + "'");
         r.last();
-        int count = r.getRow();
-        return (count != 0);
-    }
-    
-    //Checks Password with username - may not be needed
-    public Boolean checkPassword(String uName, String uPass) throws SQLException {
-        Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-        ResultSet r = s.executeQuery("SELECT username, password FROM users WHERE username='" + uName + "' AND password='" + uPass + "'");
-        return (r.next());
-    }
-    
-    //Returns Password and Salt associated with username
-    public String [] getPasswordSalt(String uName) throws SQLException {
-        String passSalt[] = new String[2];
-        Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-        ResultSet r = s.executeQuery("SELECT password, salt FROM users WHERE username='" + uName + "'");
-        r.next();
-        passSalt[0] = r.getString("password");
-        passSalt[1] = r.getString("salt");
-        //make sure only one row returned
-        return passSalt;
-    }
-    
-    //Gets hint
-    public String getHint(String uName) throws SQLException {
-        Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-        ResultSet r = s.executeQuery("SELECT Hint FROM users WHERE username='" + uName + "'");
-        r.next();
-        return r.getString("Hint");
+
+        if (r.getRow() > 1) throw new SQLException("Can't be more than one user with the same username");
+        if (r.getRow() == 0) return null;
+
+        return new User(
+            r.getInt("ID"),
+            uName,
+            r.getString("password"),
+            r.getString("salt"),
+            r.getString("hint"));
     }
 
     //Inserts new user into Database
@@ -84,18 +67,12 @@ public class Database
             System.out.println(err);
         }
     }
+
     //Searches for the next available ID
     public int nextID() throws SQLException {
         Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         ResultSet r = s.executeQuery("SELECT ID FROM Users");
         r.last();
-        return r.getInt("ID");
-    }
-    
-    public int getID(String uName) throws SQLException {
-        Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-        ResultSet r = s.executeQuery("SELECT ID FROM Users WHERE username='" + uName + "'");
-        r.next();
         return r.getInt("ID");
     }
 }

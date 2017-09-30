@@ -12,6 +12,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import journal.test.pkg1.JournalTest1;
 
+import javax.xml.bind.DatatypeConverter;
+
 /**
  *
  * @author User
@@ -27,9 +29,12 @@ public class RegisterController {
             String uName = username.getText();
             String uPass = password.getText();
             String uHint = "HINT";
-            String uSalt = "SALT";
-            
-            Database.INSTANCE.newUser(uName, uPass, uHint, uSalt);
+
+            byte[] salt = PasswordHelper.getNewSalt();
+            String dbHash = DatatypeConverter.printHexBinary(PasswordHelper.getHash(uPass.toCharArray(), salt));
+            String uSalt = DatatypeConverter.printHexBinary(salt);
+
+            Database.INSTANCE.newUser(uName, dbHash, uHint, uSalt);
             /*
             if (JournalTest1.getInstance().addUser(username.getText(), password.getText())) {
                 errorMessage.setText("Account successfully created!");
@@ -55,14 +60,11 @@ public class RegisterController {
     }
     
     private boolean passwordCheck(String password, String confirmedpassword) {
-        if (password.equals(confirmedpassword) && !password.isEmpty()) {
+        if (!password.isEmpty() && password.equals(confirmedpassword)) {
             return true;
         }
-        
-        else {
-            errorMessage.setText("Please ensure passwords match!");
-            return false;
-        }
+        errorMessage.setText("Please ensure passwords match!");
+        return false;
     }
     
     private boolean requiredCheck() {
