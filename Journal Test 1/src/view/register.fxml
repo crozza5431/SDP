@@ -24,6 +24,10 @@
     <Label text="*Confirm Password: " />
     <PasswordField fx:id="confirmedPassword" />
   </HBox>
+  <HBox alignment = "CENTER">
+      <Label text="Hint: " />
+      <TextField fx:id="hint" />
+  </HBox>
   <Button fx:id="register" defaultButton="true" onAction="#handleRegister" text="Register" />
   <Hyperlink fx:id="Back" onAction="#processBack" text="Go Back" textFill="RED">
     <font>
