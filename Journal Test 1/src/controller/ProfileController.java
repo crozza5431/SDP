@@ -43,17 +43,37 @@ public class ProfileController implements Initializable {
       nameClm.setCellValueFactory(new PropertyValueFactory<>("name"));
       dateClm.setCellValueFactory(new PropertyValueFactory<>("date"));
       //Double click event
-      journalTable.setRowFactory(tv-> {
-          TableRow<Journal> row = new TableRow<>();
-          row.setOnMouseClicked(event -> {
+      journalTable.setRowFactory(
+              new Callback<TableView<Journal>, TableRow<Journal>>() {
+          
+                @Override
+          public TableRow<Journal> call(TableView<Journal> tableView) {
+              final TableRow<Journal> row = new TableRow<>();
+              final ContextMenu rowMenu = new ContextMenu();
+              MenuItem hideItem = new MenuItem("Hide");
+              //hideItem.setOnAction();
+              MenuItem deleteItem = new MenuItem("Delete");
+              deleteItem.setOnAction(new EventHandler<ActionEvent>() {
+                  @Override
+                  public void handle(ActionEvent event) {
+                      journalTable.getItems().remove(row.getItem());
+                  }
+              });
+              rowMenu.getItems().addAll(hideItem, deleteItem);
+              
+              row.setOnMouseClicked(event -> {
+              if (event.getButton() == MouseButton.SECONDARY && (! row.isEmpty())) {
+                  rowMenu.show(journalTable, event.getScreenX(), event.getScreenY());
+              }
               if (event.getClickCount() == 2 && (! row.isEmpty())) {
                   Journal rowData = row.getItem();
                   JournalTest1.getInstance().returnSelected(rowData);
                   JournalTest1.getInstance().gotoEntry();
               }
           });
-        return row;
-      }); 
+              return row;
+          }
+      });
     }
     
     public Journal returnSelected(Journal journal) {
