@@ -29,17 +29,19 @@ public class RegisterController {
         if (errorCheck()) {
             String uName = username.getText();
             String uPass = password.getText();
-            String uHint = "HINT";
+            String uHint = hint.getText();
 
             byte[] salt = PasswordHelper.getNewSalt();
             String dbHash = DatatypeConverter.printHexBinary(PasswordHelper.getHash(uPass.toCharArray(), salt));
             String uSalt = DatatypeConverter.printHexBinary(salt);
 
             Database.INSTANCE.newUser(uName, dbHash, uHint, uSalt);
-            JournalTest1.getInstance().gotoLogin();
+                JournalTest1.getInstance().gotoLogin();
+        }
+            else errorMessage.setText("Username already taken, please choose another!");
+        
         }
         
-    }
     
     private boolean errorCheck() throws SQLException {
         if(!requiredCheck()) {
