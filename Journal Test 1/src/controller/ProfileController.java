@@ -9,15 +9,21 @@ package controller;
  *
  * @author Caldiddy's PC
  */
+import database.Database;
 import java.net.URL;
-import java.util.List;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.text.Text;
+import javafx.scene.input.MouseButton;
+import javafx.util.Callback;
 import journal.test.pkg1.JournalTest1;
 import model.Journal;
 import model.User;
