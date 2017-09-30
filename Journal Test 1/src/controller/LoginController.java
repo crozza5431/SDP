@@ -25,8 +25,9 @@ public class LoginController {
     @FXML private TextField userName;
     @FXML private PasswordField password;
     @FXML private Label errorMessage;
+    @FXML private Label hintMessage;
     private int count = 0;
-    private Integer previousUserID = null;
+    private Integer previousUserID = -1;
     
     
     // login ###need to create an extra hint line as "Incorrect Login Details" 
