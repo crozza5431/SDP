@@ -21,11 +21,16 @@ public class User {
     private int ID;
     private StringProperty username = new SimpleStringProperty();
     private String password;
+    private String salt;
+    private String hint;
     private ObservableList<Journal> journals = FXCollections.observableArrayList();
     
-    public User(String username, String password) {
+    public User(int id, String username, String password, String salt, String hint) {
+        this.ID = id;
         this.username.set(username);
         this.password = password;
+        this.salt = salt;
+        this.hint = hint;
         journals.add(new Journal("Welcome Journal"));
     }
     
@@ -46,7 +51,9 @@ public class User {
     public ObservableList<Journal> getJournals() {
         return journals;
     } 
-    
+
+    public int getID() { return ID; }
+
     public String getUsername(){
         return username.get();
     }
@@ -54,6 +61,10 @@ public class User {
     public String getPassword(){
         return password;
     }
+
+    public String getSalt() { return salt; }
+
+    public String getHint() { return hint; }
     
     public boolean userExists(String username) {
         if(of(username) != null) {
