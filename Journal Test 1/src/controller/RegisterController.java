@@ -22,6 +22,7 @@ public class RegisterController {
     @FXML private TextField username;
     @FXML private PasswordField password;
     @FXML private PasswordField confirmedPassword;
+    @FXML private TextField hint;
     @FXML private Label errorMessage;
     
     @FXML protected void handleRegister() throws SQLException {
