@@ -10,7 +10,8 @@ package controller;
  * @author Caldiddy's PC
  */
  
-import database.database;
+import database.Database;
+
 import java.sql.SQLException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -30,18 +31,18 @@ public class LoginController {
         String uName = userName.getText();
         String uPass = password.getText();
         
-        if (!database.checkUser(uName)) {
+        if (!Database.INSTANCE.checkUser(uName)) {
             errorMessage.setText("User Does Not Exist!");
         } else {
             if (count >= 3) {
-                errorMessage.setText(database.getHint(uName));
+                errorMessage.setText(Database.INSTANCE.getHint(uName));
             }
-            if (!database.checkPassword(uName, uPass)) {
+            if (!Database.INSTANCE.checkPassword(uName, uPass)) {
                 count++;
                 errorMessage.setText("Incorrect Login Details");
             } else {
                 count = 0;
-                //userLogging(database.getID(uName));
+                //userLogging(Database.getID(uName));
                 System.out.println("Correct");
             }
         }

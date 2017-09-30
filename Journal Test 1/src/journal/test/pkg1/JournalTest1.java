@@ -5,8 +5,8 @@
  */
 package journal.test.pkg1;
 
-import database.database;
-import java.sql.Connection;
+import database.Database;
+
 import java.util.List;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -16,7 +16,6 @@ import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import model.Entry;
 import model.Journal;
 import model.User;
 
@@ -31,7 +30,7 @@ public class JournalTest1 extends Application {
     private Journal currentJournal;
     private ObservableList<User> Users = FXCollections.observableArrayList();
     private static JournalTest1 instance;
-    private static database db;
+    private static Database db;
     
     public JournalTest1() {
         instance = this;
@@ -47,7 +46,6 @@ public class JournalTest1 extends Application {
     }
     
     public static void main(String[] args) {
-        database.establishCon();
         launch(args);
     }
      @Override

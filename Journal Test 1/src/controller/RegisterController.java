@@ -5,7 +5,8 @@
  */
 package controller;
 
-import database.database;
+import database.Database;
+
 import java.sql.SQLException;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -28,7 +29,7 @@ public class RegisterController {
             String uHint = "HINT";
             String uSalt = "SALT";
             
-            database.newUser(uName, uPass, uHint, uSalt);
+            Database.INSTANCE.newUser(uName, uPass, uHint, uSalt);
             /*
             if (JournalTest1.getInstance().addUser(username.getText(), password.getText())) {
                 errorMessage.setText("Account successfully created!");
