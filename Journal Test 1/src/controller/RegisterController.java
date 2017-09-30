@@ -35,20 +35,17 @@ public class RegisterController {
             String uSalt = DatatypeConverter.printHexBinary(salt);
 
             Database.INSTANCE.newUser(uName, dbHash, uHint, uSalt);
-            /*
-            if (JournalTest1.getInstance().addUser(username.getText(), password.getText())) {
-                errorMessage.setText("Account successfully created!");
-                JournalTest1.getInstance().gotoLogin();
-            }
-            
-            else errorMessage.setText("Username already taken, please choose another!");
-        */
+            JournalTest1.getInstance().gotoLogin();
         }
         
     }
     
-    private boolean errorCheck() {
+    private boolean errorCheck() throws SQLException {
         if(!requiredCheck()) {
+            if (Database.INSTANCE.checkDupUser(username.getText())) {
+                errorMessage.setText("Username has already been taken!");
+                return false;
+            }
             return passwordCheck(password.getText(), confirmedPassword.getText());
         }  
         errorMessage.setText("Please ensure all fields are filled out");

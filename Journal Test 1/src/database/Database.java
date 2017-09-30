@@ -55,6 +55,15 @@ public class Database
             r.getString("salt"),
             r.getString("hint"));
     }
+    
+    //Checks for Duplicate ID
+    public boolean checkDupUser(String uName) throws SQLException {
+        Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        ResultSet r = s.executeQuery("SELECT username FROM users WHERE username ='" + uName + "'");
+        r.last();
+        
+        return (!(r.getRow() == 0));
+    }
 
     //Inserts new user into Database
     public void newUser(String uName, String uPass, String uHint, String uSalt) throws SQLException {
