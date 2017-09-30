@@ -6,11 +6,7 @@
 package journal.test.pkg1;
 
 import database.Database;
-
-import java.util.List;
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Parent;
@@ -28,7 +24,6 @@ public class JournalTest1 extends Application {
     private Stage stage;
     private User loggedUser;
     private Journal currentJournal;
-    private ObservableList<User> Users = FXCollections.observableArrayList();
     private static JournalTest1 instance;
     private static Database db;
     
@@ -40,11 +35,7 @@ public class JournalTest1 extends Application {
     public static JournalTest1 getInstance() {
         return instance;
     }
-    
-    public List<User> getUserList() {
-        return Users;
-    }
-    
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -68,24 +59,9 @@ public class JournalTest1 extends Application {
         return currentJournal;
     }
 
-    public boolean userLogging(String username , String password) {
-        if (checkCredentials(username, password)) {
-            loggedUser = User.of(username);
-            gotoProfile();
-            return true;
-        }
-        
-        else return false;
-    }
-    
-    private boolean checkCredentials(String username, String password) {
-        for(User user : Users) {
-            if(user.getUsername().equals(username) && user.getPassword().equals(password)) {
-                return true;
-            }
-        }
-        
-        return false;
+    public void userLogging(User user) {
+        loggedUser = user;
+        gotoProfile();
     }
     
     public void userLogout(){
@@ -154,17 +130,6 @@ public class JournalTest1 extends Application {
         stage.sizeToScene();
         return page;
     }
-
-    // Deprecated
-//    public boolean addUser(String username, String password) {
-//        User user = new User(username, password);
-//
-//        if (!user.userExists(username)) {
-//            Users.add(user);
-//            return true;
-//        }
-//        return false;
-//    }
     
     public void gotoCreateJournal() {
         try {
