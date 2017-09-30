@@ -33,18 +33,6 @@ public class User {
         this.hint = hint;
         journals.add(new Journal("Welcome Journal"));
     }
-
-    public static User of(String username) {
-        List<User> searchList = JournalTest1.getInstance().getUserList();
-        
-        for (User user : searchList) {
-            if(user.getUsername().equals(username)) {
-                return user;
-            }
-        }
-        
-        return null;
-    }
     
     public ObservableList<Journal> getJournals() {
         return journals;
@@ -63,14 +51,6 @@ public class User {
     public String getSalt() { return salt; }
 
     public String getHint() { return hint; }
-    
-    public boolean userExists(String username) {
-        if(of(username) != null) {
-            return true;
-        }
-        
-        return false;
-    }
     
     public void addJournal(Journal journal) {
         journals.add(journal);
