@@ -47,7 +47,7 @@ public class LoginController {
             if (PasswordHelper.passwordMatches(uPass.toCharArray(), salt, dbHash))
             {
                 count = 0;
-                //userLogging(user.getID());
+                JournalTest1.getInstance().userLogging(user);
                 System.out.println("Correct");
             }
             else
@@ -68,12 +68,6 @@ public class LoginController {
                 }
             }
         }
-        //without db
-        /**
-        if (!JournalTest1.getInstance().userLogging(userName.getText(), password.getText())) {
-        errorMessage.setText("Incorrect Login Details");
-        }
-        */
     }
     
     @FXML protected void handleRegister(ActionEvent event) {
