@@ -18,13 +18,18 @@ import javafx.collections.ObservableList;
  */
 public class Journal {
     private ObservableList<Entry> Entry = FXCollections.observableArrayList();
+    private final int id;
+    private final int userID;
     private StringProperty name = new SimpleStringProperty();
     private final Date date;
     
-    public Journal(String name) {
-        date = new Date();
-        this.name.set(name); 
-        Entry.add(new Entry("My first entry", "Welcome!"));
+    public Journal(int id, int userID, String name, Date date) {
+        this.id = id;
+        this.userID = userID;
+        this.name.set(name);
+        this.date = date;
+        //date = new Date(); 
+        //Entry.add(new Entry("My first entry", "Welcome!"));
     }
     
     public String getDate(){

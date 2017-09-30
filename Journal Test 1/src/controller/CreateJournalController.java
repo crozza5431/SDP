@@ -19,8 +19,8 @@ public class CreateJournalController {
     @FXML private TextField journalName;
     
     public void handleCreateJournal(){
-        Journal journal = new Journal(journalName.getText());
-        JournalTest1.getInstance().getLoggedUser().addJournal(journal);
+        //Journal journal = new Journal(journalName.getText());
+        //JournalTest1.getInstance().getLoggedUser().addJournal(journal);
     }
     
     @FXML protected void processBack() {

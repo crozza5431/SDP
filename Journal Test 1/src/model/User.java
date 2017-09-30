@@ -31,7 +31,7 @@ public class User {
         this.password = password;
         this.salt = salt;
         this.hint = hint;
-        journals.add(new Journal("Welcome Journal"));
+        //journals.add(new Journal("Welcome Journal"));
     }
     
     public ObservableList<Journal> getJournals() {
