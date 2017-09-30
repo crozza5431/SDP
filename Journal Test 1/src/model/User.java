@@ -33,9 +33,7 @@ public class User {
         this.hint = hint;
         journals.add(new Journal("Welcome Journal"));
     }
-    
 
-    
     public static User of(String username) {
         List<User> searchList = JournalTest1.getInstance().getUserList();
         
