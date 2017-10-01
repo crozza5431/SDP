@@ -5,6 +5,7 @@
  */
 package database;
 
+import model.Journal;
 import model.User;
 
 import java.io.InvalidObjectException;
@@ -13,6 +14,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Date;
+import java.util.LinkedList;
 
 /**
  *
@@ -37,11 +40,10 @@ public class Database
     //Get user info or null
     public static User tryGetUser(String uName) throws SQLException, InvalidObjectException
     {
-        ResultSet r;
         try (Connection conn = establishConnection())
         {
             Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            r = s.executeQuery("SELECT * FROM users WHERE username ='" + uName + "'");
+            ResultSet r = s.executeQuery("SELECT * FROM users WHERE username ='" + uName + "'");
 
             if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
             r.last();
@@ -61,11 +63,10 @@ public class Database
     //Checks for Duplicate ID
     public static boolean checkDupUser(String uName) throws SQLException, InvalidObjectException
     {
-        ResultSet r;
         try (Connection conn = establishConnection())
         {
             Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            r = s.executeQuery("SELECT username FROM users WHERE username ='" + uName + "'");
+            ResultSet r = s.executeQuery("SELECT username FROM users WHERE username ='" + uName + "'");
 
             if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
             r.last();
@@ -91,11 +92,10 @@ public class Database
     //Searches for the next available ID
     static int nextID() throws SQLException, InvalidObjectException
     {
-        ResultSet r;
         try (Connection conn = establishConnection())
         {
             Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            r = s.executeQuery("SELECT ID FROM Users");
+            ResultSet r = s.executeQuery("SELECT ID FROM Users");
 
             if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
             r.last();
@@ -104,16 +104,24 @@ public class Database
     }
     
     //returns a result set of a users journals
-    public static ResultSet getJournals(int id) throws SQLException, InvalidObjectException
+    public static LinkedList<Journal> getJournals(int id) throws SQLException, InvalidObjectException
     {
-        ResultSet r;
+        LinkedList<Journal> journals = new LinkedList<>();
         try (Connection conn = establishConnection())
         {
             Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            r = s.executeQuery("SELECT * FROM journal Where user_id='" + id + "'");
+            ResultSet r = s.executeQuery("SELECT * FROM journal Where user_id='" + id + "'");
 
             if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
-            return r;
+            while (r.next())
+            {
+                int jID = r.getInt("ID");
+                int jUserID = r.getInt("User_ID");
+                String jName = r.getString("Name");
+                Date jDateCreated = r.getDate("Date_created");
+                journals.add(new Journal(jID, jUserID, jName, jDateCreated));
+            }
         }
+        return journals;
     }
 }

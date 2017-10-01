@@ -11,6 +11,8 @@ import java.io.InvalidObjectException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.LinkedList;
+
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -149,13 +151,10 @@ public class JournalTest1 extends Application {
     }
     
     public void loadJournal() throws SQLException, InvalidObjectException {
-        ResultSet r = Database.getJournals(loggedUser.getID());
-        while (r.next()) {
-            int id = r.getInt("ID");
-            int userID = r.getInt("User_ID");
-            String name = r.getString("Name");
-            Date dateCreated = r.getDate("Date_created");
-            loggedUser.addJournal(new Journal(id, userID, name, dateCreated));
+        LinkedList<Journal> journals = Database.getJournals(loggedUser.getID());
+        for (Journal journal : journals)
+        {
+            loggedUser.addJournal(journal);
         }
     }
 }
