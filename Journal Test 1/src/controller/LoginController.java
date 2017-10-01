@@ -12,6 +12,7 @@ package controller;
  
 import database.Database;
 
+import java.io.InvalidObjectException;
 import java.sql.SQLException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -27,17 +28,17 @@ public class LoginController {
     @FXML private Label errorMessage;
     @FXML private Label hintMessage;
     private int count = 0;
-    private Integer previousUserID = -1;
+    private int previousUserID = -1;
     
     
     // login ###need to create an extra hint line as "Incorrect Login Details" 
     // will replace hint when hint activates
-    @FXML protected void handleLogin(ActionEvent event) throws SQLException {
+    @FXML protected void handleLogin(ActionEvent event) throws SQLException, InvalidObjectException {
         String uName = userName.getText();
         String uPass = password.getText();
 
         //get user information from the database
-        User user = Database.INSTANCE.tryGetUser(uName);
+        User user = Database.tryGetUser(uName);
         if (user == null) errorMessage.setText("Incorrect Username or Password");
         else
         {

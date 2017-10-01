@@ -6,6 +6,8 @@
 package journal.test.pkg1;
 
 import database.Database;
+
+import java.io.InvalidObjectException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
@@ -64,7 +66,7 @@ public class JournalTest1 extends Application {
         return currentJournal;
     }
 
-    public void userLogging(User user) throws SQLException {
+    public void userLogging(User user) throws SQLException, InvalidObjectException {
         loggedUser = user;
         loadJournal();
         gotoProfile();
@@ -146,8 +148,8 @@ public class JournalTest1 extends Application {
         }
     }
     
-    public void loadJournal() throws SQLException {
-        ResultSet r = Database.INSTANCE.getJournals(loggedUser.getID());
+    public void loadJournal() throws SQLException, InvalidObjectException {
+        ResultSet r = Database.getJournals(loggedUser.getID());
         while (r.next()) {
             int id = r.getInt("ID");
             int userID = r.getInt("User_ID");

@@ -7,6 +7,7 @@ package controller;
 
 import database.Database;
 
+import java.io.InvalidObjectException;
 import java.sql.SQLException;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -25,7 +26,8 @@ public class RegisterController {
     @FXML private TextField hint;
     @FXML private Label errorMessage;
     
-    @FXML protected void handleRegister() throws SQLException {
+    @FXML protected void handleRegister() throws SQLException, InvalidObjectException
+    {
         if (errorCheck()) {
             String uName = username.getText();
             String uPass = password.getText();
@@ -35,17 +37,17 @@ public class RegisterController {
             String dbHash = DatatypeConverter.printHexBinary(PasswordHelper.getHash(uPass.toCharArray(), salt));
             String uSalt = DatatypeConverter.printHexBinary(salt);
 
-            Database.INSTANCE.newUser(uName, dbHash, uHint, uSalt);
-                JournalTest1.getInstance().gotoLogin();
+            Database.newUser(uName, dbHash, uHint, uSalt);
+            JournalTest1.getInstance().gotoLogin();
         }
-            else errorMessage.setText("Username already taken, please choose another!");
+        else errorMessage.setText("Username already taken, please choose another!");
         
-        }
+    }
         
     
-    private boolean errorCheck() throws SQLException {
+    private boolean errorCheck() throws SQLException, InvalidObjectException {
         if(!requiredCheck()) {
-            if (Database.INSTANCE.checkDupUser(username.getText())) {
+            if (Database.checkDupUser(username.getText())) {
                 errorMessage.setText("Username has already been taken!");
                 return false;
             }
