@@ -40,9 +40,10 @@ public class Database
     //Get user info or null
     public static User tryGetUser(String uName) throws SQLException, InvalidObjectException
     {
-        try (Connection conn = establishConnection())
-        {
+        try (
+            Connection conn = establishConnection();
             Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        ) {
             ResultSet r = s.executeQuery("SELECT * FROM users WHERE username ='" + uName + "'");
 
             if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
@@ -63,9 +64,10 @@ public class Database
     //Checks for Duplicate ID
     public static boolean checkDupUser(String uName) throws SQLException, InvalidObjectException
     {
-        try (Connection conn = establishConnection())
-        {
+        try (
+            Connection conn = establishConnection();
             Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        ) {
             ResultSet r = s.executeQuery("SELECT username FROM users WHERE username ='" + uName + "'");
 
             if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
@@ -79,10 +81,11 @@ public class Database
     public static void newUser(String uName, String uPass, String uHint, String uSalt) throws SQLException, InvalidObjectException
     {
         int uID = nextID() + 1;
-        try (Connection conn = establishConnection())
-        {
+        try (
+            Connection conn = establishConnection();
             Statement s = conn.createStatement();
-            s.executeUpdate("INSERT INTO Users VALUES ('" + uID + "', '" + uName + "', '" + uPass + "', '" + uHint + "', '" + uSalt + "')");    
+        ) {
+            s.executeUpdate("INSERT INTO Users VALUES ('" + uID + "', '" + uName + "', '" + uPass + "', '" + uHint + "', '" + uSalt + "')");
         }
         catch ( SQLException err ) {
             System.out.println(err);
@@ -92,9 +95,10 @@ public class Database
     //Searches for the next available ID
     static int nextID() throws SQLException, InvalidObjectException
     {
-        try (Connection conn = establishConnection())
-        {
+        try (
+            Connection conn = establishConnection();
             Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        ) {
             ResultSet r = s.executeQuery("SELECT ID FROM Users");
 
             if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
@@ -107,9 +111,10 @@ public class Database
     public static LinkedList<Journal> getJournals(int id) throws SQLException, InvalidObjectException
     {
         LinkedList<Journal> journals = new LinkedList<>();
-        try (Connection conn = establishConnection())
-        {
+        try (
+            Connection conn = establishConnection();
             Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        ) {
             ResultSet r = s.executeQuery("SELECT * FROM journal Where user_id='" + id + "'");
 
             if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
