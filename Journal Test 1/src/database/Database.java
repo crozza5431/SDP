@@ -167,7 +167,7 @@ public class Database
             Connection conn = establishConnection();
             Statement s = conn.createStatement();
         ) {
-            s.executeUpdate("UPDATE journal SET Deleted=" + delete + "' WHERE ID=" + ID);
+            s.executeUpdate("UPDATE journal SET Deleted=" + delete + " WHERE ID=" + ID);
         }
         catch ( SQLException err ) {
             System.out.println(err);
