@@ -64,6 +64,7 @@ public class ProfileController implements Initializable {
                   public void handle(ActionEvent event) {
                       //Delete Function
                       int journalID = row.getItem().getId();
+                      Database.changeDeletedStatus(journalID, 1);
                       journalTable.getItems().remove(row.getItem());
                       System.out.println("Selected Journal ID is: " + journalID);
                   }

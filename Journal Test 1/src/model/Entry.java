@@ -14,14 +14,22 @@ import javafx.beans.property.*;
  */
 public class Entry {
     //Github test!
+    private final int id;
+    private final int journalID;
     private StringProperty name = new SimpleStringProperty();
     private final Date date;
+    private boolean hidden;
     private StringProperty entry = new SimpleStringProperty();
+    private String reason;
     
-    public Entry(String name, String entry) {
-        date = new Date();
+    public Entry(int id, int journalID, String name, Date date, boolean hidden, String data, String reason) {
+        this.id = id;
+        this.journalID = journalID;
         this.name.set(name);
-        this.entry.set(entry);
+        this.date = date;
+        this.hidden = hidden;
+        this.entry.set(data);
+        this.reason = reason;
     }
     
     public String getName() {

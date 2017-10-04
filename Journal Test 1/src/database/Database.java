@@ -7,6 +7,7 @@ package database;
 
 import model.Journal;
 import model.User;
+import model.Entry;
 
 import java.io.InvalidObjectException;
 import java.sql.Connection;
@@ -173,4 +174,64 @@ public class Database
             System.out.println(err);
         }
     }
+    
+     //returns a result set of a users journals
+    public static LinkedList<Entry> getEntry(int id) throws SQLException, InvalidObjectException
+    {
+        LinkedList<Entry> entries = new LinkedList<>();
+        try (
+            Connection conn = establishConnection();
+            Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        ) {
+            ResultSet r = s.executeQuery("SELECT * FROM Entry Where journal_id='" + id + "'");
+
+            if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
+            while (r.next())
+            {
+                int eID = r.getInt("ID");
+                int eJournalID = r.getInt("User_ID");
+                String eName = r.getString("Name");
+                Date eDateCreated = r.getDate("Date_created");
+                boolean hidden = r.getBoolean("Deleted");
+                String data = r.getString("Data");
+                String reason = r.getString("Reason");
+                if (hidden == false) {
+                    //.add(e)
+                    //entries.add(eID, eJournalID, eName, eDateCreated, hidden, data, reason);
+                }
+            }
+        }
+        return entries;
+    }
+    
+    //Inserts new entry into Database
+    public static void newEntry(int journalID, String name) throws SQLException, InvalidObjectException
+    {
+        int uID = nextEntryID() + 1;
+        try (
+            Connection conn = establishConnection();
+            Statement s = conn.createStatement();
+        ) {
+            s.executeUpdate("INSERT INTO Journal VALUES ('" + uID + "', '" + journalID + "', '" + name + "', GETDATE ( ) , '0')");
+        }
+        catch ( SQLException err ) {
+            System.out.println(err);
+        }
+    }
+    
+    //Searches for the next available Journal ID
+    public static int nextEntryID() throws SQLException, InvalidObjectException
+    {
+        try (
+            Connection conn = establishConnection();
+            Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        ) {
+            ResultSet r = s.executeQuery("SELECT ID FROM Entry");
+
+            if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
+            r.last();
+            return r.getInt("ID");
+        }
+    }
+    
 }
