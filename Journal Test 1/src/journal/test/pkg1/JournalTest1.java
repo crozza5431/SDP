@@ -21,6 +21,7 @@ import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import model.Entry;
 import model.Journal;
 import model.User;
 
@@ -66,6 +67,10 @@ public class JournalTest1 extends Application {
     
     public Journal getJournal() {
         return currentJournal;
+    }
+    
+    public void setJournal(Journal journal) {
+        currentJournal = journal;
     }
 
     public void userLogging(User user) throws SQLException, InvalidObjectException {
@@ -156,6 +161,15 @@ public class JournalTest1 extends Application {
         for (Journal journal : journals)
         {
             loggedUser.addJournal(journal);
+        }
+    }
+    
+    public void loadEntry() throws SQLException, InvalidObjectException {
+        currentJournal.clearEntries();
+        LinkedList<Entry> entries = Database.getEntry(currentJournal.getId());
+        for (Entry entry : entries)
+        {
+            currentJournal.addEntry(entry);
         }
     }
 }
