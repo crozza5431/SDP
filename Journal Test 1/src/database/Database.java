@@ -231,5 +231,18 @@ public class Database
             r.last();
             return r.getInt("ID");
         }
-    }   
+    }
+    
+    //sets a entry to be "Hidden"
+    public static void changeHiddenStatus(int ID, int hidden) {
+        try (
+            Connection conn = establishConnection();
+            Statement s = conn.createStatement();
+        ) {
+            s.executeUpdate("UPDATE entry SET Deleted=" + hidden + " WHERE ID=" + ID);
+        }
+        catch ( SQLException err ) {
+            System.out.println(err);
+        }
+    }
 }
