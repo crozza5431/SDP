@@ -34,10 +34,6 @@ public class Journal {
         //Entry.add(new Entry("My first entry", "Welcome!"));
     }
     
-    public int getId(){
-        return id;
-    }
-    
     public String getDate(){
         return date.toString();
     }
@@ -46,11 +42,19 @@ public class Journal {
         return name.get();
     }
     
+    public int getId(){
+        return id;
+    }
+    
     public ObservableList<Entry> getEntries(){
         return Entry;
     }
     
     public void addEntry(Entry entry) {
         Entry.add(entry);
+    }
+
+    public void clearEntries() {
+        Entry.clear();
     }
 }
