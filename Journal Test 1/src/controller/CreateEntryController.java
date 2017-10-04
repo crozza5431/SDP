@@ -8,7 +8,10 @@
 package controller;
 //ass
 
+import database.Database;
+import java.io.InvalidObjectException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -25,9 +28,13 @@ public class CreateEntryController implements Initializable{
     @FXML TextField entryName;
     @FXML TextArea entryContents;
     //further testing
-    public void handleCreateEntry(){
-        Entry entry = new Entry(entryName.getText(), entryContents.getText());
-        JournalTest1.getInstance().getJournal().addEntry(entry);
+    public void handleCreateEntry() throws SQLException, InvalidObjectException {
+        String eName = entryName.getText();
+        String data = entryContents.getText();
+        int jID = JournalTest1.getInstance().getJournal().getId();
+        Database.newEntry(jID, eName, data);
+        //Entry entry = new Entry(entryName.getText(), entryContents.getText());
+        //JournalTest1.getInstance().getJournal().addEntry(entry);
     }
     
     @FXML protected void processBack() {

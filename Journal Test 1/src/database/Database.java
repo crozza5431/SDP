@@ -204,14 +204,14 @@ public class Database
     }
     
     //Inserts new entry into Database
-    public static void newEntry(int journalID, String name, String data, String reason) throws SQLException, InvalidObjectException
+    public static void newEntry(int journalID, String name, String data) throws SQLException, InvalidObjectException
     {
         int eID = nextEntryID() + 1;
         try (
             Connection conn = establishConnection();
             Statement s = conn.createStatement();
         ) {
-            s.executeUpdate("INSERT INTO Entry VALUES ('" + eID + "', '" + journalID + "', '" + name + "', GETDATE ( ) , '0', '" + data + "', '" + reason + "'");
+            s.executeUpdate("INSERT INTO Entry VALUES ('" + eID + "', '" + journalID + "', '" + name + "', GETDATE ( ) , '0', '" + data + "', '')");
         }
         catch ( SQLException err ) {
             System.out.println(err);
@@ -231,6 +231,5 @@ public class Database
             r.last();
             return r.getInt("ID");
         }
-    }
-    
+    }   
 }
