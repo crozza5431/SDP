@@ -120,6 +120,7 @@ public class JournalTest1 extends Application {
     
     public void gotoEntry() {
         try {
+            loadEntry();
             replaceSceneContext("/view/journal.fxml");
         }
         catch (Exception ex){
