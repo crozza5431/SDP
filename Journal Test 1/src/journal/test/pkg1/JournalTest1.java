@@ -151,6 +151,7 @@ public class JournalTest1 extends Application {
     }
     
     public void loadJournal() throws SQLException, InvalidObjectException {
+        loggedUser.clearJournals();
         LinkedList<Journal> journals = Database.getJournals(loggedUser.getID());
         for (Journal journal : journals)
         {

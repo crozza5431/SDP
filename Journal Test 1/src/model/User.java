@@ -55,4 +55,8 @@ public class User {
     public void addJournal(Journal journal) {
         journals.add(journal);
     }
+    
+    public void  clearJournals() {
+        journals.clear();
+    }
 }

@@ -92,7 +92,7 @@ public class Database
         }
     }
 
-    //Searches for the next available ID
+    //Searches for the next available user ID
     static int nextID() throws SQLException, InvalidObjectException
     {
         try (
@@ -124,9 +124,40 @@ public class Database
                 int jUserID = r.getInt("User_ID");
                 String jName = r.getString("Name");
                 Date jDateCreated = r.getDate("Date_created");
-                journals.add(new Journal(jID, jUserID, jName, jDateCreated));
+                boolean deleted = r.getBoolean("Deleted");
+                journals.add(new Journal(jID, jUserID, jName, jDateCreated, deleted));
             }
         }
         return journals;
+    }
+    
+    //Inserts new journal into Database
+    public static void newJournal(int userID, String name) throws SQLException, InvalidObjectException
+    {
+        int uID = nextJournalID() + 1;
+        try (
+            Connection conn = establishConnection();
+            Statement s = conn.createStatement();
+        ) {
+            s.executeUpdate("INSERT INTO Journal VALUES ('" + uID + "', '" + userID + "', '" + name + "', GETDATE ( ) , '0')");
+        }
+        catch ( SQLException err ) {
+            System.out.println(err);
+        }
+    }
+    
+    //Searches for the next available Journal ID
+    static int nextJournalID() throws SQLException, InvalidObjectException
+    {
+        try (
+            Connection conn = establishConnection();
+            Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        ) {
+            ResultSet r = s.executeQuery("SELECT ID FROM Journal");
+
+            if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
+            r.last();
+            return r.getInt("ID");
+        }
     }
 }
