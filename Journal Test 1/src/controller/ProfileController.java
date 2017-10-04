@@ -70,16 +70,10 @@ public class ProfileController implements Initializable {
                   rowMenu.show(journalTable, event.getScreenX(), event.getScreenY());
               }
               if (event.getClickCount() == 2 && (! row.isEmpty())) {
-                  try {
                       Journal rowData = row.getItem();
                       JournalTest1.getInstance().returnSelected(rowData);
-                      JournalTest1.getInstance().loadEntry();
                       JournalTest1.getInstance().gotoEntry();
-                  } catch (SQLException ex) {
-                      Logger.getLogger(ProfileController.class.getName()).log(Level.SEVERE, null, ex);
-                  } catch (InvalidObjectException ex) {
-                      Logger.getLogger(ProfileController.class.getName()).log(Level.SEVERE, null, ex);
-                  }
+
               }
           });
               return row;
