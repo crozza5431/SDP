@@ -33,6 +33,7 @@ public class CreateEntryController implements Initializable{
         String data = entryContents.getText();
         int jID = JournalTest1.getInstance().getJournal().getId();
         Database.newEntry(jID, eName, data);
+        JournalTest1.getInstance().gotoEntry();
         //Entry entry = new Entry(entryName.getText(), entryContents.getText());
         //JournalTest1.getInstance().getJournal().addEntry(entry);
     }
