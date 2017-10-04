@@ -34,6 +34,10 @@ public class Journal {
         //Entry.add(new Entry("My first entry", "Welcome!"));
     }
     
+    public int getId(){
+        return id;
+    }
+    
     public String getDate(){
         return date.toString();
     }
