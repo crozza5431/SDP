@@ -62,7 +62,9 @@ public class ProfileController implements Initializable {
               deleteItem.setOnAction(new EventHandler<ActionEvent>() {
                   @Override
                   public void handle(ActionEvent event) {
-                      journalTable.getItems().remove(row.getItem());
+                      //Delete Function
+                      int journalID = row.getItem().getId();
+                      System.out.println("Selected Journal ID is: " + journalID);
                   }
               });
               rowMenu.getItems().addAll(hideItem, deleteItem);
