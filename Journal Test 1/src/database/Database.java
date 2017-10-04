@@ -135,12 +135,12 @@ public class Database
     //Inserts new journal into Database
     public static void newJournal(int userID, String name) throws SQLException, InvalidObjectException
     {
-        int uID = nextJournalID() + 1;
+        int jID = nextJournalID() + 1;
         try (
             Connection conn = establishConnection();
             Statement s = conn.createStatement();
         ) {
-            s.executeUpdate("INSERT INTO Journal VALUES ('" + uID + "', '" + userID + "', '" + name + "', GETDATE ( ) , '0')");
+            s.executeUpdate("INSERT INTO Journal VALUES ('" + jID + "', '" + userID + "', '" + name + "', GETDATE ( ) , '0')");
         }
         catch ( SQLException err ) {
             System.out.println(err);
@@ -196,8 +196,7 @@ public class Database
                 String data = r.getString("Data");
                 String reason = r.getString("Reason");
                 if (hidden == false) {
-                    //.add(e)
-                    //entries.add(eID, eJournalID, eName, eDateCreated, hidden, data, reason);
+                    entries.add(new Entry(eID, eJournalID, eName, eDateCreated, hidden, data, reason));
                 }
             }
         }
@@ -205,14 +204,14 @@ public class Database
     }
     
     //Inserts new entry into Database
-    public static void newEntry(int journalID, String name) throws SQLException, InvalidObjectException
+    public static void newEntry(int journalID, String name, String data, String reason) throws SQLException, InvalidObjectException
     {
-        int uID = nextEntryID() + 1;
+        int eID = nextEntryID() + 1;
         try (
             Connection conn = establishConnection();
             Statement s = conn.createStatement();
         ) {
-            s.executeUpdate("INSERT INTO Journal VALUES ('" + uID + "', '" + journalID + "', '" + name + "', GETDATE ( ) , '0')");
+            s.executeUpdate("INSERT INTO Entry VALUES ('" + eID + "', '" + journalID + "', '" + name + "', GETDATE ( ) , '0', '" + data + "', '" + reason + "'");
         }
         catch ( SQLException err ) {
             System.out.println(err);
