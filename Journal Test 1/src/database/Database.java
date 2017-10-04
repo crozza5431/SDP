@@ -125,7 +125,7 @@ public class Database
                 String jName = r.getString("Name");
                 Date jDateCreated = r.getDate("Date_created");
                 boolean deleted = r.getBoolean("Deleted");
-                journals.add(new Journal(jID, jUserID, jName, jDateCreated, deleted));
+                if (deleted == false) journals.add(new Journal(jID, jUserID, jName, jDateCreated, deleted));
             }
         }
         return journals;
@@ -147,7 +147,7 @@ public class Database
     }
     
     //Searches for the next available Journal ID
-    static int nextJournalID() throws SQLException, InvalidObjectException
+    public static int nextJournalID() throws SQLException, InvalidObjectException
     {
         try (
             Connection conn = establishConnection();
@@ -158,6 +158,19 @@ public class Database
             if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
             r.last();
             return r.getInt("ID");
+        }
+    }
+    
+    //sets a journal to be "deleted"
+    public static void changeDeletedStatus(int ID, int delete) {
+        try (
+            Connection conn = establishConnection();
+            Statement s = conn.createStatement();
+        ) {
+            s.executeUpdate("UPDATE journal SET Deleted=" + delete + "' WHERE ID=" + ID);
+        }
+        catch ( SQLException err ) {
+            System.out.println(err);
         }
     }
 }
