@@ -189,10 +189,10 @@ public class Database
             while (r.next())
             {
                 int eID = r.getInt("ID");
-                int eJournalID = r.getInt("User_ID");
+                int eJournalID = r.getInt("Journal_ID");
                 String eName = r.getString("Name");
                 Date eDateCreated = r.getDate("Date_created");
-                boolean hidden = r.getBoolean("Deleted");
+                boolean hidden = r.getBoolean("Hidden");
                 String data = r.getString("Data");
                 String reason = r.getString("Reason");
                 if (hidden == false) {
