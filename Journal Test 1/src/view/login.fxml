@@ -10,6 +10,7 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
+
 <StackPane id="Login" prefHeight="276.0" prefWidth="467.0" styleClass="login" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="controller.LoginController">
   <children>
     <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="361.0" prefWidth="294.0">
@@ -24,16 +25,15 @@
         <PasswordField fx:id="password" layoutX="81.0" layoutY="138.0" onAction="#handleLogin" prefWidth="200.0" />
         <Label layoutX="153.0" layoutY="122.0" text="Password:" />
         <Label layoutX="152.0" layoutY="85.0" text="Username:" />
-        <Button fx:id="login" defaultButton="true" layoutX="144.0" layoutY="196.0" onAction="#handleLogin" prefHeight="22.0" prefWidth="75.0" text="Login" />
-        <Button fx:id="register" defaultButton="true" layoutX="144.0" layoutY="225.0" minHeight="16.0" onAction="#handleRegister" prefHeight="22.0" prefWidth="75.0" text="Register" textFill="RED" />
-        <Label fx:id="errorMessage" layoutX="90.0" layoutY="252.0" textFill="RED" />
+        <Button fx:id="login" defaultButton="true" layoutX="144.0" layoutY="171.0" onAction="#handleLogin" prefHeight="22.0" prefWidth="75.0" text="Login" />
+        <Button fx:id="register" defaultButton="true" layoutX="144.0" layoutY="200.0" minHeight="16.0" onAction="#handleRegister" prefHeight="22.0" prefWidth="75.0" text="Register" textFill="RED" />
+        <Label fx:id="errorMessage" layoutX="90.0" layoutY="250.0" textFill="RED" />
         <Text layoutX="86.0" layoutY="71.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your Personal Problem Book">
           <font>
             <Font name="Lucida Handwriting Italic" size="12.0" />
           </font>
         </Text>
-        <Label fx:id="hintMessage" layoutX="144.0" layoutY="252.0" text="" textFill="RED" />
-        <CheckBox fx:id="hint" layoutX="144.0" layoutY="170.0" mnemonicParsing="false" text="Show Hint" />
+        <Label fx:id="hintMessage" layoutX="144.0" layoutY="227.0" prefWidth="75.0" text="" textAlignment="CENTER" textFill="RED" wrapText="true" />
       </children>
     </AnchorPane>
   </children>
