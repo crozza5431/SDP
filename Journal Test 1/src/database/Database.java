@@ -43,7 +43,7 @@ public class Database
     {
         try (
             Connection conn = establishConnection();
-            Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
         ) {
             ResultSet r = s.executeQuery("SELECT * FROM users WHERE username ='" + uName + "'");
 
@@ -67,7 +67,7 @@ public class Database
     {
         try (
             Connection conn = establishConnection();
-            Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
         ) {
             ResultSet r = s.executeQuery("SELECT username FROM users WHERE username ='" + uName + "'");
 
@@ -84,7 +84,7 @@ public class Database
         int uID = nextID() + 1;
         try (
             Connection conn = establishConnection();
-            Statement s = conn.createStatement();
+            Statement s = conn.createStatement()
         ) {
             s.executeUpdate("INSERT INTO Users VALUES ('" + uID + "', '" + uName + "', '" + uPass + "', '" + uHint + "', '" + uSalt + "')");
         }
@@ -98,7 +98,7 @@ public class Database
     {
         try (
             Connection conn = establishConnection();
-            Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
         ) {
             ResultSet r = s.executeQuery("SELECT ID FROM Users");
 
@@ -114,7 +114,7 @@ public class Database
         LinkedList<Journal> journals = new LinkedList<>();
         try (
             Connection conn = establishConnection();
-            Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
         ) {
             ResultSet r = s.executeQuery("SELECT * FROM journal Where user_id='" + id + "'");
 
@@ -126,7 +126,7 @@ public class Database
                 String jName = r.getString("Name");
                 Date jDateCreated = r.getDate("Date_created");
                 boolean deleted = r.getBoolean("Deleted");
-                if (deleted == false) journals.add(new Journal(jID, jUserID, jName, jDateCreated, deleted));
+                if (!deleted) journals.add(new Journal(jID, jUserID, jName, jDateCreated, false));
             }
         }
         return journals;
@@ -138,7 +138,7 @@ public class Database
         int jID = nextJournalID() + 1;
         try (
             Connection conn = establishConnection();
-            Statement s = conn.createStatement();
+            Statement s = conn.createStatement()
         ) {
             s.executeUpdate("INSERT INTO Journal VALUES ('" + jID + "', '" + userID + "', '" + name + "', GETDATE ( ) , '0')");
         }
@@ -148,11 +148,11 @@ public class Database
     }
     
     //Searches for the next available Journal ID
-    public static int nextJournalID() throws SQLException, InvalidObjectException
+    static int nextJournalID() throws SQLException, InvalidObjectException
     {
         try (
             Connection conn = establishConnection();
-            Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
         ) {
             ResultSet r = s.executeQuery("SELECT ID FROM Journal");
 
@@ -166,7 +166,7 @@ public class Database
     public static void changeDeletedStatus(int ID, int delete) {
         try (
             Connection conn = establishConnection();
-            Statement s = conn.createStatement();
+            Statement s = conn.createStatement()
         ) {
             s.executeUpdate("UPDATE journal SET Deleted=" + delete + " WHERE ID=" + ID);
         }
@@ -181,7 +181,7 @@ public class Database
         LinkedList<Entry> entries = new LinkedList<>();
         try (
             Connection conn = establishConnection();
-            Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
         ) {
             ResultSet r = s.executeQuery("SELECT * FROM Entry Where journal_id='" + id + "'");
 
@@ -195,8 +195,8 @@ public class Database
                 boolean hidden = r.getBoolean("Hidden");
                 String data = r.getString("Data");
                 String reason = r.getString("Reason");
-                if (hidden == false) {
-                    entries.add(new Entry(eID, eJournalID, eName, eDateCreated, hidden, data, reason));
+                if (!hidden) {
+                    entries.add(new Entry(eID, eJournalID, eName, eDateCreated, false, data, reason));
                 }
             }
         }
@@ -209,7 +209,7 @@ public class Database
         int eID = nextEntryID() + 1;
         try (
             Connection conn = establishConnection();
-            Statement s = conn.createStatement();
+            Statement s = conn.createStatement()
         ) {
             s.executeUpdate("INSERT INTO Entry VALUES ('" + eID + "', '" + journalID + "', '" + name + "', GETDATE ( ) , '0', '" + data + "', '')");
         }
@@ -223,7 +223,7 @@ public class Database
     {
         try (
             Connection conn = establishConnection();
-            Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
         ) {
             ResultSet r = s.executeQuery("SELECT ID FROM Entry");
 
@@ -237,7 +237,7 @@ public class Database
     public static void changeHiddenStatus(int ID, int hidden) {
         try (
             Connection conn = establishConnection();
-            Statement s = conn.createStatement();
+            Statement s = conn.createStatement()
         ) {
             s.executeUpdate("UPDATE entry SET Deleted=" + hidden + " WHERE ID=" + ID);
         }
