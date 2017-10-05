@@ -211,7 +211,7 @@ public class Database
             Connection conn = establishConnection();
             Statement s = conn.createStatement()
         ) {
-            s.executeUpdate("INSERT INTO Entry VALUES ('" + eID + "', '" + journalID + "', '" + name + "', GETDATE ( ) , '0', '" + data + "', '')");
+            s.executeUpdate("INSERT INTO Entry VALUES ('" + eID + "', '" + journalID + "', '" + name + "', GETUTCDATE ( ) , '0', '" + data + "', '')");
         }
         catch ( SQLException err ) {
             System.out.println(err);
@@ -244,5 +244,21 @@ public class Database
         catch ( SQLException err ) {
             System.out.println(err);
         }
+    }
+    
+        //retrieves most recent data
+    public static String retrieveLatestEntry(int ID) throws SQLException, InvalidObjectException {
+        String entryData = null;
+        try (
+            Connection conn = establishConnection();
+            Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        ) {
+            ResultSet r = s.executeQuery("SELECT * FROM Entry WHERE ID=" + ID + " ORDER BY Date_created ASC");
+
+            if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
+            r.next();
+            entryData = r.getString("Data");
+        }
+        return entryData;
     }
 }
