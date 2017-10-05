@@ -87,6 +87,8 @@ public class JournalTest1 extends Application {
     public void gotoRegister() {
         try {
             replaceSceneContext("/view/register.fxml");
+            stage.setResizable(false);
+            stage.sizeToScene();
         }
         catch (Exception ex){
            System.out.println(ex);
@@ -95,6 +97,8 @@ public class JournalTest1 extends Application {
     public void gotoProfile() {
         try {
             replaceSceneContext("/view/profile.fxml");
+            stage.setResizable(false);
+            stage.sizeToScene();
         }
         catch (Exception ex){
            System.out.println(ex);
@@ -104,6 +108,8 @@ public class JournalTest1 extends Application {
     public void gotoLogin() {
         try {
             replaceSceneContext("/view/login.fxml");
+            stage.setResizable(false);
+            stage.sizeToScene();
         }
         catch (Exception ex){
         }
@@ -112,6 +118,8 @@ public class JournalTest1 extends Application {
     public void gotoCreateEntry() {
         try {
             replaceSceneContext("/view/createEntry.fxml");
+            stage.setResizable(false);
+            stage.sizeToScene();
         }
         catch (Exception ex) {
             
@@ -122,6 +130,8 @@ public class JournalTest1 extends Application {
         try {
             loadEntry();
             replaceSceneContext("/view/journal.fxml");
+            stage.setResizable(false);
+            stage.sizeToScene();
         }
         catch (Exception ex){
 
@@ -150,6 +160,8 @@ public class JournalTest1 extends Application {
     public void gotoCreateJournal() {
         try {
             replaceSceneContext("/view/createJournal.fxml");
+            stage.setResizable(false);
+            stage.sizeToScene();
         }
         catch (Exception ex){
 
