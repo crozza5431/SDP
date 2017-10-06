@@ -28,7 +28,7 @@ public class Database
     {
         // Establishes connection with the SQL Database AZURE
         try {
-            String connectionURL = "jdbc:sqlserver://team10sdp.Database.windows.net:1433;Database=JournalBuddy;user=Team10@team10sdp;password=Passw0rd;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.Database.windows.net;loginTimeout=30;";
+            String connectionURL = "jdbc:sqlserver://team10sdpaus.database.windows.net:1433;database=JournalBuddy;user=Team10SDP@team10sdpaus;password=Passw0rd;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
 
             return DriverManager.getConnection(connectionURL);
         }
