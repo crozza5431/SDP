@@ -15,8 +15,11 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.TimeZone;
 
 /**
  *
@@ -124,7 +127,7 @@ public class Database
                 int jID = r.getInt("ID");
                 int jUserID = r.getInt("User_ID");
                 String jName = r.getString("Name");
-                Date jDateCreated = r.getDate("Date_created");
+                String jDateCreated = dateCorrectionFromUTC(r.getTimestamp("Date_created"));
                 boolean deleted = r.getBoolean("Deleted");
                 if (!deleted) journals.add(new Journal(jID, jUserID, jName, jDateCreated, false));
             }
@@ -140,7 +143,7 @@ public class Database
             Connection conn = establishConnection();
             Statement s = conn.createStatement()
         ) {
-            s.executeUpdate("INSERT INTO Journal VALUES ('" + jID + "', '" + userID + "', '" + name + "', GETDATE ( ) , '0')");
+            s.executeUpdate("INSERT INTO Journal VALUES ('" + jID + "', '" + userID + "', '" + name + "', GETUTCDATE ( ) , '0')");
         }
         catch ( SQLException err ) {
             System.out.println(err);
@@ -191,7 +194,7 @@ public class Database
                 int eID = r.getInt("ID");
                 int eJournalID = r.getInt("Journal_ID");
                 String eName = r.getString("Name");
-                Date eDateCreated = r.getDate("Date_created");
+                String eDateCreated = dateCorrectionFromUTC(r.getTimestamp("Date_created"));
                 boolean hidden = r.getBoolean("Hidden");
                 String data = r.getString("Data");
                 String reason = r.getString("Reason");
@@ -246,19 +249,90 @@ public class Database
         }
     }
     
-        //retrieves most recent data
+    //retrieves most recent data
     public static String retrieveLatestEntry(int ID) throws SQLException, InvalidObjectException {
         String entryData = null;
         try (
             Connection conn = establishConnection();
             Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         ) {
-            ResultSet r = s.executeQuery("SELECT * FROM Entry WHERE ID=" + ID + " ORDER BY Date_created ASC");
+            ResultSet r = s.executeQuery("SELECT * FROM Entry WHERE ID=" + ID + " ORDER BY Date_created DESC");
 
             if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
             r.next();
             entryData = r.getString("Data");
         }
         return entryData;
+    }
+    
+    //searches entries to find keywords
+    public static LinkedList<Entry> searchEntriesKeyword(int id, String keyword, String hid) throws SQLException, InvalidObjectException {
+        LinkedList<Entry> results = new LinkedList<>();
+        try (
+            Connection conn = establishConnection();
+            Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+        ) {
+            ResultSet r = s.executeQuery("SELECT * FROM Entry WHERE User_ID=" + id + " Hidden=" + hid + " AND Data LIKE '%" + keyword + "%'");
+
+            if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
+            while (r.next())
+            {
+                int eID = r.getInt("ID");
+                int eJournalID = r.getInt("Journal_ID");
+                String eName = r.getString("Name");
+                String eDateCreated = dateCorrectionFromUTC(r.getTimestamp("Date_created"));
+                boolean hidden = r.getBoolean("Hidden");
+                String data = r.getString("Data");
+                String reason = r.getString("Reason");
+                if (!hidden) {
+                    results.add(new Entry(eID, eJournalID, eName, eDateCreated, false, data, reason));
+                }
+            }
+        }
+        return results;
+    }
+    
+    //searches entries to find entries BF, AF or between dates
+    // dates are in YYYY-MM-DD format and in UTC time (matters if an entry was made before 11am as it will show previous day )
+    public static LinkedList<Entry> searchEntriesKeyword(int id, String hid, String date1, String date2) throws SQLException, InvalidObjectException {
+        LinkedList<Entry> results = new LinkedList<>();
+        String query;
+        
+        if (date1 == null) {
+            query = ">'" + date1 + "'";
+        } else if (date2 == null) {
+            query = "<'" + date1 + "'";
+        } else {
+            query = " BETWEEN '" + date1 + "' AND '" + date2 + "'";
+        }
+        try (
+            Connection conn = establishConnection();
+            Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+        ) {
+            ResultSet r = s.executeQuery("SELECT * FROM Entry WHERE User_ID=" + id + " Hidden=" + hid + " AND Date_created" + query);
+
+            if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
+            while (r.next())
+            {
+                int eID = r.getInt("ID");
+                int eJournalID = r.getInt("Journal_ID");
+                String eName = r.getString("Name");
+                String eDateCreated = dateCorrectionFromUTC(r.getTimestamp("Date_created"));
+                boolean hidden = r.getBoolean("Hidden");
+                String data = r.getString("Data");
+                String reason = r.getString("Reason");
+                if (!hidden) {
+                    results.add(new Entry(eID, eJournalID, eName, eDateCreated, false, data, reason));
+                }
+            }
+        }
+        return results;
+    }
+    
+    private static String dateCorrectionFromUTC(Date utcTime) {
+        TimeZone t = TimeZone.getDefault();
+        if (t.useDaylightTime()) utcTime = new Date(utcTime.getTime() - 3600*1000);
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("EEEE, d MMMM yyyy 'at' h:m:s a z");
+        return dateFormatter.format(utcTime);
     }
 }

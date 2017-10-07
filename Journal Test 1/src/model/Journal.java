@@ -21,10 +21,10 @@ public class Journal {
     private final int id;
     private final int userID;
     private StringProperty name = new SimpleStringProperty();
-    private final Date date;
+    private final String date;
     private boolean deleted;
     
-    public Journal(int id, int userID, String name, Date date, boolean deleted) {
+    public Journal(int id, int userID, String name, String date, boolean deleted) {
         this.id = id;
         this.userID = userID;
         this.name.set(name);
