@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.TimeZone;
@@ -329,10 +330,19 @@ public class Database
         return results;
     }
     
+    //Converts UTC to local time
     private static String dateCorrectionFromUTC(Date utcTime) {
-        TimeZone t = TimeZone.getDefault();
-        if (t.useDaylightTime()) utcTime = new Date(utcTime.getTime() - 3600*1000);
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("EEEE, d MMMM yyyy 'at' h:m:s a z");
-        return dateFormatter.format(utcTime);
+        String timeZone = Calendar.getInstance().getTimeZone().getID();
+        Date local = new Date(utcTime.getTime() + TimeZone.getTimeZone(timeZone).getOffset(utcTime.getTime()));
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("EEEE, d MMMM yyyy 'at' h:mm a z");
+        return dateFormatter.format(local);
+    }
+    
+    //Converts local time to UTC
+    private static String dateLocaltoUTC(Date localTime) {
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss:fff");
+        dateFormatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date UTC = new Date(dateFormatter.format(localTime));
+        return dateFormatter.format(UTC);
     }
 }
