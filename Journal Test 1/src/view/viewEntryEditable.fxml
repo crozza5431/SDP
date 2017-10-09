@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="controller.ViewEntryEditableController">
+  <children>
+    <Text layoutX="208.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" fx:id="entryName">
+      <font>
+        <Font name="System Bold" size="30.0" />
+      </font>
+    </Text>
+    <Button layoutX="14.0" layoutY="13.0" mnemonicParsing="false" text="&lt;" onAction="#handleBack">
+      <font>
+        <Font name="System Bold" size="20.0" fx:id="x1" />
+      </font>
+    </Button>
+    <Button font="$x1" layoutX="508.0" layoutY="13.0" mnemonicParsing="false" text="Save" />
+    <TextArea layoutX="14.0" layoutY="67.0" prefHeight="243.0" prefWidth="572.0" wrapText="true" fx:id="entryData" />
+    <TextArea layoutX="14.0" layoutY="351.0" prefHeight="35.0001220703125" prefWidth="571.9998779296875"  wrapText="true" fx:id="entryReason"/>
+    <Text layoutX="222.0" layoutY="340.0" strokeType="OUTSIDE" strokeWidth="0.0" text="What changes did you make?">
+      <font>
+        <Font name="System Bold" size="12.0" />
+      </font>
+    </Text>
+  </children>
+</AnchorPane>
