@@ -48,4 +48,8 @@ public class Entry {
     public String getDate() {
         return date.toString();
     }
+    
+    public String getReason() {
+        return reason;
+    }
 }
