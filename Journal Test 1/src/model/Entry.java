@@ -13,7 +13,6 @@ import javafx.beans.property.*;
  * @author User
  */
 public class Entry {
-    //Github test!
     private final int id;
     private final int journalID;
     private StringProperty name = new SimpleStringProperty();
