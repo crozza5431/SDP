@@ -3,105 +3,217 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controller;
+package journal.test.pkg1;
 
 import database.Database;
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseButton;
-import javafx.util.Callback;
-import journal.test.pkg1.JournalTest1;
+
+import java.io.InvalidObjectException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.LinkedList;
+
+import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.JavaFXBuilderFactory;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import model.Entry;
 import model.Journal;
+import model.User;
 
 /**
  *
- * @author User
+ * @author Caldiddy's PC
  */
-public class JournalController implements Initializable{
-    @FXML private TableView<Entry> entryTable;
-    @FXML private TableColumn<Journal, String> nameClm;
-    @FXML private TableColumn<Journal, String> summaryClm;
-    @FXML private TableColumn<Journal, String> dateClm;
+public class JournalTest1 extends Application {
+  
+    private Stage stage;
+    private User loggedUser;
+    private Journal currentJournal;
+    private Entry currentEntry;
+    private static JournalTest1 instance;
+    private static Database db;
     
-    @FXML protected void processLogout() {
-        JournalTest1.getInstance().userLogout();
+    public JournalTest1() {
+        instance = this;
+        //Users.add(new User("c", "c"));
     }
     
-    public final Journal getJournal() {
-        return JournalTest1.getInstance().getJournal();
+    public static JournalTest1 getInstance() {
+        return instance;
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-      entryTable.setItems(JournalTest1.getInstance().getJournal().getEntries());
-      entryTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-      nameClm.setCellValueFactory(new PropertyValueFactory<>("name"));
-      summaryClm.setCellValueFactory(new PropertyValueFactory<>("entry"));
-      dateClm.setCellValueFactory(new PropertyValueFactory<>("date"));
-      //Double click event
-      entryTable.setRowFactory(
-              new Callback<TableView<Entry>, TableRow<Entry>>() {
+    public static void main(String[] args) {
+        launch(args);
+    }
+     @Override
+    public void start(Stage primarystage){
+        try {
+            stage = primarystage;
+            gotoLogin();
+            primarystage.show();
+        }
+        catch (Exception ex){
+            
+        }
+    }
+    
+    public void currentEntry(Entry entry) {
+        currentEntry = entry;
+    }
+    
+    public Entry getCurrentEntry() {
+        return currentEntry;
+    }
+    
+    public User getLoggedUser() {
+        return loggedUser;
+    }
+    
+    public Journal getJournal() {
+        return currentJournal;
+    }
+    
+    public void setJournal(Journal journal) {
+        currentJournal = journal;
+    }
 
-          @Override
-          public TableRow<Entry> call(TableView<Entry> param) {
-              final TableRow<Entry> row = new TableRow<>();
-              final ContextMenu rowMenu = new ContextMenu();
-              MenuItem hideItem = new MenuItem("Hide");
-              hideItem.setOnAction(new EventHandler<ActionEvent>() {
-                  @Override
-                  public void handle(ActionEvent event) {
-                      //Hide Function
-                      int entryID = row.getItem().getId();
-                      Database.changeHiddenStatus(entryID, 1);
-                      entryTable.getItems().remove(row.getItem());
-                      System.out.println("Selected Entry ID is: " + entryID);
-                  }
-              });
-              MenuItem deleteItem = new MenuItem("Delete");
-              deleteItem.setOnAction(new EventHandler<ActionEvent>() {
-                  @Override
-                  public void handle(ActionEvent event) {
-                      //Delete Function
-                      int entryID = row.getItem().getId();
-                      Database.setEntryDeletedStatus(entryID, 1);
-                      entryTable.getItems().remove(row.getItem());
-                  }
-                  
-              });
-              
-              rowMenu.getItems().addAll(hideItem, deleteItem);
-              
-              row.setOnMouseClicked(event -> {
-              if (event.getButton() == MouseButton.SECONDARY && (! row.isEmpty())) {
-                  rowMenu.show(entryTable, event.getScreenX(), event.getScreenY());
-              }
-              if (event.getClickCount() == 2 && (! row.isEmpty())) {
-                      Entry rowData = row.getItem();
-                      JournalTest1.getInstance().currentEntry(rowData);
-                      JournalTest1.getInstance().gotoViewEntry();
-              }
-              });
-              return row;  
-          }
-      });
+    public void userLogging(User user) throws SQLException, InvalidObjectException {
+        loggedUser = user;
+        loadJournal();
+        gotoProfile();
     }
     
-    public void handleCreateEntry(){
-        JournalTest1.getInstance().gotoCreateEntry();
+    public void userLogout(){
+        loggedUser = null;
+        gotoLogin();
     }
     
-    public void processBack() {
-        JournalTest1.getInstance().gotoProfile();
+    public void gotoRegister() {
+        try {
+            replaceSceneContext("/view/register.fxml");
+            stage.setResizable(false);
+            stage.sizeToScene();
+        }
+        catch (Exception ex){
+           System.out.println(ex);
+        }
+    }
+    public void gotoProfile() {
+        try {
+            replaceSceneContext("/view/profile.fxml");
+            stage.setResizable(false);
+            stage.sizeToScene();
+        }
+        catch (Exception ex){
+           System.out.println(ex);
+        }
+    }
+    
+    public void gotoLogin() {
+        try {
+            replaceSceneContext("/view/login.fxml");
+            stage.setResizable(false);
+            stage.sizeToScene();
+        }
+        catch (Exception ex){
+        }
+    }
+    
+    public void gotoCreateEntry() {
+        try {
+            replaceSceneContext("/view/createEntry.fxml");
+            stage.setResizable(false);
+            stage.sizeToScene();
+        }
+        catch (Exception ex) {
+            
+        }
+    }
+    
+    public void gotoEntry() {
+        try {
+            loadEntry();
+            replaceSceneContext("/view/journal.fxml");
+            stage.setResizable(false);
+            stage.sizeToScene();
+        }
+        catch (Exception ex){
+
+        }
+    }
+    
+    public Journal returnSelected(Journal selectedJournal) {
+        currentJournal = selectedJournal;
+        return currentJournal;
+    }
+        
+    public Parent replaceSceneContext(String fxml) throws Exception {
+        Parent page = (Parent) FXMLLoader.load(JournalTest1.class.getResource(fxml), null, new JavaFXBuilderFactory());
+        Scene scene = stage.getScene();
+        if (scene == null) {
+            scene = new Scene(page, 700, 550);
+            stage.setScene(scene);
+            stage.setTitle("Journal Application");
+        } else {
+            stage.getScene().setRoot(page);
+        }
+        stage.sizeToScene();
+        return page;
+    }
+    
+    public void gotoCreateJournal() {
+        try {
+            replaceSceneContext("/view/createJournal.fxml");
+            stage.setResizable(false);
+            stage.sizeToScene();
+        }
+        catch (Exception ex){
+
+        }
+    }
+    
+    public void loadJournal() throws SQLException, InvalidObjectException {
+        loggedUser.clearJournals();
+        LinkedList<Journal> journals = Database.getJournals(loggedUser.getID());
+        for (Journal journal : journals)
+        {
+            loggedUser.addJournal(journal);
+        }
+    }
+    
+    public void loadEntry() throws SQLException, InvalidObjectException {
+        currentJournal.clearEntries();
+        LinkedList<Entry> entries = Database.getEntry(currentJournal.getId());
+        for (Entry entry : entries)
+        {
+            currentJournal.addEntry(entry);
+        }
+    }
+
+    public void gotoEditEntry() {
+        try {
+            replaceSceneContext("/view/viewEntryEditable.fxml");
+            stage.setResizable(false);
+            stage.sizeToScene();
+        }
+        catch (Exception ex){
+
+        }
+    }
+    
+    public void gotoViewEntry() {
+        try {
+            replaceSceneContext("/view/viewEntryUneditable.fxml");
+            stage.setResizable(false);
+            stage.sizeToScene();
+        }
+        catch (Exception ex){
+
+        }
     }
 }
