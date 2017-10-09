@@ -66,6 +66,20 @@ public class JournalController implements Initializable{
       summaryClm.setCellValueFactory(new PropertyValueFactory<>("entry"));
       dateClm.setCellValueFactory(new PropertyValueFactory<>("date"));
       //Double click event
+      entryTable.setRowFactory(new Callback<TableView<Entry>, TableRow<Entry>>() {
+            @Override
+            public TableRow<Entry> call(TableView<Entry> entryTableView) {
+                return new TableRow<Entry>() {
+                    @Override
+                    protected void updateItem(Entry entry, boolean b) {
+                        super.updateItem(entry, b);
+                        if(entry.getHidden()) {                     
+                            this.setStyle("fx-control-inner-background: skyblue;");
+                        }
+                    }
+                };
+            }
+        });
       entryTable.setRowFactory(
               new Callback<TableView<Entry>, TableRow<Entry>>() {
 

@@ -53,4 +53,8 @@ public class Entry {
     public String getReason() {
         return reason;
     }
+    
+    public boolean getHidden() {
+        return hidden;
+    }
 }
