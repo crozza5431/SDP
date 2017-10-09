@@ -201,8 +201,9 @@ public class Database
                 boolean deleted = r.getBoolean("Deleted");
                 String data = r.getString("Data");
                 String reason = r.getString("Reason");
-                if (!hidden && !deleted) {
-                    entries.add(new Entry(eID, eJournalID, eName, eDateCreated, false, false, data, reason));
+                boolean history = r.getBoolean("History");
+                if (!hidden && !deleted && !history) {
+                    entries.add(new Entry(eID, eJournalID, eName, eDateCreated, false, false, data, reason, history));
                 }
             }
         }
@@ -217,7 +218,7 @@ public class Database
             Connection conn = establishConnection();
             Statement s = conn.createStatement()
         ) {
-            s.executeUpdate("INSERT INTO Entry VALUES ('" + eID + "', '" + journalID + "', '" + name + "', GETUTCDATE ( ) , '0', '0', '" + data + "', '')");
+            s.executeUpdate("INSERT INTO Entry VALUES ('" + eID + "', '" + journalID + "', '" + name + "', GETUTCDATE ( ) , '0', '0', '" + data + "', '', '0')");
         }
         catch ( SQLException err ) {
             System.out.println(err);
@@ -291,7 +292,8 @@ public class Database
             Connection conn = establishConnection();
             Statement s = conn.createStatement()
         ) {
-            s.executeUpdate("INSERT INTO Entry VALUES ('" + entryID + "', '" + journalID + "', '" + name + "', GETUTCDATE ( ) , '0', '0', '" + data + "', '" + reason + "')");
+            s.executeUpdate("UPDATE entry SET History=1 WHERE ID=" + entryID + ")");
+            s.executeUpdate("INSERT INTO Entry VALUES ('" + entryID + "', '" + journalID + "', '" + name + "', GETUTCDATE ( ) , '0', '0', '" + data + "', '" + reason + "', '0')");
         }
         catch ( SQLException err ) {
             System.out.println(err);
@@ -320,8 +322,9 @@ public class Database
                 boolean deleted = r.getBoolean("Deleted");
                 String data = r.getString("Data");
                 String reason = r.getString("Reason");
-                if (!hidden && !deleted) {
-                    entries.add(new Entry(eID, eJournalID, eName, eDateCreated, false, false, data, reason));
+                boolean history = r.getBoolean("History");
+                if (!hidden && !deleted && !history) {
+                    entries.add(new Entry(eID, eJournalID, eName, eDateCreated, false, false, data, reason, history));
                 }
             }
         }
@@ -349,8 +352,9 @@ public class Database
                 boolean deleted = r.getBoolean("Deleted");
                 String data = r.getString("Data");
                 String reason = r.getString("Reason");
-                if (!hidden && !deleted) {
-                    results.add(new Entry(eID, eJournalID, eName, eDateCreated, false, false, data, reason));
+                boolean history = r.getBoolean("History");
+                if (!hidden && !deleted && !history) {
+                    results.add(new Entry(eID, eJournalID, eName, eDateCreated, false, false, data, reason, history));
                 }
             }
         }
@@ -388,8 +392,9 @@ public class Database
                 boolean deleted  = r.getBoolean("Deleted");
                 String data = r.getString("Data");
                 String reason = r.getString("Reason");
-                if (!hidden) {
-                    results.add(new Entry(eID, eJournalID, eName, eDateCreated, false, false, data, reason));
+                boolean history = r.getBoolean("History");
+                if (!hidden && !deleted && !history) {
+                    results.add(new Entry(eID, eJournalID, eName, eDateCreated, false, false, data, reason, history));
                 }
             }
         }
