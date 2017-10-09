@@ -217,7 +217,7 @@ public class Database
             Connection conn = establishConnection();
             Statement s = conn.createStatement()
         ) {
-            s.executeUpdate("INSERT INTO Entry VALUES ('" + eID + "', '" + journalID + "', '" + name + "', GETUTCDATE ( ) , '0', '" + data + "', '')");
+            s.executeUpdate("INSERT INTO Entry VALUES ('" + eID + "', '" + journalID + "', '" + name + "', GETUTCDATE ( ) , '0', '0', '" + data + "', '')");
         }
         catch ( SQLException err ) {
             System.out.println(err);
@@ -284,14 +284,14 @@ public class Database
         return entryData;
     }
     
-    //Inserts new entry into Database
-    public static void updateEntry(int journalID, int entryID, String name, String data) throws SQLException, InvalidObjectException
+    //update entry
+    public static void updateEntry(int journalID, int entryID, String name, String data, String reason) throws SQLException, InvalidObjectException
     {
         try (
             Connection conn = establishConnection();
             Statement s = conn.createStatement()
         ) {
-            s.executeUpdate("INSERT INTO Entry VALUES ('" + entryID + "', '" + journalID + "', '" + name + "', GETUTCDATE ( ) , '0', '" + data + "', '')");
+            s.executeUpdate("INSERT INTO Entry VALUES ('" + entryID + "', '" + journalID + "', '" + name + "', GETUTCDATE ( ) , '0', '0', '" + data + "', '" + reason + "')");
         }
         catch ( SQLException err ) {
             System.out.println(err);
