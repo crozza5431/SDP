@@ -21,8 +21,9 @@ public class Entry {
     private boolean deleted;
     private StringProperty entry = new SimpleStringProperty();
     private String reason;
+    private boolean history;
     
-    public Entry(int id, int journalID, String name, String date, boolean hidden, boolean deleted, String data, String reason) {
+    public Entry(int id, int journalID, String name, String date, boolean hidden, boolean deleted, String data, String reason, boolean history) {
         this.id = id;
         this.journalID = journalID;
         this.name.set(name);
@@ -31,6 +32,7 @@ public class Entry {
         this.deleted = deleted;
         this.entry.set(data);
         this.reason = reason;
+        this.history = history;
     }
     
     public int getId() {
