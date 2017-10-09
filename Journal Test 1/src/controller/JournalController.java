@@ -5,13 +5,21 @@
  */
 package controller;
 
+import database.Database;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
+import javafx.util.Callback;
 import journal.test.pkg1.JournalTest1;
 import model.Entry;
 import model.Journal;
@@ -41,7 +49,40 @@ public class JournalController implements Initializable{
       nameClm.setCellValueFactory(new PropertyValueFactory<>("name"));
       summaryClm.setCellValueFactory(new PropertyValueFactory<>("entry"));
       dateClm.setCellValueFactory(new PropertyValueFactory<>("date"));
+      //Double click event
+      entryTable.setRowFactory(
+              new Callback<TableView<Entry>, TableRow<Entry>>() {
 
+          @Override
+          public TableRow<Entry> call(TableView<Entry> param) {
+              final TableRow<Entry> row = new TableRow<>();
+              final ContextMenu rowMenu = new ContextMenu();
+              MenuItem hideItem = new MenuItem("Hide");
+              hideItem.setOnAction(new EventHandler<ActionEvent>() {
+                  @Override
+                  public void handle(ActionEvent event) {
+                      //Delete Function
+                      int entryID = row.getItem().getId();
+                      Database.changeHiddenStatus(entryID, 1);
+                      entryTable.getItems().remove(row.getItem());
+                      System.out.println("Selected Journal ID is: " + entryID);
+                  }
+              });
+              rowMenu.getItems().addAll(hideItem);
+              
+              row.setOnMouseClicked(event -> {
+              if (event.getButton() == MouseButton.SECONDARY && (! row.isEmpty())) {
+                  rowMenu.show(entryTable, event.getScreenX(), event.getScreenY());
+              }
+              if (event.getClickCount() == 2 && (! row.isEmpty())) {
+                      Entry rowData = row.getItem();
+                      JournalTest1.getInstance().currentEntry(rowData);
+                      JournalTest1.getInstance().gotoEntry();
+              }
+              });
+              return row;  
+          }
+      });
     }
     
     public void handleCreateEntry(){
