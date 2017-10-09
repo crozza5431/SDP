@@ -180,8 +180,8 @@ public class Database
         }
     }
     
-     //returns a result set of a users journals
-    public static LinkedList<Entry> getEntry(int id) throws SQLException, InvalidObjectException
+     //returns a result set of a users entries
+    public static LinkedList<Entry> getEntry(int id, boolean showhidden) throws SQLException, InvalidObjectException
     {
         LinkedList<Entry> entries = new LinkedList<>();
         try (
@@ -202,8 +202,11 @@ public class Database
                 String data = r.getString("Data");
                 String reason = r.getString("Reason");
                 boolean history = r.getBoolean("History");
-                if (!hidden && !deleted && !history) {
-                    entries.add(new Entry(eID, eJournalID, eName, eDateCreated, false, false, data, reason, history));
+                if (showhidden) {
+                    if (!deleted && !history) entries.add(new Entry(eID, eJournalID, eName, eDateCreated, false, false, data, reason, history));
+                }
+                else {
+                    if (!hidden && !deleted && !history) entries.add(new Entry(eID, eJournalID, eName, eDateCreated, false, false, data, reason, history));
                 }
             }
         }

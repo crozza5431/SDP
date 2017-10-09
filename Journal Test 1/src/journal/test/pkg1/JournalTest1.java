@@ -188,7 +188,7 @@ public class JournalTest1 extends Application {
     
     public void loadEntry() throws SQLException, InvalidObjectException {
         currentJournal.clearEntries();
-        LinkedList<Entry> entries = Database.getEntry(currentJournal.getId());
+        LinkedList<Entry> entries = Database.getEntry(currentJournal.getId(), false);
         for (Entry entry : entries)
         {
             currentJournal.addEntry(entry);
