@@ -292,7 +292,7 @@ public class Database
             Connection conn = establishConnection();
             Statement s = conn.createStatement()
         ) {
-            s.executeUpdate("UPDATE entry SET History=1 WHERE ID=" + entryID + ")");
+            s.executeUpdate("UPDATE entry SET History=1 WHERE ID=" + entryID);
             s.executeUpdate("INSERT INTO Entry VALUES ('" + entryID + "', '" + journalID + "', '" + name + "', GETUTCDATE ( ) , '0', '0', '" + data + "', '" + reason + "', '0')");
         }
         catch ( SQLException err ) {
