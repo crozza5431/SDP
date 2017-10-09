@@ -66,6 +66,10 @@ public class JournalTest1 extends Application {
         currentEntry = entry;
     }
     
+    public Entry getCurrentEntry() {
+        return currentEntry;
+    }
+    
     public User getLoggedUser() {
         return loggedUser;
     }
@@ -188,6 +192,28 @@ public class JournalTest1 extends Application {
         for (Entry entry : entries)
         {
             currentJournal.addEntry(entry);
+        }
+    }
+
+    public void gotoEditEntry() {
+        try {
+            replaceSceneContext("/view/viewEntryEditable.fxml");
+            stage.setResizable(false);
+            stage.sizeToScene();
+        }
+        catch (Exception ex){
+
+        }
+    }
+    
+    public void gotoViewEntry() {
+        try {
+            replaceSceneContext("/view/viewEntryUneditable.fxml");
+            stage.setResizable(false);
+            stage.sizeToScene();
+        }
+        catch (Exception ex){
+
         }
     }
 }
