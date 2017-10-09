@@ -35,9 +35,9 @@ import model.Journal;
  */
 public class JournalController implements Initializable{
     @FXML private TableView<Entry> entryTable;
-    @FXML private TableColumn<Journal, String> nameClm;
-    @FXML private TableColumn<Journal, String> summaryClm;
-    @FXML private TableColumn<Journal, String> dateClm;
+    @FXML private TableColumn<Entry, String> nameClm;
+    @FXML private TableColumn<Entry, String> summaryClm;
+    @FXML private TableColumn<Entry, String> dateClm;
     @FXML private CheckBox hiddenChbx;
     
     
@@ -68,13 +68,31 @@ public class JournalController implements Initializable{
       //Double click event
       entryTable.setRowFactory(
               new Callback<TableView<Entry>, TableRow<Entry>>() {
-
+                
           @Override
           public TableRow<Entry> call(TableView<Entry> param) {
-              final TableRow<Entry> row = new TableRow<>();
+              final TableRow<Entry> row = new TableRow<Entry>() {
+                  //Highlight hidden journals
+                  @Override
+                protected void updateItem(Entry entry, boolean empty){
+                    super.updateItem(entry, empty);
+                    if(empty) {
+                        setStyle("");
+                    }
+                    else if (this.getItem().getHidden()){
+                        setStyle("-fx-control-inner-background: lightsteelblue; ");
+                    }
+                    else {
+                        setStyle("");
+                    }
+              }
+              };
+              
+              //Menu Items + Handlers
               final ContextMenu rowMenu = new ContextMenu();
               MenuItem hideItem = new MenuItem("Hide");
               hideItem.setOnAction(new EventHandler<ActionEvent>() {
+                  
                   @Override
                   public void handle(ActionEvent event) {
                       //Hide Function
@@ -98,6 +116,7 @@ public class JournalController implements Initializable{
               
               rowMenu.getItems().addAll(hideItem, deleteItem);
               
+              //Double Click feature
               row.setOnMouseClicked(event -> {
               if (event.getButton() == MouseButton.SECONDARY && (! row.isEmpty())) {
                   rowMenu.show(entryTable, event.getScreenX(), event.getScreenY());
@@ -108,6 +127,7 @@ public class JournalController implements Initializable{
                       JournalTest1.getInstance().gotoViewEntry();
               }
               });
+              
               return row;  
           }
 

@@ -203,10 +203,10 @@ public class Database
                 String reason = r.getString("Reason");
                 boolean history = r.getBoolean("History");
                 if (showhidden) {
-                    if (!deleted && !history) entries.add(new Entry(eID, eJournalID, eName, eDateCreated, false, false, data, reason, history));
+                    if (!deleted && !history) entries.add(new Entry(eID, eJournalID, eName, eDateCreated, hidden, deleted, data, reason, history));
                 }
                 else {
-                    if (!hidden && !deleted && !history) entries.add(new Entry(eID, eJournalID, eName, eDateCreated, false, false, data, reason, history));
+                    if (!hidden && !deleted && !history) entries.add(new Entry(eID, eJournalID, eName, eDateCreated, hidden, deleted, data, reason, history));
                 }
             }
         }
@@ -327,7 +327,7 @@ public class Database
                 String reason = r.getString("Reason");
                 boolean history = r.getBoolean("History");
                 if (!hidden && !deleted && !history) {
-                    entries.add(new Entry(eID, eJournalID, eName, eDateCreated, false, false, data, reason, history));
+                    entries.add(new Entry(eID, eJournalID, eName, eDateCreated, hidden, deleted, data, reason, history));
                 }
             }
         }
@@ -357,7 +357,7 @@ public class Database
                 String reason = r.getString("Reason");
                 boolean history = r.getBoolean("History");
                 if (!hidden && !deleted && !history) {
-                    results.add(new Entry(eID, eJournalID, eName, eDateCreated, false, false, data, reason, history));
+                    results.add(new Entry(eID, eJournalID, eName, eDateCreated, hidden, deleted, data, reason, history));
                 }
             }
         }
@@ -397,7 +397,7 @@ public class Database
                 String reason = r.getString("Reason");
                 boolean history = r.getBoolean("History");
                 if (!hidden && !deleted && !history) {
-                    results.add(new Entry(eID, eJournalID, eName, eDateCreated, false, false, data, reason, history));
+                    results.add(new Entry(eID, eJournalID, eName, eDateCreated, hidden, deleted, data, reason, history));
                 }
             }
         }
