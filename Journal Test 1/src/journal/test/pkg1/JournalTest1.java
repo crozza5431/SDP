@@ -34,6 +34,7 @@ public class JournalTest1 extends Application {
     private Stage stage;
     private User loggedUser;
     private Journal currentJournal;
+    private Entry currentEntry;
     private static JournalTest1 instance;
     private static Database db;
     
@@ -59,6 +60,10 @@ public class JournalTest1 extends Application {
         catch (Exception ex){
             
         }
+    }
+    
+    public void currentEntry(Entry entry) {
+        currentEntry = entry;
     }
     
     public User getLoggedUser() {
