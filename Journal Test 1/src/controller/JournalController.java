@@ -89,7 +89,7 @@ public class JournalController implements Initializable{
               if (event.getClickCount() == 2 && (! row.isEmpty())) {
                       Entry rowData = row.getItem();
                       JournalTest1.getInstance().currentEntry(rowData);
-                      JournalTest1.getInstance().gotoEntry();
+                      JournalTest1.getInstance().gotoViewEntry();
               }
               });
               return row;  
