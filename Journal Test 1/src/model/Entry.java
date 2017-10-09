@@ -19,15 +19,17 @@ public class Entry {
     private StringProperty name = new SimpleStringProperty();
     private final String date;
     private boolean hidden;
+    private boolean deleted;
     private StringProperty entry = new SimpleStringProperty();
     private String reason;
     
-    public Entry(int id, int journalID, String name, String date, boolean hidden, String data, String reason) {
+    public Entry(int id, int journalID, String name, String date, boolean hidden, boolean deleted, String data, String reason) {
         this.id = id;
         this.journalID = journalID;
         this.name.set(name);
         this.date = date;
         this.hidden = hidden;
+        this.deleted = deleted;
         this.entry.set(data);
         this.reason = reason;
     }
