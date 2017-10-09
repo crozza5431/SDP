@@ -243,7 +243,7 @@ public class Database
             Connection conn = establishConnection();
             Statement s = conn.createStatement()
         ) {
-            s.executeUpdate("UPDATE entry SET Deleted=" + hidden + " WHERE ID=" + ID);
+            s.executeUpdate("UPDATE entry SET Hidden=" + hidden + " WHERE ID=" + ID);
         }
         catch ( SQLException err ) {
             System.out.println(err);
