@@ -197,10 +197,11 @@ public class Database
                 String eName = r.getString("Name");
                 String eDateCreated = dateCorrectionFromUTC(r.getTimestamp("Date_created"));
                 boolean hidden = r.getBoolean("Hidden");
+                boolean deleted = r.getBoolean("Deleted");
                 String data = r.getString("Data");
                 String reason = r.getString("Reason");
-                if (!hidden) {
-                    entries.add(new Entry(eID, eJournalID, eName, eDateCreated, false, data, reason));
+                if (!hidden && !deleted) {
+                    entries.add(new Entry(eID, eJournalID, eName, eDateCreated, false, false, data, reason));
                 }
             }
         }
@@ -297,10 +298,11 @@ public class Database
                 String eName = r.getString("Name");
                 String eDateCreated = dateCorrectionFromUTC(r.getTimestamp("Date_created"));
                 boolean hidden = r.getBoolean("Hidden");
+                boolean deleted = r.getBoolean("Deleted");
                 String data = r.getString("Data");
                 String reason = r.getString("Reason");
-                if (!hidden) {
-                    results.add(new Entry(eID, eJournalID, eName, eDateCreated, false, data, reason));
+                if (!hidden && !deleted) {
+                    results.add(new Entry(eID, eJournalID, eName, eDateCreated, false, false, data, reason));
                 }
             }
         }
@@ -334,10 +336,11 @@ public class Database
                 String eName = r.getString("Name");
                 String eDateCreated = dateCorrectionFromUTC(r.getTimestamp("Date_created"));
                 boolean hidden = r.getBoolean("Hidden");
+                boolean deleted  = r.getBoolean("Deleted");
                 String data = r.getString("Data");
                 String reason = r.getString("Reason");
                 if (!hidden) {
-                    results.add(new Entry(eID, eJournalID, eName, eDateCreated, false, data, reason));
+                    results.add(new Entry(eID, eJournalID, eName, eDateCreated, false, false, data, reason));
                 }
             }
         }
