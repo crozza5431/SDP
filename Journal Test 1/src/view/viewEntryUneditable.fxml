@@ -2,10 +2,24 @@
 
 <?import java.lang.*?>
 <?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ViewEntryUneditableController">
-    <Button text="Edit" onAction="#handleEditEntry"/>
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="controller.ViewEntryUneditableController">
+  <children>
+    <Text layoutX="208.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" fx:id="entryName">
+      <font>
+        <Font name="System Bold" size="30.0" />
+      </font>
+    </Text>
+    <Button layoutX="14.0" layoutY="13.0" mnemonicParsing="false" text="&lt;" onAction="#handleBack">
+      <font>
+        <Font name="System Bold" size="20.0" fx:id="x1" />
+      </font>
+    </Button>
+    <Button font="$x1" layoutX="508.0" layoutY="13.0" mnemonicParsing="false" text="Edit" onAction="#handleEditEntry"/>
+    <Text layoutX="14.0" layoutY="67.0" fx:id="entryData" />
+  </children>
 </AnchorPane>
