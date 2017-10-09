@@ -6,12 +6,17 @@
 package controller;
 
 import database.Database;
+import java.io.InvalidObjectException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
@@ -33,6 +38,8 @@ public class JournalController implements Initializable{
     @FXML private TableColumn<Journal, String> nameClm;
     @FXML private TableColumn<Journal, String> summaryClm;
     @FXML private TableColumn<Journal, String> dateClm;
+    @FXML private CheckBox hiddenChbx;
+    
     
     @FXML protected void processLogout() {
         JournalTest1.getInstance().userLogout();
@@ -44,6 +51,15 @@ public class JournalController implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        hiddenChbx.setOnAction(e -> {
+            try {
+                handleButtonAction(e);
+            } catch (SQLException ex) {
+                Logger.getLogger(JournalController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InvalidObjectException ex) {
+                Logger.getLogger(JournalController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
       entryTable.setItems(JournalTest1.getInstance().getJournal().getEntries());
       entryTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
       nameClm.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -103,5 +119,14 @@ public class JournalController implements Initializable{
     
     public void processBack() {
         JournalTest1.getInstance().gotoProfile();
+    }
+
+    private void handleButtonAction(ActionEvent e) throws SQLException, InvalidObjectException {
+        if(hiddenChbx.isSelected()) {
+            JournalTest1.getInstance().loadHiddenEntry();
+        }
+        if(!hiddenChbx.isSelected()) {
+            JournalTest1.getInstance().loadEntry();
+        }
     }
 }
