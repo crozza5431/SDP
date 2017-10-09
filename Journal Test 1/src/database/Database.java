@@ -167,7 +167,8 @@ public class Database
     }
     
     //sets a journal to be "deleted"
-    public static void changeDeletedStatus(int ID, int delete) {
+    public static void changeDeletedStatus(int ID, int delete) 
+    {
         try (
             Connection conn = establishConnection();
             Statement s = conn.createStatement()
@@ -239,7 +240,8 @@ public class Database
     }
     
     //sets a entry to be "Hidden"
-    public static void changeHiddenStatus(int ID, int hidden) {
+    public static void changeHiddenStatus(int ID, int hidden) 
+    {
         try (
             Connection conn = establishConnection();
             Statement s = conn.createStatement()
@@ -251,8 +253,9 @@ public class Database
         }
     }
     
-    //
-    public static void setEntryDeletedStatus(int ID, int delete) {
+    //changes the deleted status of the entry
+    public static void setEntryDeletedStatus(int ID, int delete) 
+    {
         try (
             Connection conn = establishConnection();
             Statement s = conn.createStatement()
@@ -264,9 +267,9 @@ public class Database
         }
     }
     
-    
-    //retrieves most recent data
-    public static String retrieveLatestEntry(int ID) throws SQLException, InvalidObjectException {
+    //retrieves most recent data ###NOT NEEDED
+    public static String retrieveLatestEntryData(int ID) throws SQLException, InvalidObjectException 
+    {
         String entryData = null;
         try (
             Connection conn = establishConnection();
@@ -281,8 +284,53 @@ public class Database
         return entryData;
     }
     
+    //Inserts new entry into Database
+    public static void updateEntry(int journalID, int entryID, String name, String data) throws SQLException, InvalidObjectException
+    {
+        try (
+            Connection conn = establishConnection();
+            Statement s = conn.createStatement()
+        ) {
+            s.executeUpdate("INSERT INTO Entry VALUES ('" + entryID + "', '" + journalID + "', '" + name + "', GETUTCDATE ( ) , '0', '" + data + "', '')");
+        }
+        catch ( SQLException err ) {
+            System.out.println(err);
+        }
+    }
+    
+    //retrieves most recent data ###NOT NEEDED
+    public static LinkedList<Entry> retrieveEntryHistory(int ID) throws SQLException, InvalidObjectException 
+    {
+        LinkedList<Entry> entries = new LinkedList<>();
+        String entryData = null;
+        try (
+            Connection conn = establishConnection();
+            Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        ) {
+            ResultSet r = s.executeQuery("SELECT * FROM Entry WHERE ID=" + ID + " ORDER BY Date_created DESC");
+
+            if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
+            while (r.next())
+            {
+                int eID = r.getInt("ID");
+                int eJournalID = r.getInt("Journal_ID");
+                String eName = r.getString("Name");
+                String eDateCreated = dateCorrectionFromUTC(r.getTimestamp("Date_created"));
+                boolean hidden = r.getBoolean("Hidden");
+                boolean deleted = r.getBoolean("Deleted");
+                String data = r.getString("Data");
+                String reason = r.getString("Reason");
+                if (!hidden && !deleted) {
+                    entries.add(new Entry(eID, eJournalID, eName, eDateCreated, false, false, data, reason));
+                }
+            }
+        }
+        return entries;
+    }
+    
     //searches entries to find keywords
-    public static LinkedList<Entry> searchEntriesKeyword(int id, String keyword, String hid) throws SQLException, InvalidObjectException {
+    public static LinkedList<Entry> searchEntriesKeyword(int id, String keyword, String hid) throws SQLException, InvalidObjectException 
+    {
         LinkedList<Entry> results = new LinkedList<>();
         try (
             Connection conn = establishConnection();
@@ -311,7 +359,8 @@ public class Database
     
     //searches entries to find entries BF, AF or between dates
     // dates are in YYYY-MM-DD format and in UTC time (matters if an entry was made before 11am as it will show previous day )
-    public static LinkedList<Entry> searchEntriesDates(int id, String hid, String date1, String date2) throws SQLException, InvalidObjectException {
+    public static LinkedList<Entry> searchEntriesDates(int id, String hid, String date1, String date2) throws SQLException, InvalidObjectException 
+    {
         LinkedList<Entry> results = new LinkedList<>();
         String query;
         
@@ -348,7 +397,8 @@ public class Database
     }
     
     //Converts UTC to local time
-    private static String dateCorrectionFromUTC(Date utcTime) {
+    private static String dateCorrectionFromUTC(Date utcTime) 
+    {
         String timeZone = Calendar.getInstance().getTimeZone().getID();
         Date local = new Date(utcTime.getTime() + TimeZone.getTimeZone(timeZone).getOffset(utcTime.getTime()));
         SimpleDateFormat dateFormatter = new SimpleDateFormat("EEEE, d MMMM yyyy 'at' h:mm a z");
@@ -356,7 +406,8 @@ public class Database
     }
     
     //Converts local time to UTC
-    private static String dateLocaltoUTC(Date localTime) {
+    private static String dateLocaltoUTC(Date localTime) 
+    {
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss:fff");
         dateFormatter.setTimeZone(TimeZone.getTimeZone("UTC"));
         Date UTC = new Date(dateFormatter.format(localTime));
