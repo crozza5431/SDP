@@ -61,14 +61,26 @@ public class JournalController implements Initializable{
               hideItem.setOnAction(new EventHandler<ActionEvent>() {
                   @Override
                   public void handle(ActionEvent event) {
-                      //Delete Function
+                      //Hide Function
                       int entryID = row.getItem().getId();
                       Database.changeHiddenStatus(entryID, 1);
                       entryTable.getItems().remove(row.getItem());
-                      System.out.println("Selected Journal ID is: " + entryID);
+                      System.out.println("Selected Entry ID is: " + entryID);
                   }
               });
-              rowMenu.getItems().addAll(hideItem);
+              MenuItem deleteItem = new MenuItem("Delete");
+              deleteItem.setOnAction(new EventHandler<ActionEvent>() {
+                  @Override
+                  public void handle(ActionEvent event) {
+                      //Delete Function
+                      int entryID = row.getItem().getId();
+                      Database.setEntryDeletedStatus(entryID, 1);
+                      entryTable.getItems().remove(row.getItem());
+                  }
+                  
+              });
+              
+              rowMenu.getItems().addAll(hideItem, deleteItem);
               
               row.setOnMouseClicked(event -> {
               if (event.getButton() == MouseButton.SECONDARY && (! row.isEmpty())) {
