@@ -5,7 +5,10 @@
  */
 package controller;
 
+import database.Database;
+import java.io.InvalidObjectException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -24,7 +27,18 @@ public class ViewEntryEditableController implements Initializable{
     
     
     @FXML protected void handleBack() {
-        JournalTest1.getInstance().gotoViewEntry();
+        JournalTest1.getInstance().gotoEntry();
+    }
+    
+    @FXML protected void handleSave() throws SQLException, InvalidObjectException {
+        int journalId = JournalTest1.getInstance().getJournal().getId();
+        int entryId = JournalTest1.getInstance().getCurrentEntry().getId();
+        String name = JournalTest1.getInstance().getCurrentEntry().getName();
+        String data = entryData.getText();
+        String reason = entryReason.getText();
+        
+        Database.updateEntry(journalId, entryId, name, data, reason);
+        JournalTest1.getInstance().gotoEntry();
     }
 
     @Override
