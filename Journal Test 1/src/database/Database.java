@@ -250,6 +250,20 @@ public class Database
         }
     }
     
+    //
+    public static void setEntryDeletedStatus(int ID, int delete) {
+        try (
+            Connection conn = establishConnection();
+            Statement s = conn.createStatement()
+        ) {
+            s.executeUpdate("UPDATE entry SET Deleted=" + delete + " WHERE ID=" + ID);
+        }
+        catch ( SQLException err ) {
+            System.out.println(err);
+        }
+    }
+    
+    
     //retrieves most recent data
     public static String retrieveLatestEntry(int ID) throws SQLException, InvalidObjectException {
         String entryData = null;
@@ -295,7 +309,7 @@ public class Database
     
     //searches entries to find entries BF, AF or between dates
     // dates are in YYYY-MM-DD format and in UTC time (matters if an entry was made before 11am as it will show previous day )
-    public static LinkedList<Entry> searchEntriesKeyword(int id, String hid, String date1, String date2) throws SQLException, InvalidObjectException {
+    public static LinkedList<Entry> searchEntriesDates(int id, String hid, String date1, String date2) throws SQLException, InvalidObjectException {
         LinkedList<Entry> results = new LinkedList<>();
         String query;
         
