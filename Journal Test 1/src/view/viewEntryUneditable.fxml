@@ -9,17 +9,17 @@
 
 <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="controller.ViewEntryUneditableController">
   <children>
-    <Text layoutX="208.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" fx:id="entryName">
+    <Text fx:id="entryName" layoutX="208.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0">
       <font>
         <Font name="System Bold" size="30.0" />
       </font>
     </Text>
-    <Button layoutX="14.0" layoutY="13.0" mnemonicParsing="false" text="&lt;" onAction="#handleBack">
+    <Button layoutX="14.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleBack" text="&lt;">
       <font>
         <Font name="System Bold" size="20.0" fx:id="x1" />
       </font>
     </Button>
-    <Button font="$x1" layoutX="508.0" layoutY="13.0" mnemonicParsing="false" text="Edit" onAction="#handleEditEntry"/>
-    <Text layoutX="14.0" layoutY="67.0" fx:id="entryData" />
+    <Button font="$x1" layoutX="508.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleEditEntry" text="Edit" />
+    <Text fx:id="entryData" layoutX="16.0" layoutY="131.0" />
   </children>
 </AnchorPane>
