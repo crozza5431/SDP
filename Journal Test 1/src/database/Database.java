@@ -176,12 +176,16 @@ public class Database
     //sets a journal to be "deleted"
     public static void changeDeletedStatus(int ID, int delete) 
     {
+        int hidden = 0;
+        if (delete == 0) hidden = 0;
+        
         try (
             Connection conn = establishConnection();
-            PreparedStatement ps = conn.prepareStatement("UPDATE journal SET Deleted=? WHERE ID=?")
+            PreparedStatement ps = conn.prepareStatement("UPDATE journal SET Deleted=?, Hidden=? WHERE ID=?")
         ) {
             ps.setInt(1, delete);
-            ps.setInt(2, ID);
+            ps.setInt(2, hidden);
+            ps.setInt(3, ID);
             ps.executeUpdate();
         }
         catch ( SQLException err ) {
@@ -260,12 +264,15 @@ public class Database
     //sets a entry to be "Hidden"
     public static void changeHiddenStatus(int ID, int hidden) 
     {
+        int delete = 0;
+        if (hidden == 0) delete = 0;
         try (
             Connection conn = establishConnection();
-            PreparedStatement ps = conn.prepareStatement("UPDATE entry SET Hidden=? WHERE ID=?");
+            PreparedStatement ps = conn.prepareStatement("UPDATE entry SET Hidden=?, Deleted=? WHERE ID=?");
         ) {
             ps.setInt(1, hidden);
-            ps.setInt(2, ID);
+            ps.setInt(2, delete);
+            ps.setInt(3, ID);
             ps.executeUpdate();
         }
         catch ( SQLException err ) {
@@ -276,12 +283,16 @@ public class Database
     //changes the deleted status of the entry
     public static void setEntryDeletedStatus(int ID, int delete) 
     {
+        int hidden = 0;
+        if (delete == 0) hidden = 0;
+        
         try (
             Connection conn = establishConnection();
-            PreparedStatement ps = conn.prepareStatement("UPDATE entry SET Deleted=? WHERE ID=?")
+            PreparedStatement ps = conn.prepareStatement("UPDATE entry SET Deleted=?, Hidden=? WHERE ID=?")
         ) {
             ps.setInt(1, delete);
-            ps.setInt(2, ID);
+            ps.setInt(2, hidden);
+            ps.setInt(3, ID);
             ps.executeUpdate();
         }
         catch ( SQLException err ) {
