@@ -120,7 +120,7 @@ public class Database
             Connection conn = establishConnection();
             Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
         ) {
-            ResultSet r = s.executeQuery("SELECT * FROM journal Where user_id='" + id + "'");
+            ResultSet r = s.executeQuery("SELECT * FROM journal Where user_id='" + id + "' ORDER BY Date_created DESC");
 
             if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
             while (r.next())
@@ -188,7 +188,7 @@ public class Database
             Connection conn = establishConnection();
             Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
         ) {
-            ResultSet r = s.executeQuery("SELECT * FROM Entry Where journal_id='" + id + "'");
+            ResultSet r = s.executeQuery("SELECT * FROM Entry Where journal_id='" + id + "' ORDER BY Date_created DESC");
 
             if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
             while (r.next())
@@ -342,7 +342,7 @@ public class Database
             Connection conn = establishConnection();
             Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
         ) {
-            ResultSet r = s.executeQuery("SELECT * FROM Entry WHERE User_ID=" + id + " Hidden=" + hid + " AND Data LIKE '%" + keyword + "%'");
+            ResultSet r = s.executeQuery("SELECT * FROM Entry WHERE User_ID=" + id + " Hidden=" + hid + " AND Data LIKE '%" + keyword + "%' ORDER BY Date_created DESC");
 
             if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
             while (r.next())
@@ -382,7 +382,7 @@ public class Database
             Connection conn = establishConnection();
             Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
         ) {
-            ResultSet r = s.executeQuery("SELECT * FROM Entry WHERE User_ID=" + id + " Hidden=" + hid + " AND Date_created" + query);
+            ResultSet r = s.executeQuery("SELECT * FROM Entry WHERE User_ID=" + id + " Hidden=" + hid + " AND Date_created" + query + " ORDER BY Date_created DESC");
 
             if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
             while (r.next())
