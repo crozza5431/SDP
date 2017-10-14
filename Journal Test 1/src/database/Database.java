@@ -181,7 +181,7 @@ public class Database
             PreparedStatement ps = conn.prepareStatement("UPDATE journal SET Deleted=? WHERE ID=?")
         ) {
             ps.setInt(1, delete);
-            ps.setInt(1, ID);
+            ps.setInt(2, ID);
             ps.executeUpdate();
         }
         catch ( SQLException err ) {
