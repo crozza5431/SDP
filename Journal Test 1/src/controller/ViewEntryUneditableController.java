@@ -5,7 +5,9 @@
  */
 package controller;
 
+import java.io.InvalidObjectException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -27,6 +29,11 @@ public class ViewEntryUneditableController implements Initializable{
     
     @FXML protected void handleBack() {
         JournalTest1.getInstance().gotoEntry();
+    }
+    
+    @FXML protected void handleEntryHistory() throws SQLException, InvalidObjectException {
+        JournalTest1.getInstance().loadHistory();
+        JournalTest1.getInstance().gotoHistory();
     }
 
     @Override

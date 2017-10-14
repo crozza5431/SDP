@@ -57,4 +57,8 @@ public class Entry {
     public boolean getHidden() {
         return hidden;
     }
+    
+    public boolean getHistory() {
+        return history;
+    }
 }

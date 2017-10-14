@@ -326,7 +326,7 @@ public class Database
                 String data = r.getString("Data");
                 String reason = r.getString("Reason");
                 boolean history = r.getBoolean("History");
-                if (!hidden && !deleted && !history) {
+                if (!deleted) {
                     entries.add(new Entry(eID, eJournalID, eName, eDateCreated, hidden, deleted, data, reason, history));
                 }
             }

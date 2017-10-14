@@ -195,6 +195,15 @@ public class JournalTest1 extends Application {
         }
     }
 
+    public void loadHistory() throws SQLException, InvalidObjectException {
+        currentJournal.clearEntries();
+        LinkedList<Entry> entries = Database.retrieveEntryHistory(currentEntry.getId());
+        for (Entry entry : entries)
+        {
+            currentJournal.addEntry(entry);
+        }
+    }
+    
     public void gotoEditEntry() {
         try {
             replaceSceneContext("/view/viewEntryEditable.fxml");
@@ -223,6 +232,28 @@ public class JournalTest1 extends Application {
         for (Entry entry : entries)
         {
             currentJournal.addEntry(entry);
+        }
+    }
+
+    public void gotoHistory() {
+        try {
+            replaceSceneContext("/view/entryHistory.fxml");
+            stage.setResizable(false);
+            stage.sizeToScene();
+        }
+        catch (Exception ex){
+
+        }
+    }
+    
+    public void gotoViewHistory() {
+        try {
+            replaceSceneContext("/view/viewHistory.fxml");
+            stage.setResizable(false);
+            stage.sizeToScene();
+        }
+        catch (Exception ex){
+
         }
     }
 }
