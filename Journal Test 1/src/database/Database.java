@@ -227,6 +227,40 @@ public class Database
         return entries;
     }
     
+         //returns a result set of a users entries
+    public static LinkedList<Entry> getAllEntries(int id, boolean showHidden) throws SQLException, InvalidObjectException
+    {
+        LinkedList<Entry> entries = new LinkedList<>();
+        try (
+            Connection conn = establishConnection();
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Entry Where journal_id=? ORDER BY Date_created DESC", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+        ) {
+            ps.setInt(1, id);
+            ResultSet r = ps.executeQuery();
+
+            if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
+            while (r.next())
+            {
+                int eID = r.getInt("ID");
+                int eJournalID = r.getInt("Journal_ID");
+                String eName = r.getString("Name");
+                String eDateCreated = dateCorrectionFromUTC(r.getTimestamp("Date_created"));
+                boolean hidden = r.getBoolean("Hidden");
+                boolean deleted = r.getBoolean("Deleted");
+                String data = r.getString("Data");
+                String reason = r.getString("Reason");
+                boolean history = r.getBoolean("History");
+                if (showHidden) {
+                    if (!hidden)entries.add(new Entry(eID, eJournalID, eName, eDateCreated, hidden, false, data, reason, false));
+                }
+                else {
+                    entries.add(new Entry(eID, eJournalID, eName, eDateCreated, false, false, data, reason, false));
+                }
+            }
+        }
+        return entries;
+    }
+    
     //Inserts new entry into Database
     public static void newEntry(int journalID, String name, String data) throws SQLException, InvalidObjectException
     {
