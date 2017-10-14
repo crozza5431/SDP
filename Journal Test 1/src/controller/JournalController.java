@@ -23,6 +23,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseButton;
 import javafx.util.Callback;
 import journal.test.pkg1.JournalTest1;
@@ -39,6 +40,8 @@ public class JournalController implements Initializable{
     @FXML private TableColumn<Entry, String> summaryClm;
     @FXML private TableColumn<Entry, String> dateClm;
     @FXML private CheckBox hiddenChbx;
+    @FXML private CheckBox showAllChbx;
+    private ContextMenu rowMenu = new ContextMenu(); 
     
     
     @FXML protected void processLogout() {
@@ -58,6 +61,14 @@ public class JournalController implements Initializable{
                 Logger.getLogger(JournalController.class.getName()).log(Level.SEVERE, null, ex);
             } catch (InvalidObjectException ex) {
                 Logger.getLogger(JournalController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        showAllChbx.setOnAction(e -> {
+            handleshowAllAction(e);
+        });
+        entryTable.setOnMouseClicked(event -> {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                rowMenu.hide();
             }
         });
       entryTable.setItems(JournalTest1.getInstance().getJournal().getEntries());
@@ -89,7 +100,6 @@ public class JournalController implements Initializable{
               };
               
               //Menu Items + Handlers
-              final ContextMenu rowMenu = new ContextMenu();
               MenuItem hideItem = new MenuItem("Hide");
               hideItem.setOnAction(new EventHandler<ActionEvent>() {
                   
@@ -98,8 +108,7 @@ public class JournalController implements Initializable{
                       //Hide Function
                       int entryID = row.getItem().getId();
                       Database.changeHiddenStatus(entryID, 1);
-                      entryTable.getItems().remove(row.getItem());
-                      System.out.println("Selected Entry ID is: " + entryID);
+                      JournalTest1.getInstance().gotoEntry();
                   }
               });
               MenuItem deleteItem = new MenuItem("Delete");
@@ -112,16 +121,34 @@ public class JournalController implements Initializable{
                       entryTable.getItems().remove(row.getItem());
                   }
                   
-              });  
+              });
               
-              rowMenu.getItems().addAll(hideItem, deleteItem);
+              MenuItem unhideItem = new MenuItem("Unhide");
+              unhideItem.setOnAction(new EventHandler<ActionEvent>() {
+                  @Override
+                  public void handle(ActionEvent event) {
+                      //Unhide Function
+                      int entryID = row.getItem().getId();
+                      Database.changeHiddenStatus(entryID, 0);
+                      JournalTest1.getInstance().gotoEntry();
+                  } 
+              }); 
               
               //Double Click feature
-              row.setOnMouseClicked(event -> {
-              if (event.getButton() == MouseButton.SECONDARY && (! row.isEmpty())) {
+              row.setOnMousePressed(event -> {
+              
+                if (event.getButton() == MouseButton.SECONDARY && (! row.isEmpty()) && row.getItem().getHidden()) {
+                  rowMenu.getItems().clear();
+                  rowMenu.getItems().addAll(unhideItem);
                   rowMenu.show(entryTable, event.getScreenX(), event.getScreenY());
               }
-              if (event.getClickCount() == 2 && (! row.isEmpty())) {
+              else if (event.getButton() == MouseButton.SECONDARY && (! row.isEmpty())) {
+                  rowMenu.getItems().clear();
+                  rowMenu.getItems().addAll(hideItem, deleteItem);
+                  rowMenu.show(entryTable, event.getScreenX(), event.getScreenY());
+              }
+              
+              if (event.getClickCount() == 2 && (! row.isEmpty()) && event.getButton() != MouseButton.SECONDARY) {
                       Entry rowData = row.getItem();
                       JournalTest1.getInstance().currentEntry(rowData);
                       JournalTest1.getInstance().gotoViewEntry();
@@ -148,6 +175,12 @@ public class JournalController implements Initializable{
         }
         if(!hiddenChbx.isSelected()) {
             JournalTest1.getInstance().loadEntry();
+        }
+    }
+
+    private void handleshowAllAction(ActionEvent e) {
+        if(showAllChbx.isSelected()) {
+            JournalTest1.getInstance().loadAllEntries();
         }
     }
 }

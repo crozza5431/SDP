@@ -266,4 +266,8 @@ public class JournalTest1 extends Application {
 
         }
     }
+
+    public void loadAllEntries() {
+        //Yet to be implemented
+    }
 }
