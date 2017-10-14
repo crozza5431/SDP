@@ -10,12 +10,7 @@ import model.User;
 import model.Entry;
 
 import java.io.InvalidObjectException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
