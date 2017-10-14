@@ -10,12 +10,7 @@ import model.User;
 import model.Entry;
 
 import java.io.InvalidObjectException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -47,9 +42,10 @@ public class Database
     {
         try (
             Connection conn = establishConnection();
-            Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM users WHERE username = ?", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
         ) {
-            ResultSet r = s.executeQuery("SELECT * FROM users WHERE username ='" + uName + "'");
+            ps.setString(1, uName);
+            ResultSet r = ps.executeQuery();
 
             if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
             r.last();
@@ -71,9 +67,10 @@ public class Database
     {
         try (
             Connection conn = establishConnection();
-            Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+            PreparedStatement ps = conn.prepareStatement("SELECT username FROM users WHERE username = ?", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
         ) {
-            ResultSet r = s.executeQuery("SELECT username FROM users WHERE username ='" + uName + "'");
+            ps.setString(1, uName);
+            ResultSet r = ps.executeQuery();
 
             if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
             r.last();
@@ -88,9 +85,14 @@ public class Database
         int uID = nextID() + 1;
         try (
             Connection conn = establishConnection();
-            Statement s = conn.createStatement()
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO Users VALUES (?, ?, ?, ?, ?)")
         ) {
-            s.executeUpdate("INSERT INTO Users VALUES ('" + uID + "', '" + uName + "', '" + uPass + "', '" + uHint + "', '" + uSalt + "')");
+            ps.setInt(1, uID);
+            ps.setString(2, uName);
+            ps.setString(3, uPass);
+            ps.setString(4, uHint);
+            ps.setString(5, uSalt);
+            ps.executeUpdate();
         }
         catch ( SQLException err ) {
             System.out.println(err);
@@ -98,13 +100,13 @@ public class Database
     }
 
     //Searches for the next available user ID
-    static int nextID() throws SQLException, InvalidObjectException
+    private static int nextID() throws SQLException, InvalidObjectException
     {
         try (
             Connection conn = establishConnection();
-            Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+            PreparedStatement ps = conn.prepareStatement("SELECT ID FROM Users", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
         ) {
-            ResultSet r = s.executeQuery("SELECT ID FROM Users");
+            ResultSet r = ps.executeQuery();
 
             if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
             r.last();
@@ -118,9 +120,10 @@ public class Database
         LinkedList<Journal> journals = new LinkedList<>();
         try (
             Connection conn = establishConnection();
-            Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM journal Where user_id=?", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
         ) {
-            ResultSet r = s.executeQuery("SELECT * FROM journal Where user_id='" + id + "'");
+            ps.setInt(1, id);
+            ResultSet r = ps.executeQuery();
 
             if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
             while (r.next())
@@ -130,7 +133,7 @@ public class Database
                 String jName = r.getString("Name");
                 String jDateCreated = dateCorrectionFromUTC(r.getTimestamp("Date_created"));
                 boolean deleted = r.getBoolean("Deleted");
-                if (!deleted) journals.add(new Journal(jID, jUserID, jName, jDateCreated, deleted));
+                if (!deleted) journals.add(new Journal(jID, jUserID, jName, jDateCreated, false));
             }
         }
         return journals;
@@ -142,9 +145,12 @@ public class Database
         int jID = nextJournalID() + 1;
         try (
             Connection conn = establishConnection();
-            Statement s = conn.createStatement()
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO Journal VALUES (?, ?, ?, GETUTCDATE(), '0')")
         ) {
-            s.executeUpdate("INSERT INTO Journal VALUES ('" + jID + "', '" + userID + "', '" + name + "', GETUTCDATE ( ) , '0')");
+            ps.setInt(1, jID);
+            ps.setInt(2, userID);
+            ps.setString(3, name);
+            ps.executeUpdate();
         }
         catch ( SQLException err ) {
             System.out.println(err);
@@ -152,13 +158,13 @@ public class Database
     }
     
     //Searches for the next available Journal ID
-    static int nextJournalID() throws SQLException, InvalidObjectException
+    private static int nextJournalID() throws SQLException, InvalidObjectException
     {
         try (
             Connection conn = establishConnection();
-            Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+            PreparedStatement ps = conn.prepareStatement("SELECT ID FROM Journal", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
         ) {
-            ResultSet r = s.executeQuery("SELECT ID FROM Journal");
+            ResultSet r = ps.executeQuery();
 
             if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
             r.last();
@@ -171,9 +177,11 @@ public class Database
     {
         try (
             Connection conn = establishConnection();
-            Statement s = conn.createStatement()
+            PreparedStatement ps = conn.prepareStatement("UPDATE journal SET Deleted=? WHERE ID=?")
         ) {
-            s.executeUpdate("UPDATE journal SET Deleted=" + delete + " WHERE ID=" + ID);
+            ps.setInt(1, delete);
+            ps.setInt(1, ID);
+            ps.executeUpdate();
         }
         catch ( SQLException err ) {
             System.out.println(err);
@@ -181,14 +189,15 @@ public class Database
     }
     
      //returns a result set of a users entries
-    public static LinkedList<Entry> getEntry(int id, boolean showhidden) throws SQLException, InvalidObjectException
+    public static LinkedList<Entry> getEntry(int id, boolean showHidden) throws SQLException, InvalidObjectException
     {
         LinkedList<Entry> entries = new LinkedList<>();
         try (
             Connection conn = establishConnection();
-            Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Entry Where journal_id=?", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
         ) {
-            ResultSet r = s.executeQuery("SELECT * FROM Entry Where journal_id='" + id + "'");
+            ps.setInt(1, id);
+            ResultSet r = ps.executeQuery();
 
             if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
             while (r.next())
@@ -202,11 +211,11 @@ public class Database
                 String data = r.getString("Data");
                 String reason = r.getString("Reason");
                 boolean history = r.getBoolean("History");
-                if (showhidden) {
-                    if (!deleted && !history) entries.add(new Entry(eID, eJournalID, eName, eDateCreated, hidden, deleted, data, reason, history));
+                if (showHidden) {
+                    if (!deleted && !history) entries.add(new Entry(eID, eJournalID, eName, eDateCreated, hidden, false, data, reason, false));
                 }
                 else {
-                    if (!hidden && !deleted && !history) entries.add(new Entry(eID, eJournalID, eName, eDateCreated, hidden, deleted, data, reason, history));
+                    if (!hidden && !deleted && !history) entries.add(new Entry(eID, eJournalID, eName, eDateCreated, false, false, data, reason, false));
                 }
             }
         }
@@ -219,9 +228,13 @@ public class Database
         int eID = nextEntryID() + 1;
         try (
             Connection conn = establishConnection();
-            Statement s = conn.createStatement()
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO Entry VALUES (?, ?, ?, GETUTCDATE(), '0', '0', ?, '', '0')")
         ) {
-            s.executeUpdate("INSERT INTO Entry VALUES ('" + eID + "', '" + journalID + "', '" + name + "', GETUTCDATE ( ) , '0', '0', '" + data + "', '', '0')");
+            ps.setInt(1, eID);
+            ps.setInt(2, journalID);
+            ps.setString(3, name);
+            ps.setString(4, data);
+            ps.executeUpdate();
         }
         catch ( SQLException err ) {
             System.out.println(err);
@@ -229,13 +242,13 @@ public class Database
     }
     
     //Searches for the next available Journal ID
-    public static int nextEntryID() throws SQLException, InvalidObjectException
+    private static int nextEntryID() throws SQLException, InvalidObjectException
     {
         try (
             Connection conn = establishConnection();
-            Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+            PreparedStatement ps = conn.prepareStatement("SELECT ID FROM Entry", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
         ) {
-            ResultSet r = s.executeQuery("SELECT ID FROM Entry");
+            ResultSet r = ps.executeQuery();
 
             if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
             r.last();
@@ -248,9 +261,11 @@ public class Database
     {
         try (
             Connection conn = establishConnection();
-            Statement s = conn.createStatement()
+            PreparedStatement ps = conn.prepareStatement("UPDATE entry SET Hidden=? WHERE ID=?");
         ) {
-            s.executeUpdate("UPDATE entry SET Hidden=" + hidden + " WHERE ID=" + ID);
+            ps.setInt(1, hidden);
+            ps.setInt(2, ID);
+            ps.executeUpdate();
         }
         catch ( SQLException err ) {
             System.out.println(err);
@@ -262,24 +277,27 @@ public class Database
     {
         try (
             Connection conn = establishConnection();
-            Statement s = conn.createStatement()
+            PreparedStatement ps = conn.prepareStatement("UPDATE entry SET Deleted=? WHERE ID=?")
         ) {
-            s.executeUpdate("UPDATE entry SET Deleted=" + delete + " WHERE ID=" + ID);
+            ps.setInt(1, delete);
+            ps.setInt(2, ID);
+            ps.executeUpdate();
         }
         catch ( SQLException err ) {
             System.out.println(err);
         }
     }
-    
+
     //retrieves most recent data ###NOT NEEDED
-    public static String retrieveLatestEntryData(int ID) throws SQLException, InvalidObjectException 
+    public static String retrieveLatestEntryData(int ID) throws SQLException, InvalidObjectException
     {
-        String entryData = null;
+        String entryData;
         try (
             Connection conn = establishConnection();
-            Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Entry WHERE ID=? ORDER BY Date_created DESC", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
         ) {
-            ResultSet r = s.executeQuery("SELECT * FROM Entry WHERE ID=" + ID + " ORDER BY Date_created DESC");
+            ps.setInt(1, ID);
+            ResultSet r = ps.executeQuery();
 
             if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
             r.next();
@@ -287,16 +305,24 @@ public class Database
         }
         return entryData;
     }
-    
+
     //update entry
     public static void updateEntry(int journalID, int entryID, String name, String data, String reason) throws SQLException, InvalidObjectException
     {
         try (
             Connection conn = establishConnection();
-            Statement s = conn.createStatement()
+            PreparedStatement psHistory = conn.prepareStatement("UPDATE entry SET History=1 WHERE ID=?");
+            PreparedStatement psInsert = conn.prepareStatement("INSERT INTO Entry VALUES (?, ?, ?, GETUTCDATE(), '0', '0', ?, ?, '0')")
         ) {
-            s.executeUpdate("UPDATE entry SET History=1 WHERE ID=" + entryID);
-            s.executeUpdate("INSERT INTO Entry VALUES ('" + entryID + "', '" + journalID + "', '" + name + "', GETUTCDATE ( ) , '0', '0', '" + data + "', '" + reason + "', '0')");
+            psHistory.setInt(1, entryID);
+            psHistory.executeUpdate();
+
+            psInsert.setInt(1, entryID);
+            psInsert.setInt(2, journalID);
+            psInsert.setString(3, name);
+            psInsert.setString(4, data);
+            psInsert.setString(5, reason);
+            psInsert.executeUpdate();
         }
         catch ( SQLException err ) {
             System.out.println(err);
@@ -304,15 +330,15 @@ public class Database
     }
     
     //retrieves most recent data ###NOT NEEDED
-    public static LinkedList<Entry> retrieveEntryHistory(int ID) throws SQLException, InvalidObjectException 
+    public static LinkedList<Entry> retrieveEntryHistory(int ID) throws SQLException, InvalidObjectException
     {
         LinkedList<Entry> entries = new LinkedList<>();
-        String entryData = null;
         try (
             Connection conn = establishConnection();
-            Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Entry WHERE ID=? ORDER BY Date_created DESC", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
         ) {
-            ResultSet r = s.executeQuery("SELECT * FROM Entry WHERE ID=" + ID + " ORDER BY Date_created DESC");
+            ps.setInt(1, ID);
+            ResultSet r = ps.executeQuery();
 
             if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
             while (r.next())
@@ -327,22 +353,25 @@ public class Database
                 String reason = r.getString("Reason");
                 boolean history = r.getBoolean("History");
                 if (!hidden && !deleted && !history) {
-                    entries.add(new Entry(eID, eJournalID, eName, eDateCreated, hidden, deleted, data, reason, history));
+                    entries.add(new Entry(eID, eJournalID, eName, eDateCreated, false, false, data, reason, false));
                 }
             }
         }
         return entries;
     }
-    
+
     //searches entries to find keywords
     public static LinkedList<Entry> searchEntriesKeyword(int id, String keyword, String hid) throws SQLException, InvalidObjectException 
     {
         LinkedList<Entry> results = new LinkedList<>();
         try (
             Connection conn = establishConnection();
-            Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Entry WHERE User_ID=? Hidden=? AND Data LIKE ?", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
         ) {
-            ResultSet r = s.executeQuery("SELECT * FROM Entry WHERE User_ID=" + id + " Hidden=" + hid + " AND Data LIKE '%" + keyword + "%'");
+            ps.setInt(1, id);
+            ps.setString(2, hid);
+            ps.setString(3, "%" + keyword + "%");
+            ResultSet r = ps.executeQuery();
 
             if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
             while (r.next())
@@ -357,7 +386,7 @@ public class Database
                 String reason = r.getString("Reason");
                 boolean history = r.getBoolean("History");
                 if (!hidden && !deleted && !history) {
-                    results.add(new Entry(eID, eJournalID, eName, eDateCreated, hidden, deleted, data, reason, history));
+                    results.add(new Entry(eID, eJournalID, eName, eDateCreated, false, false, data, reason, false));
                 }
             }
         }
@@ -372,17 +401,29 @@ public class Database
         String query;
         
         if (date1 == null) {
-            query = ">'" + date1 + "'";
+            query = "> ?";
         } else if (date2 == null) {
-            query = "<'" + date1 + "'";
+            query = "< ?";
         } else {
-            query = " BETWEEN '" + date1 + "' AND '" + date2 + "'";
+            query = " BETWEEN ? AND ?";
         }
         try (
             Connection conn = establishConnection();
-            Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Entry WHERE User_ID=? Hidden=? AND Date_created" + query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
         ) {
-            ResultSet r = s.executeQuery("SELECT * FROM Entry WHERE User_ID=" + id + " Hidden=" + hid + " AND Date_created" + query);
+            ps.setInt(1, id);
+            ps.setString(2, hid);
+
+            if (date1 == null) {
+                ps.setString(3, date2);
+            } else if (date2 == null) {
+                ps.setString(3, date1);
+            } else {
+                ps.setString(3, date1);
+                ps.setString(4, date2);
+            }
+
+            ResultSet r = ps.executeQuery();
 
             if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
             while (r.next())
@@ -397,7 +438,7 @@ public class Database
                 String reason = r.getString("Reason");
                 boolean history = r.getBoolean("History");
                 if (!hidden && !deleted && !history) {
-                    results.add(new Entry(eID, eJournalID, eName, eDateCreated, hidden, deleted, data, reason, history));
+                    results.add(new Entry(eID, eJournalID, eName, eDateCreated, false, false, data, reason, false));
                 }
             }
         }
