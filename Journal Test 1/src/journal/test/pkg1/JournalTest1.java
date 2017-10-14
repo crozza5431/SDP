@@ -186,6 +186,16 @@ public class JournalTest1 extends Application {
         }
     }
     
+    public Journal getJournal(int id) {
+        for (Journal journal : loggedUser.getJournals()) {
+            if (journal.getId() == id) {
+                return journal;
+            }
+        }
+        
+        return null;
+    }
+    
     public void loadEntry() throws SQLException, InvalidObjectException {
         currentJournal.clearEntries();
         LinkedList<Entry> entries = Database.getEntry(currentJournal.getId(), false);

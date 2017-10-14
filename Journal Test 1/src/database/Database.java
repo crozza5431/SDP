@@ -137,7 +137,7 @@ public class Database
     }
     
     //Inserts new journal into Database
-    public static void newJournal(int userID, String name) throws SQLException, InvalidObjectException
+    public static int newJournal(int userID, String name) throws SQLException, InvalidObjectException
     {
         int jID = nextJournalID() + 1;
         try (
@@ -149,6 +149,7 @@ public class Database
         catch ( SQLException err ) {
             System.out.println(err);
         }
+        return jID;
     }
     
     //Searches for the next available Journal ID

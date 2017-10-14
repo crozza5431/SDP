@@ -24,12 +24,11 @@ public class CreateJournalController {
     public void handleCreateJournal() throws SQLException, InvalidObjectException {
         String jName = journalName.getText();
         int uID = JournalTest1.getInstance().getLoggedUser().getID();
-        Database.newJournal(uID, jName);
-        JournalTest1.getInstance().loadJournal();
-        JournalTest1.getInstance().gotoProfile();
-        
-        //Journal journal = new Journal(journalName.getText());
-        //JournalTest1.getInstance().getLoggedUser().addJournal(journal);
+        int jID = Database.newJournal(uID, jName);
+        JournalTest1.getInstance().loadJournal(); 
+        Journal journal = JournalTest1.getInstance().getJournal(jID);
+        JournalTest1.getInstance().setJournal(journal);
+        JournalTest1.getInstance().gotoEntry();
     }
     
     @FXML protected void processBack() {
