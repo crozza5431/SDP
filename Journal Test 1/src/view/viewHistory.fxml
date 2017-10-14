@@ -7,7 +7,7 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="controller.ViewEntryUneditableController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="controller.ViewHistoryController">
   <children>
     <Text fx:id="entryName" layoutX="208.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0">
       <font>
@@ -19,8 +19,6 @@
         <Font name="System Bold" size="20.0" fx:id="x1" />
       </font>
     </Button>
-    <Button font="$x1" layoutX="508.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleEditEntry" text="Edit" />
-    <Button onAction="#handleEntryHistory" text="View History" />
     <Text fx:id="entryData" layoutX="16.0" layoutY="131.0" />
   </children>
 </AnchorPane>

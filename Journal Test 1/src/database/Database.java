@@ -10,7 +10,12 @@ import model.User;
 import model.Entry;
 
 import java.io.InvalidObjectException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -120,7 +125,7 @@ public class Database
         LinkedList<Journal> journals = new LinkedList<>();
         try (
             Connection conn = establishConnection();
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM journal Where user_id=?", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM journal Where user_id=? ORDER BY Date_created DESC", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
         ) {
             ps.setInt(1, id);
             ResultSet r = ps.executeQuery();
@@ -140,7 +145,7 @@ public class Database
     }
     
     //Inserts new journal into Database
-    public static void newJournal(int userID, String name) throws SQLException, InvalidObjectException
+    public static int newJournal(int userID, String name) throws SQLException, InvalidObjectException
     {
         int jID = nextJournalID() + 1;
         try (
@@ -155,6 +160,7 @@ public class Database
         catch ( SQLException err ) {
             System.out.println(err);
         }
+        return jID;
     }
     
     //Searches for the next available Journal ID
@@ -194,7 +200,7 @@ public class Database
         LinkedList<Entry> entries = new LinkedList<>();
         try (
             Connection conn = establishConnection();
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Entry Where journal_id=?", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Entry Where journal_id=? ORDER BY Date_created DESC", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
         ) {
             ps.setInt(1, id);
             ResultSet r = ps.executeQuery();
@@ -352,8 +358,8 @@ public class Database
                 String data = r.getString("Data");
                 String reason = r.getString("Reason");
                 boolean history = r.getBoolean("History");
-                if (!hidden && !deleted && !history) {
-                    entries.add(new Entry(eID, eJournalID, eName, eDateCreated, false, false, data, reason, false));
+                if (!deleted) {
+                    entries.add(new Entry(eID, eJournalID, eName, eDateCreated, hidden, false, data, reason, history));
                 }
             }
         }
@@ -366,7 +372,7 @@ public class Database
         LinkedList<Entry> results = new LinkedList<>();
         try (
             Connection conn = establishConnection();
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Entry WHERE User_ID=? Hidden=? AND Data LIKE ?", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Entry WHERE User_ID=? Hidden=? AND Data LIKE ? ORDER BY Date_created DESC", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
         ) {
             ps.setInt(1, id);
             ps.setString(2, hid);
@@ -409,7 +415,7 @@ public class Database
         }
         try (
             Connection conn = establishConnection();
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Entry WHERE User_ID=? Hidden=? AND Date_created" + query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Entry WHERE User_ID=? Hidden=? AND Date_created" + query + " ORDER BY Date_created DESC", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
         ) {
             ps.setInt(1, id);
             ps.setString(2, hid);

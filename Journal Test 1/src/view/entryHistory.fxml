@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="controller.EntryHistoryController">
+  <children>
+    <TableView layoutX="13.0" layoutY="52.0" prefHeight="339.0" prefWidth="574.0" fx:id="historyTable">
+      <columns>
+        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="379.0" fx:id="nameClm" text="Entry Name" />
+        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="194.0" fx:id="dateClm" text="Date and Time Modifed" />
+        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="194.0" fx:id="reasonClm" text="Reason" />
+      </columns>
+    </TableView>
+    <Text layoutX="196.0" layoutY="32.0" scaleX="1.0" scaleY="1.0" strokeType="OUTSIDE" strokeWidth="0.0" fx:id="entryName" >
+      <font>
+        <Font name="System Bold" size="16.0" />
+      </font>
+    </Text>
+    <Button layoutX="13.0" layoutY="10.0" mnemonicParsing="false" text="&lt;" onAction="#handleBack">
+      <font>
+        <Font name="System Bold" size="18.0" />
+      </font>
+    </Button>
+  </children>
+</AnchorPane>
