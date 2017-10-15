@@ -139,6 +139,31 @@ public class Database
         return journals;
     }
     
+    //returns all result set of a users journals
+    public static LinkedList<Journal> getAllJournals(int id) throws SQLException, InvalidObjectException
+    {
+        LinkedList<Journal> journals = new LinkedList<>();
+        try (
+            Connection conn = establishConnection();
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM journal Where user_id=? ORDER BY Date_created DESC", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+        ) {
+            ps.setInt(1, id);
+            ResultSet r = ps.executeQuery();
+
+            if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
+            while (r.next())
+            {
+                int jID = r.getInt("ID");
+                int jUserID = r.getInt("User_ID");
+                String jName = r.getString("Name");
+                String jDateCreated = dateCorrectionFromUTC(r.getTimestamp("Date_created"));
+                boolean deleted = r.getBoolean("Deleted");
+                journals.add(new Journal(jID, jUserID, jName, jDateCreated, false));
+            }
+        }
+        return journals;
+    }
+    
     //Inserts new journal into Database
     public static int newJournal(int userID, String name) throws SQLException, InvalidObjectException
     {
@@ -228,7 +253,7 @@ public class Database
     }
     
          //returns a result set of a users entries
-    public static LinkedList<Entry> getAllEntries(int id, boolean showHidden) throws SQLException, InvalidObjectException
+    public static LinkedList<Entry> getAllEntries(int id, int showHidden) throws SQLException, InvalidObjectException
     {
         LinkedList<Entry> entries = new LinkedList<>();
         try (
@@ -250,12 +275,10 @@ public class Database
                 String data = r.getString("Data");
                 String reason = r.getString("Reason");
                 boolean history = r.getBoolean("History");
-                if (showHidden) {
-                    if (!hidden)entries.add(new Entry(eID, eJournalID, eName, eDateCreated, hidden, false, data, reason, false));
+                if (showHidden != 0) {
+                    if (!hidden) entries.add(new Entry(eID, eJournalID, eName, eDateCreated, hidden, false, data, reason, false));
                 }
-                else {
-                    entries.add(new Entry(eID, eJournalID, eName, eDateCreated, false, false, data, reason, false));
-                }
+                else entries.add(new Entry(eID, eJournalID, eName, eDateCreated, hidden, false, data, reason, false));
             }
         }
         return entries;

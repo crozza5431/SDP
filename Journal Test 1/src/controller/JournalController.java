@@ -64,101 +64,98 @@ public class JournalController implements Initializable{
             }
         });
         showAllChbx.setOnAction(e -> {
-            handleshowAllAction(e);
+            try {
+                handleButtonAction(e);
+            } catch (SQLException ex) {
+                Logger.getLogger(JournalController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InvalidObjectException ex) {
+                Logger.getLogger(JournalController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
         entryTable.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
                 rowMenu.hide();
             }
         });
-      entryTable.setItems(JournalTest1.getInstance().getJournal().getEntries());
-      entryTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-      nameClm.setCellValueFactory(new PropertyValueFactory<>("name"));
-      summaryClm.setCellValueFactory(new PropertyValueFactory<>("entry"));
-      dateClm.setCellValueFactory(new PropertyValueFactory<>("date"));
-      //Double click event
-      entryTable.setRowFactory(
-              new Callback<TableView<Entry>, TableRow<Entry>>() {
-                
-          @Override
-          public TableRow<Entry> call(TableView<Entry> param) {
-              final TableRow<Entry> row = new TableRow<Entry>() {
-                  //Highlight hidden journals
-                  @Override
-                protected void updateItem(Entry entry, boolean empty){
-                    super.updateItem(entry, empty);
-                    if(empty) {
-                        setStyle("");
+        entryTable.setItems(JournalTest1.getInstance().getJournal().getEntries());
+        entryTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        nameClm.setCellValueFactory(new PropertyValueFactory<>("name"));
+        summaryClm.setCellValueFactory(new PropertyValueFactory<>("entry"));
+        dateClm.setCellValueFactory(new PropertyValueFactory<>("date"));
+        //Double click event
+        entryTable.setRowFactory(
+                new Callback<TableView<Entry>, TableRow<Entry>>() {
+                    
+                    @Override
+                    public TableRow<Entry> call(TableView<Entry> param) {
+                        final TableRow<Entry> row = new TableRow<Entry>() {
+                        //Highlight hidden journals
+                            @Override
+                            protected void updateItem(Entry entry, boolean empty){
+                                super.updateItem(entry, empty);
+                                if(empty) {
+                                    setStyle("");
+                                }
+                                else if (this.getItem().getHidden()){
+                                    setStyle("-fx-control-inner-background: lightsteelblue; ");
+                                }
+                                else {
+                                    setStyle("");
+                                }
+                            }
+                        };
+                        //Menu Items + Handlers
+                        MenuItem hideItem = new MenuItem("Hide");
+                        hideItem.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent event) {
+                            //Hide Function
+                                int entryID = row.getItem().getId();
+                                Database.changeHiddenStatus(entryID, 1);
+                                JournalTest1.getInstance().gotoEntry();
+                            }
+                        });
+                        MenuItem deleteItem = new MenuItem("Delete");
+                        deleteItem.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent event) {
+                            //Delete Function
+                            int entryID = row.getItem().getId();
+                            Database.setEntryDeletedStatus(entryID, 1);
+                            entryTable.getItems().remove(row.getItem());
+                            }
+                        });
+                        MenuItem unhideItem = new MenuItem("Unhide");
+                        unhideItem.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent event) {
+                                //Unhide Function
+                                int entryID = row.getItem().getId();
+                                Database.changeHiddenStatus(entryID, 0);
+                                JournalTest1.getInstance().gotoEntry();
+                            } 
+                        }); 
+                        //Double Click feature
+                        row.setOnMousePressed(event -> {
+                            if (event.getButton() == MouseButton.SECONDARY && (! row.isEmpty()) && row.getItem().getHidden()) {
+                                rowMenu.getItems().clear();
+                                rowMenu.getItems().addAll(unhideItem);
+                                rowMenu.show(entryTable, event.getScreenX(), event.getScreenY());
+                            }
+                            else if (event.getButton() == MouseButton.SECONDARY && (! row.isEmpty())) {
+                                rowMenu.getItems().clear();
+                                rowMenu.getItems().addAll(hideItem, deleteItem);
+                                rowMenu.show(entryTable, event.getScreenX(), event.getScreenY());
+                            }
+                            if (event.getClickCount() == 2 && (! row.isEmpty()) && event.getButton() != MouseButton.SECONDARY) {
+                                Entry rowData = row.getItem();
+                                JournalTest1.getInstance().currentEntry(rowData);
+                                JournalTest1.getInstance().gotoViewEntry();
+                            }
+                        });
+                        return row;  
                     }
-                    else if (this.getItem().getHidden()){
-                        setStyle("-fx-control-inner-background: lightsteelblue; ");
-                    }
-                    else {
-                        setStyle("");
-                    }
-              }
-              };
-              
-              //Menu Items + Handlers
-              MenuItem hideItem = new MenuItem("Hide");
-              hideItem.setOnAction(new EventHandler<ActionEvent>() {
-                  
-                  @Override
-                  public void handle(ActionEvent event) {
-                      //Hide Function
-                      int entryID = row.getItem().getId();
-                      Database.changeHiddenStatus(entryID, 1);
-                      JournalTest1.getInstance().gotoEntry();
-                  }
-              });
-              MenuItem deleteItem = new MenuItem("Delete");
-              deleteItem.setOnAction(new EventHandler<ActionEvent>() {
-                  @Override
-                  public void handle(ActionEvent event) {
-                      //Delete Function
-                      int entryID = row.getItem().getId();
-                      Database.setEntryDeletedStatus(entryID, 1);
-                      entryTable.getItems().remove(row.getItem());
-                  }
-                  
-              });
-              
-              MenuItem unhideItem = new MenuItem("Unhide");
-              unhideItem.setOnAction(new EventHandler<ActionEvent>() {
-                  @Override
-                  public void handle(ActionEvent event) {
-                      //Unhide Function
-                      int entryID = row.getItem().getId();
-                      Database.changeHiddenStatus(entryID, 0);
-                      JournalTest1.getInstance().gotoEntry();
-                  } 
-              }); 
-              
-              //Double Click feature
-              row.setOnMousePressed(event -> {
-              
-                if (event.getButton() == MouseButton.SECONDARY && (! row.isEmpty()) && row.getItem().getHidden()) {
-                  rowMenu.getItems().clear();
-                  rowMenu.getItems().addAll(unhideItem);
-                  rowMenu.show(entryTable, event.getScreenX(), event.getScreenY());
-              }
-              else if (event.getButton() == MouseButton.SECONDARY && (! row.isEmpty())) {
-                  rowMenu.getItems().clear();
-                  rowMenu.getItems().addAll(hideItem, deleteItem);
-                  rowMenu.show(entryTable, event.getScreenX(), event.getScreenY());
-              }
-              
-              if (event.getClickCount() == 2 && (! row.isEmpty()) && event.getButton() != MouseButton.SECONDARY) {
-                      Entry rowData = row.getItem();
-                      JournalTest1.getInstance().currentEntry(rowData);
-                      JournalTest1.getInstance().gotoViewEntry();
-              }
-              });
-              
-              return row;  
-          }
-
-      });
+                });
     }
     
     public void handleCreateEntry(){
@@ -170,17 +167,29 @@ public class JournalController implements Initializable{
     }
 
     private void handleButtonAction(ActionEvent e) throws SQLException, InvalidObjectException {
-        if(hiddenChbx.isSelected()) {
+        if(hiddenChbx.isSelected() && showAllChbx.isSelected()) {
+            JournalTest1.getInstance().loadAllEntries(0);
+        }
+        else if (hiddenChbx.isSelected() && !showAllChbx.isSelected()) {
             JournalTest1.getInstance().loadHiddenEntry();
         }
-        if(!hiddenChbx.isSelected()) {
+        else if (showAllChbx.isSelected() && !hiddenChbx.isSelected()) {
+            JournalTest1.getInstance().loadAllEntries(1);
+        }
+        else {
             JournalTest1.getInstance().loadEntry();
         }
     }
 
-    private void handleshowAllAction(ActionEvent e) {
-        if(showAllChbx.isSelected()) {
-            JournalTest1.getInstance().loadAllEntries();
+    private void handleshowAllAction(ActionEvent e) throws SQLException, InvalidObjectException {
+        if(showAllChbx.isSelected() && hiddenChbx.isSelected()) {
+            JournalTest1.getInstance().loadAllEntries(0);
+        }
+        else if (showAllChbx.isSelected()) {
+            JournalTest1.getInstance().loadAllEntries(1);
+        }
+        if(!showAllChbx.isSelected()) {
+            JournalTest1.getInstance().loadEntry();
         }
     }
 }
