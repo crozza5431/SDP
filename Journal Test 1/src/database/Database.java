@@ -12,9 +12,11 @@ import model.Entry;
 import java.io.InvalidObjectException;
 import java.sql.*;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.SimpleTimeZone;
 import java.util.TimeZone;
 
 /**
@@ -437,15 +439,16 @@ public class Database
     }
     
     //searches a users journals
-    public static LinkedList<Entry> searchEntries(int id, String keyword, Date before, Date after, int hid, int delete, int hist) throws SQLException, InvalidObjectException {
+    public static LinkedList<Entry> searchEntries(int id, String keyword, LocalDate before, LocalDate after, int hid, int delete, int hist) throws SQLException, InvalidObjectException {
         LinkedList<Entry> results = new LinkedList<>();
         String bef = null;
         String aft = null;
+        
         if (before != null) {
-            bef = dateLocaltoUTC(before);
+            bef = before.toString();
         }
         if (after != null) {
-            aft = dateLocaltoUTC(after);
+            aft = after.toString();
         }
         
         String query = "";

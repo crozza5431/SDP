@@ -10,6 +10,7 @@ import database.Database;
 import java.io.InvalidObjectException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.LinkedList;
 
@@ -285,7 +286,7 @@ public class JournalTest1 extends Application {
         }
     }
     
-    public void loadSearches(int id, String keyword, Date before, Date after, int hid, int delete, int hist) throws SQLException, InvalidObjectException {
+    public void loadSearches(int id, String keyword, LocalDate before, LocalDate after, int hid, int delete, int hist) throws SQLException, InvalidObjectException {
         currentJournal.clearEntries();
         LinkedList<Entry> entries = Database.searchEntries(id, keyword, before, after, hid, delete, hist);
         for (Entry entry : entries)

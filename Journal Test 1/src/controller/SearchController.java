@@ -8,6 +8,7 @@ package controller;
 import java.io.InvalidObjectException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import static java.time.temporal.TemporalQueries.localDate;
 import java.util.Date;
 import java.util.ResourceBundle;
@@ -73,13 +74,13 @@ public class SearchController implements Initializable{
         int jID = JournalTest1.getInstance().getJournal().getId();
         
         String keyword = keyWord.getText();
-        Date before = null;
-        Date after = null;
+        LocalDate before = null;
+        LocalDate after = null;
         if (secondDate.getValue() != null) {
-            before = java.sql.Date.valueOf(secondDate.getValue());
+            before = secondDate.getValue();
         }
         if (firstDate.getValue() != null) {
-            after = java.sql.Date.valueOf(firstDate.getValue());
+            after = firstDate.getValue();
         }
         
         JournalTest1.getInstance().loadSearches(jID, keyword, before, after, hid, delete, hist);
