@@ -63,7 +63,21 @@ public class ProfileController implements Initializable {
                 new Callback<TableView<Journal>, TableRow<Journal>>() {
                     @Override
                     public TableRow<Journal> call(TableView<Journal> tableView) {
-                        final TableRow<Journal> row = new TableRow<>();
+                        final TableRow<Journal> row = new TableRow<Journal>() { 
+                        @Override
+                            protected void updateItem(Journal journal, boolean empty) {
+                        super.updateItem(journal, empty);
+                        if(empty) {
+                            setStyle("");
+                        }
+                        else if(this.getItem().isDeleted()) {
+                            setStyle("-fx-control-inner-background: red; ");
+                        }
+                        else {
+                            setStyle("");
+                        }
+                    }
+                        };     
                         //hideItem.setOnAction();
                         MenuItem deleteItem = new MenuItem("Delete");
                         deleteItem.setOnAction(new EventHandler<ActionEvent>() {
