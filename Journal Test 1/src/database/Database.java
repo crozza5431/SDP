@@ -437,7 +437,7 @@ public class Database
     }
     
     //searches a users journals
-    public static LinkedList<Entry> searchEntries(int id, String keyword, Date before, Date after, String hid, String delete, String hist) throws SQLException, InvalidObjectException {
+    public static LinkedList<Entry> searchEntries(int id, String keyword, Date before, Date after, int hid, int delete, int hist) throws SQLException, InvalidObjectException {
         LinkedList<Entry> results = new LinkedList<>();
         String bef = null;
         String aft = null;
@@ -450,25 +450,25 @@ public class Database
         
         String query = null;
         
-        if (hid.equals(0)) {
-            query += " AND hidden=0";
+        if (hid == 0) {
+            query += " AND hidden=?";
         }
-        if (delete.equals(0)) {
-            query += " AND delete=0";
+        if (delete == 0) {
+            query += " AND delete=?";
         }
-        if (hist.equals(0)) {
-            query += " AND History=0";
+        if (hist == 0) {
+            query += " AND History=?";
         }
         
         if (!keyword.isEmpty()) {
             query += " AND DATA LIKE ?";
         }
         if (bef == null) {
-            query = " AND date_created> ?";
+            query += " AND date_created> ?";
         } else if (aft == null) {
-            query = " AND date_created< ?";
+            query += " AND date_created< ?";
         } else {
-            query = " AND date_created BETWEEN ? AND ?";
+            query += " AND date_created BETWEEN ? AND ?";
         }
         
         try (
@@ -477,15 +477,15 @@ public class Database
         ) {
             ps.setInt(1, id);
             int count = 2;
-            if (hid.equals(0))  {
+            if (hid == 0)  {
                 ps.setString(count, "0");
                 count++;
             }
-            if (delete.equals(0))  {
+            if (delete == 0)  {
                 ps.setString(count, "0");
                 count++;
             }
-            if (hist.equals(0))  {
+            if (hist == 0)  {
                 ps.setString(count, "0");
                 count++;
             }

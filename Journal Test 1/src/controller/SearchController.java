@@ -41,9 +41,9 @@ public class SearchController implements Initializable{
     @FXML CheckBox hiddenChbx;
     @FXML CheckBox deletedChbx;
     @FXML Text searchName;
-    String hid = "0";
-    String delete = "0";
-    String hist = "0";
+    int hid = 0;
+    int delete = 0;
+    int hist = 0;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -87,22 +87,22 @@ public class SearchController implements Initializable{
 
     private void handleButtonAction(ActionEvent e) {
         if(historyChbx.isSelected()) {
-            hist = "1";
+            hist = 1;
         }
         if(!historyChbx.isSelected()) {
-            hist = "0";
+            hist = 0;
         }
         if(hiddenChbx.isSelected()) {
-            hid = "1";
+            hid = 1;
         }
         if(!hiddenChbx.isSelected()) {
-            hid = "0";
+            hid = 0;
         }
         if(deletedChbx.isSelected()) {
-            delete = "1";
+            delete = 1;
         }
         if(!deletedChbx.isSelected()) {
-            delete = "0";
+            delete = 0;
         }
     }
 }
