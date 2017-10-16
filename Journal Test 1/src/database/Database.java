@@ -435,6 +435,70 @@ public class Database
         }
         return entries;
     }
+    
+    //searches a users journals
+    public static LinkedList<Entry> searchEntries(int id, String keyword, Date before, Date after, String hid, String delete, String hist) throws SQLException, InvalidObjectException {
+        LinkedList<Entry> results = new LinkedList<>();
+        String bef = dateLocaltoUTC(before);
+        String aft = dateLocaltoUTC(after);
+        String query = null;
+        
+        if (!keyword.isEmpty()) {
+            query += " AND DATA LIKE ?";
+        }
+        if (bef == null) {
+            query = " AND date_created> ?";
+        } else if (aft == null) {
+            query = " AND date_created< ?";
+        } else {
+            query = " AND date_created BETWEEN ? AND ?";
+        }
+        
+        try (
+            Connection conn = establishConnection();
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Entry WHERE User_ID=? AND Hidden=? AND DELETED=? AND history=?" + query + " ORDER BY Date_created DESC", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+        ) {
+            ps.setInt(1, id);
+            ps.setString(2, hid);
+            ps.setString(3, delete);
+            ps.setString(4, hist);
+            int count = 5;
+            if (!keyword.isEmpty()) {
+                ps.setString(count, keyword);
+                count++;
+            }
+            if (bef == null) {
+                ps.setString(count, aft);
+            } else if (aft == null) {
+                ps.setString(count, bef);
+            } else {
+                ps.setString(count, bef);
+                count++;
+                ps.setString(count, aft);
+            }
+            
+            ps.setString(3, "%" + keyword + "%");
+            ResultSet r = ps.executeQuery();
+
+            if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
+            while (r.next())
+            {
+                int eID = r.getInt("ID");
+                int eJournalID = r.getInt("Journal_ID");
+                String eName = r.getString("Name");
+                String eDateCreated = dateCorrectionFromUTC(r.getTimestamp("Date_created"));
+                boolean hidden = r.getBoolean("Hidden");
+                boolean deleted = r.getBoolean("Deleted");
+                String data = r.getString("Data");
+                String reason = r.getString("Reason");
+                boolean history = r.getBoolean("History");
+                if (!hidden && !deleted && !history) {
+                    results.add(new Entry(eID, eJournalID, eName, eDateCreated, hidden, deleted, data, reason, history));
+                }
+            }
+        }
+        return results;
+    }
 
     //searches entries to find keywords
     public static LinkedList<Entry> searchEntriesKeyword(int id, String keyword, String hid) throws SQLException, InvalidObjectException 
@@ -514,7 +578,7 @@ public class Database
                 String reason = r.getString("Reason");
                 boolean history = r.getBoolean("History");
                 if (!hidden && !deleted && !history) {
-                    results.add(new Entry(eID, eJournalID, eName, eDateCreated, false, false, data, reason, false));
+                    results.add(new Entry(eID, eJournalID, eName, eDateCreated, hidden, deleted, data, reason, false));
                 }
             }
         }
