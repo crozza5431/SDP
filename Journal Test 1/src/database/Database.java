@@ -443,6 +443,16 @@ public class Database
         String aft = dateLocaltoUTC(after);
         String query = null;
         
+        if (hid.equals(0)) {
+            query += " AND hidden=0";
+        }
+        if (delete.equals(0)) {
+            query += " AND delete=0";
+        }
+        if (hist.equals(0)) {
+            query += " AND History=0";
+        }
+        
         if (!keyword.isEmpty()) {
             query += " AND DATA LIKE ?";
         }
@@ -459,10 +469,19 @@ public class Database
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM Entry WHERE User_ID=? AND Hidden=? AND DELETED=? AND history=?" + query + " ORDER BY Date_created DESC", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
         ) {
             ps.setInt(1, id);
-            ps.setString(2, hid);
-            ps.setString(3, delete);
-            ps.setString(4, hist);
-            int count = 5;
+            int count = 2;
+            if (hid.equals(0))  {
+                ps.setString(count, "0");
+                count++;
+            }
+            if (delete.equals(0))  {
+                ps.setString(count, "0");
+                count++;
+            }
+            if (hist.equals(0))  {
+                ps.setString(count, "0");
+                count++;
+            }
             if (!keyword.isEmpty()) {
                 ps.setString(count, keyword);
                 count++;
@@ -500,7 +519,7 @@ public class Database
         return results;
     }
 
-    //searches entries to find keywords
+    //DO NOT NEED searches entries to find keywords
     public static LinkedList<Entry> searchEntriesKeyword(int id, String keyword, String hid) throws SQLException, InvalidObjectException 
     {
         LinkedList<Entry> results = new LinkedList<>();
@@ -533,7 +552,7 @@ public class Database
         return results;
     }
     
-    //searches entries to find entries BF, AF or between dates
+    //DO NOT NEED searches entries to find entries BF, AF or between dates
     // dates are in YYYY-MM-DD format and in UTC time (matters if an entry was made before 11am as it will show previous day )
     public static LinkedList<Entry> searchEntriesDates(int id, String hid, String date1, String date2) throws SQLException, InvalidObjectException 
     {
