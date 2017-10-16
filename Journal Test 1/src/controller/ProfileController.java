@@ -71,7 +71,7 @@ public class ProfileController implements Initializable {
                             setStyle("");
                         }
                         else if(this.getItem().isDeleted()) {
-                            setStyle("-fx-control-inner-background: red; ");
+                            setStyle("-fx-control-inner-background: lightcoral; ");
                         }
                         else {
                             setStyle("");

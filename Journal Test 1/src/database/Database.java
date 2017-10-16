@@ -158,7 +158,7 @@ public class Database
                 String jName = r.getString("Name");
                 String jDateCreated = dateCorrectionFromUTC(r.getTimestamp("Date_created"));
                 boolean deleted = r.getBoolean("Deleted");
-                journals.add(new Journal(jID, jUserID, jName, jDateCreated, false));
+                journals.add(new Journal(jID, jUserID, jName, jDateCreated, deleted));
             }
         }
         return journals;
