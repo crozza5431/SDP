@@ -32,6 +32,7 @@ public class ProfileController implements Initializable {
     @FXML private TableColumn<Journal, String> nameClm;
     @FXML private TableColumn<Journal, String> dateClm;
     @FXML private CheckBox showAllChbx;
+    private ContextMenu rowMenu = new ContextMenu();
 
     @FXML protected void processLogout() {
         JournalTest1.getInstance().userLogout();
@@ -52,14 +53,17 @@ public class ProfileController implements Initializable {
         journalTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         nameClm.setCellValueFactory(new PropertyValueFactory<>("name"));
         dateClm.setCellValueFactory(new PropertyValueFactory<>("date"));
+        journalTable.setOnMouseClicked(event -> {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                rowMenu.hide();
+            }
+        });
         //Double click event
         journalTable.setRowFactory(
                 new Callback<TableView<Journal>, TableRow<Journal>>() {
                     @Override
                     public TableRow<Journal> call(TableView<Journal> tableView) {
                         final TableRow<Journal> row = new TableRow<>();
-                        final ContextMenu rowMenu = new ContextMenu();
-                        MenuItem hideItem = new MenuItem("Hide");
                         //hideItem.setOnAction();
                         MenuItem deleteItem = new MenuItem("Delete");
                         deleteItem.setOnAction(new EventHandler<ActionEvent>() {
@@ -69,18 +73,13 @@ public class ProfileController implements Initializable {
                             int journalID = row.getItem().getId();
                             Database.changeDeletedStatus(journalID, 1);
                             journalTable.getItems().remove(row.getItem());
-                            System.out.println("Selected Journal ID is: " + journalID);
                             }
                         });
-                        rowMenu.getItems().addAll(hideItem, deleteItem);
-                        row.setOnMouseClicked(event -> {
-                            if (event.getButton() == MouseButton.SECONDARY && (! row.isEmpty())) {
+                        row.setOnMousePressed(event -> {
+                            if (event.getButton() == MouseButton.SECONDARY && (! row.isEmpty()) && !row.getItem().isDeleted()) {
+                                rowMenu.getItems().clear();
+                                rowMenu.getItems().add(deleteItem);
                                 rowMenu.show(journalTable, event.getScreenX(), event.getScreenY());
-                            }
-                            if (event.getClickCount() == 2 && (! row.isEmpty())) {
-                                Journal rowData = row.getItem();
-                                JournalTest1.getInstance().returnSelected(rowData);
-                                JournalTest1.getInstance().gotoEntry();
                             }
                         });
                         return row;

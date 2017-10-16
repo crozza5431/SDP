@@ -57,4 +57,8 @@ public class Journal {
     public void clearEntries() {
         Entry.clear();
     }
+    
+    public boolean isDeleted() {
+        return deleted;
+    }
 }
