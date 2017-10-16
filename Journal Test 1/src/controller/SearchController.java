@@ -20,11 +20,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
 import javafx.scene.text.Text;
+import javafx.util.Callback;
 import journal.test.pkg1.JournalTest1;
+import model.Entry;
 
 /**
  *
@@ -34,7 +38,7 @@ public class SearchController implements Initializable{
     @FXML TextField keyWord;
     @FXML DatePicker firstDate;
     @FXML DatePicker secondDate;
-    @FXML TableView historyTbl;
+    @FXML TableView searchTbl;
     @FXML TableColumn nameClm;
     @FXML TableColumn summaryClm;
     @FXML TableColumn dateClm;
@@ -49,8 +53,8 @@ public class SearchController implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         searchName.setText("Search: " + JournalTest1.getInstance().getJournal().getName());
-        historyTbl.setItems(JournalTest1.getInstance().getJournal().getEntries());
-        historyTbl.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        searchTbl.setItems(JournalTest1.getInstance().getJournal().getEntries());
+        searchTbl.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         nameClm.setCellValueFactory(new PropertyValueFactory<>("name"));
         summaryClm.setCellValueFactory(new PropertyValueFactory<>("entry"));
         dateClm.setCellValueFactory(new PropertyValueFactory<>("date"));
@@ -64,7 +68,45 @@ public class SearchController implements Initializable{
         deletedChbx.setOnAction(e -> {
             handleButtonAction(e);
         });
+        
+        searchTbl.setRowFactory(
+                new Callback<TableView<Entry>, TableRow<Entry>>() {
+                    
+                    @Override
+                    public TableRow<Entry> call(TableView<Entry> param) {
+                        final TableRow<Entry> row = new TableRow<Entry>() {
+                        //Highlight hidden journals
+                            @Override
+                            protected void updateItem(Entry entry, boolean empty){
+                                super.updateItem(entry, empty);
+                                if(empty) {
+                                    setStyle("");
+                                }
+                                else if (this.getItem().getHidden()){
+                                    setStyle("-fx-control-inner-background: lightsteelblue; ");
+                                }
+                                
+                                else if (this.getItem().isDeleted()){
+                                    setStyle("-fx-control-inner-background: lightcoral; ");
+                                }
+                                else {
+                                    setStyle("");
+                                }
+                            }
+                        };
+                        
+                        row.setOnMousePressed(event -> {
+                            if (event.getClickCount() == 2 && (! row.isEmpty()) && event.getButton() != MouseButton.SECONDARY) {
+                                Entry rowData = row.getItem();
+                                JournalTest1.getInstance().currentEntry(rowData);
+                                JournalTest1.getInstance().gotoViewEntry();
+                            }
+                        });
+                        
+                        return row;
     }
+                });
+                }
     
     @FXML protected void handleBack() {
         JournalTest1.getInstance().gotoEntry();
