@@ -16,6 +16,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -41,6 +42,7 @@ public class JournalController implements Initializable{
     @FXML private TableColumn<Entry, String> dateClm;
     @FXML private CheckBox hiddenChbx;
     @FXML private CheckBox showAllChbx;
+    @FXML private Button createEntryBtn;
     private ContextMenu rowMenu = new ContextMenu(); 
     
     
@@ -54,6 +56,9 @@ public class JournalController implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        if (JournalTest1.getInstance().getJournal().isDeleted()) {
+            createEntryBtn.setDisable(true);
+        }
         hiddenChbx.setOnAction(e -> {
             try {
                 handleButtonAction(e);

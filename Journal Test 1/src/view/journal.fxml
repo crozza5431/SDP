@@ -31,7 +31,7 @@
       <TableColumn text="Date Created" fx:id="dateClm" />
     </columns>
   </TableView>
-  <Button onAction="#handleCreateEntry" text="Create Entry" />
+  <Button onAction="#handleCreateEntry" text="Create Entry" fx:id="createEntryBtn"/>
   <Hyperlink fx:id="Back" font="$x1" onAction="#processBack" text="Go Back" textFill="RED" />
   <stylesheets>
     <URL value="@Login.css" />
