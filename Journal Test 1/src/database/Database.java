@@ -448,13 +448,13 @@ public class Database
             aft = dateLocaltoUTC(after);
         }
         
-        String query = null;
+        String query = "";
         
         if (hid == 0) {
             query += " AND hidden=?";
         }
         if (delete == 0) {
-            query += " AND delete=?";
+            query += " AND deleted=?";
         }
         if (hist == 0) {
             query += " AND History=?";
@@ -473,7 +473,7 @@ public class Database
         
         try (
             Connection conn = establishConnection();
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Entry WHERE User_ID=?" + query + " ORDER BY Date_created DESC", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Entry WHERE journal_ID=?" + query + " ORDER BY Date_created DESC", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
         ) {
             ps.setInt(1, id);
             int count = 2;
@@ -490,7 +490,7 @@ public class Database
                 count++;
             }
             if (!keyword.isEmpty()) {
-                ps.setString(count, keyword);
+                ps.setString(count, "%" + keyword + "%");
                 count++;
             }
             if (bef == null) {
@@ -503,7 +503,6 @@ public class Database
                 ps.setString(count, aft);
             }
             
-            ps.setString(3, "%" + keyword + "%");
             ResultSet r = ps.executeQuery();
 
             if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
