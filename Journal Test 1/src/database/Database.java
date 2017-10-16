@@ -212,6 +212,17 @@ public class Database
         catch ( SQLException err ) {
             System.out.println(err);
         }
+        try (
+            Connection conn = establishConnection();
+            PreparedStatement ps = conn.prepareStatement("UPDATE entry SET Deleted=? WHERE journal_ID=?")
+        ) {
+            ps.setInt(1, delete);
+            ps.setInt(2, ID);
+            ps.executeUpdate();
+        }
+        catch ( SQLException err ) {
+            System.out.println(err);
+        }
     }
     
      //returns a result set of a users entries
