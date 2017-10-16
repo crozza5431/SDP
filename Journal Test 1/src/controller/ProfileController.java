@@ -95,6 +95,11 @@ public class ProfileController implements Initializable {
                                 rowMenu.getItems().add(deleteItem);
                                 rowMenu.show(journalTable, event.getScreenX(), event.getScreenY());
                             }
+                            if (event.getButton() == MouseButton.PRIMARY && (! row.isEmpty()) && event.getClickCount() == 2) {
+                                Journal journal = row.getItem();
+                                JournalTest1.getInstance().setJournal(journal);
+                                JournalTest1.getInstance().gotoEntry();
+                            }
                         });
                         return row;
                     }
