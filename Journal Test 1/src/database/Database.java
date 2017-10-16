@@ -528,91 +528,6 @@ public class Database
         }
         return results;
     }
-
-    //DO NOT NEED searches entries to find keywords
-    public static LinkedList<Entry> searchEntriesKeyword(int id, String keyword, String hid) throws SQLException, InvalidObjectException 
-    {
-        LinkedList<Entry> results = new LinkedList<>();
-        try (
-            Connection conn = establishConnection();
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Entry WHERE User_ID=? Hidden=? AND Data LIKE ? ORDER BY Date_created DESC", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-        ) {
-            ps.setInt(1, id);
-            ps.setString(2, hid);
-            ps.setString(3, "%" + keyword + "%");
-            ResultSet r = ps.executeQuery();
-
-            if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
-            while (r.next())
-            {
-                int eID = r.getInt("ID");
-                int eJournalID = r.getInt("Journal_ID");
-                String eName = r.getString("Name");
-                String eDateCreated = dateCorrectionFromUTC(r.getTimestamp("Date_created"));
-                boolean hidden = r.getBoolean("Hidden");
-                boolean deleted = r.getBoolean("Deleted");
-                String data = r.getString("Data");
-                String reason = r.getString("Reason");
-                boolean history = r.getBoolean("History");
-                if (!hidden && !deleted && !history) {
-                    results.add(new Entry(eID, eJournalID, eName, eDateCreated, false, false, data, reason, false));
-                }
-            }
-        }
-        return results;
-    }
-    
-    //DO NOT NEED searches entries to find entries BF, AF or between dates
-    // dates are in YYYY-MM-DD format and in UTC time (matters if an entry was made before 11am as it will show previous day )
-    public static LinkedList<Entry> searchEntriesDates(int id, String hid, String date1, String date2) throws SQLException, InvalidObjectException 
-    {
-        LinkedList<Entry> results = new LinkedList<>();
-        String query;
-        
-        if (date1 == null) {
-            query = "> ?";
-        } else if (date2 == null) {
-            query = "< ?";
-        } else {
-            query = " BETWEEN ? AND ?";
-        }
-        try (
-            Connection conn = establishConnection();
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Entry WHERE User_ID=? Hidden=? AND Date_created" + query + " ORDER BY Date_created DESC", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-        ) {
-            ps.setInt(1, id);
-            ps.setString(2, hid);
-
-            if (date1 == null) {
-                ps.setString(3, date2);
-            } else if (date2 == null) {
-                ps.setString(3, date1);
-            } else {
-                ps.setString(3, date1);
-                ps.setString(4, date2);
-            }
-
-            ResultSet r = ps.executeQuery();
-
-            if (r == null) throw new InvalidObjectException("Hopefully r isn't null");
-            while (r.next())
-            {
-                int eID = r.getInt("ID");
-                int eJournalID = r.getInt("Journal_ID");
-                String eName = r.getString("Name");
-                String eDateCreated = dateCorrectionFromUTC(r.getTimestamp("Date_created"));
-                boolean hidden = r.getBoolean("Hidden");
-                boolean deleted  = r.getBoolean("Deleted");
-                String data = r.getString("Data");
-                String reason = r.getString("Reason");
-                boolean history = r.getBoolean("History");
-                if (!hidden && !deleted && !history) {
-                    results.add(new Entry(eID, eJournalID, eName, eDateCreated, hidden, deleted, data, reason, false));
-                }
-            }
-        }
-        return results;
-    }
     
     //Converts UTC to local time
     private static String dateCorrectionFromUTC(Date utcTime) 
@@ -621,14 +536,5 @@ public class Database
         Date local = new Date(utcTime.getTime() + TimeZone.getTimeZone(timeZone).getOffset(utcTime.getTime()));
         SimpleDateFormat dateFormatter = new SimpleDateFormat("EEEE, d MMMM yyyy 'at' h:mm a z");
         return dateFormatter.format(local);
-    }
-    
-    //Converts local time to UTC
-    private static String dateLocaltoUTC(Date localTime) 
-    {
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-mm-dd");
-        dateFormatter.setTimeZone(TimeZone.getTimeZone("UTC"));
-        Date UTC = new Date(dateFormatter.format(localTime));
-        return dateFormatter.format(UTC);
     }
 }
