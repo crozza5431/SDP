@@ -463,12 +463,14 @@ public class Database
         if (!keyword.isEmpty()) {
             query += " AND DATA LIKE ?";
         }
-        if (bef == null) {
-            query += " AND date_created> ?";
-        } else if (aft == null) {
-            query += " AND date_created< ?";
-        } else {
+        if (bef != null && aft != null) {
             query += " AND date_created BETWEEN ? AND ?";
+        } 
+        else if (aft != null) {
+            query += " AND date_created> ?";
+        }
+        else if (bef != null) {
+            query += " AND date_created< ?";
         }
         
         try (
@@ -493,14 +495,15 @@ public class Database
                 ps.setString(count, "%" + keyword + "%");
                 count++;
             }
-            if (bef == null) {
-                ps.setString(count, aft);
-            } else if (aft == null) {
-                ps.setString(count, bef);
-            } else {
+            if (aft != null && bef != null) {
                 ps.setString(count, bef);
                 count++;
                 ps.setString(count, aft);
+            }
+            else if (aft != null) {
+                ps.setString(count, aft);
+            } else if (bef != null) {
+                ps.setString(count, bef);
             }
             
             ResultSet r = ps.executeQuery();
