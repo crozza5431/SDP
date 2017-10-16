@@ -272,9 +272,9 @@ public class Database
                 String reason = r.getString("Reason");
                 boolean history = r.getBoolean("History");
                 if (showHidden != 0) {
-                    if (!hidden) entries.add(new Entry(eID, eJournalID, eName, eDateCreated, hidden, false, data, reason, false));
+                    if (!hidden) entries.add(new Entry(eID, eJournalID, eName, eDateCreated, hidden, deleted, data, reason, history));
                 }
-                else entries.add(new Entry(eID, eJournalID, eName, eDateCreated, hidden, false, data, reason, false));
+                else entries.add(new Entry(eID, eJournalID, eName, eDateCreated, hidden, deleted, data, reason, history));
             }
         }
         return entries;

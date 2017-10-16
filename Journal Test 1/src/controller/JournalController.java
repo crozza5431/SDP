@@ -99,6 +99,10 @@ public class JournalController implements Initializable{
                                 else if (this.getItem().getHidden()){
                                     setStyle("-fx-control-inner-background: lightsteelblue; ");
                                 }
+                                
+                                else if (this.getItem().isDeleted()){
+                                    setStyle("-fx-control-inner-background: lightcoral; ");
+                                }
                                 else {
                                     setStyle("");
                                 }
@@ -142,7 +146,7 @@ public class JournalController implements Initializable{
                                 rowMenu.getItems().addAll(unhideItem);
                                 rowMenu.show(entryTable, event.getScreenX(), event.getScreenY());
                             }
-                            else if (event.getButton() == MouseButton.SECONDARY && (! row.isEmpty())) {
+                            else if (event.getButton() == MouseButton.SECONDARY && (! row.isEmpty()) && !row.getItem().isDeleted()) {
                                 rowMenu.getItems().clear();
                                 rowMenu.getItems().addAll(hideItem, deleteItem);
                                 rowMenu.show(entryTable, event.getScreenX(), event.getScreenY());

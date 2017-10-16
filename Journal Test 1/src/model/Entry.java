@@ -61,4 +61,8 @@ public class Entry {
     public boolean getHistory() {
         return history;
     }
+    
+    public boolean isDeleted() {
+        return deleted;
+    }
 }
