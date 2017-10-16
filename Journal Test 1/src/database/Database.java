@@ -616,7 +616,7 @@ public class Database
     //Converts local time to UTC
     private static String dateLocaltoUTC(Date localTime) 
     {
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss:fff");
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-mm-dd");
         dateFormatter.setTimeZone(TimeZone.getTimeZone("UTC"));
         Date UTC = new Date(dateFormatter.format(localTime));
         return dateFormatter.format(UTC);
