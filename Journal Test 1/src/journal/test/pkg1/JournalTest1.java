@@ -284,6 +284,15 @@ public class JournalTest1 extends Application {
             loggedUser.addJournal(journal);
         }
     }
+    
+    public void loadSearches(int id, String keyword, Date before, Date after, String hid, String delete, String hist) throws SQLException, InvalidObjectException {
+        currentJournal.clearEntries();
+        LinkedList<Entry> entries = Database.searchEntries(id, keyword, before, after, hid, delete, hist);
+        for (Entry entry : entries)
+        {
+            currentJournal.addEntry(entry);
+        }
+    }
 
     public void gotoSearch() {
          try {

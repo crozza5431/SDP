@@ -27,7 +27,7 @@
     <DatePicker layoutX="286.0" layoutY="86.0" prefWidth="105" fx:id="firstDate"/>
     <DatePicker layoutX="407.0" layoutY="86.0" prefWidth="105" fx:id="secondDate"/>
     <Text layoutX="394.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="to" />
-    <Button layoutX="272.0" layoutY="160.0" mnemonicParsing="false" text="Search" />
+    <Button layoutX="272.0" layoutY="160.0" mnemonicParsing="false" text="Search" onAction="#handleSearch"/>
     <CheckBox layoutX="217.0" layoutY="120.0" mnemonicParsing="false" text="Include entries from History" fx:id="historyChbx"/>
     <CheckBox layoutX="232.0" layoutY="136.0" mnemonicParsing="false" text="Include hidden entries" fx:id="hiddenChbx"/>
     <CheckBox layoutX="270.0" layoutY="136.0" mnemonicParsing="false" text="Include deleted entries" fx:id="deletedChbx" />
