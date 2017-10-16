@@ -499,9 +499,9 @@ public class Database
                 count++;
             }
             if (aft != null && bef != null) {
-                ps.setString(count, bef);
-                count++;
                 ps.setString(count, aft);
+                count++;
+                ps.setString(count, bef);
             }
             else if (aft != null) {
                 ps.setString(count, aft);
