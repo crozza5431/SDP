@@ -55,6 +55,7 @@ public class JournalController implements Initializable{
     }
     
      @FXML protected void processSearch() {
+        JournalTest1.getInstance().getJournal().clearEntries();
         JournalTest1.getInstance().gotoSearch();
     }
 

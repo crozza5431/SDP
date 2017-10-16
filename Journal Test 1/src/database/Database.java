@@ -439,8 +439,15 @@ public class Database
     //searches a users journals
     public static LinkedList<Entry> searchEntries(int id, String keyword, Date before, Date after, String hid, String delete, String hist) throws SQLException, InvalidObjectException {
         LinkedList<Entry> results = new LinkedList<>();
-        String bef = dateLocaltoUTC(before);
-        String aft = dateLocaltoUTC(after);
+        String bef = null;
+        String aft = null;
+        if (before != null) {
+            bef = dateLocaltoUTC(before);
+        }
+        if (after != null) {
+            aft = dateLocaltoUTC(after);
+        }
+        
         String query = null;
         
         if (hid.equals(0)) {
@@ -466,7 +473,7 @@ public class Database
         
         try (
             Connection conn = establishConnection();
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Entry WHERE User_ID=? AND Hidden=? AND DELETED=? AND history=?" + query + " ORDER BY Date_created DESC", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Entry WHERE User_ID=?" + query + " ORDER BY Date_created DESC", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
         ) {
             ps.setInt(1, id);
             int count = 2;

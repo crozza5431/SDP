@@ -41,7 +41,9 @@ public class SearchController implements Initializable{
     @FXML CheckBox hiddenChbx;
     @FXML CheckBox deletedChbx;
     @FXML Text searchName;
-    String hid, delete, hist;
+    String hid = "0";
+    String delete = "0";
+    String hist = "0";
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -64,14 +66,21 @@ public class SearchController implements Initializable{
     }
     
     @FXML protected void handleBack() {
-        JournalTest1.getInstance().gotoProfile();
+        JournalTest1.getInstance().gotoEntry();
     }    
     
     @FXML protected void handleSearch() throws SQLException, InvalidObjectException {
         int jID = JournalTest1.getInstance().getJournal().getId();
+        
         String keyword = keyWord.getText();
-        Date before = java.sql.Date.valueOf(secondDate.getValue());
-        Date after = java.sql.Date.valueOf(firstDate.getValue());
+        Date before = null;
+        Date after = null;
+        if (secondDate.getValue() != null) {
+            before = java.sql.Date.valueOf(secondDate.getValue());
+        }
+        if (firstDate.getValue() != null) {
+            after = java.sql.Date.valueOf(firstDate.getValue());
+        }
         
         JournalTest1.getInstance().loadSearches(jID, keyword, before, after, hid, delete, hist);
     }
