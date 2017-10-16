@@ -10,7 +10,6 @@
 <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProfileController">
   <children>
     <Button layoutX="530.0" layoutY="10.0" mnemonicParsing="false" onAction="#processLogout" text="Logout" />
-    <Button layoutX="461.0" layoutY="10.0" mnemonicParsing="false" text="Options" />
     <TableView fx:id="journalTable" layoutX="13.0" layoutY="60.0" prefHeight="329.0" prefWidth="576.0">
       <columns>
         <TableColumn fx:id="nameClm" maxWidth="5000.0" minWidth="10.0" prefWidth="478.0" text="Journal Name" />

@@ -284,4 +284,15 @@ public class JournalTest1 extends Application {
             loggedUser.addJournal(journal);
         }
     }
+
+    public void gotoSearch() {
+         try {
+            replaceSceneContext("/view/Search.fxml");
+            stage.setResizable(false);
+            stage.sizeToScene();
+        }
+        catch (Exception ex){
+
+        }
+    }
 }

@@ -7,29 +7,29 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="controller.SearchController">
   <children>
     <Text layoutX="253.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search">
       <font>
         <Font name="System Bold" size="30.0" />
       </font>
     </Text>
-    <Text layoutX="153.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search by keyword" />
-    <TextField layoutX="286.0" layoutY="59.0" prefWidth="200.0" text="great day" />
+    <Text layoutX="153.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search by keyword:" />
+    <TextField layoutX="286.0" layoutY="59.0" prefWidth="200.0"  fx:id="keyWord"/>
     <TableView layoutX="14.0" layoutY="186.0" prefHeight="200.0" prefWidth="572.0">
       <columns>
         <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="432.0" text="Name" />
         <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="140.0" text="Timestamp" />
       </columns>
     </TableView>
-    <Text layoutX="174.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search by date" />
-    <TextField layoutX="286.0" layoutY="86.0" prefWidth="78.2108154296875" text="11/05/2017" />
-    <TextField layoutX="407.0" layoutY="86.0" prefWidth="78.2108154296875" text="11/08/2017" />
-    <Text layoutX="380.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="to" />
+    <Text layoutX="174.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search by date:" />
+    <DatePicker layoutX="286.0" layoutY="86.0" prefWidth="105" fx:id="firstDate"/>
+    <DatePicker layoutX="407.0" layoutY="86.0" prefWidth="105" fx:id="secondDate"/>
+    <Text layoutX="394.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="to" />
     <Button layoutX="272.0" layoutY="160.0" mnemonicParsing="false" text="Search" />
-    <CheckBox layoutX="217.0" layoutY="120.0" mnemonicParsing="false" text="Include entries from History" />
-    <CheckBox layoutX="232.0" layoutY="136.0" mnemonicParsing="false" text="Include hidden entries" />
-    <Button layoutX="14.0" layoutY="11.0" mnemonicParsing="false" text="&lt;">
+    <CheckBox layoutX="217.0" layoutY="120.0" mnemonicParsing="false" text="Include entries from History" fx:id="historyChbx"/>
+    <CheckBox layoutX="232.0" layoutY="136.0" mnemonicParsing="false" text="Include hidden entries" fx:id="hiddenChbx"/>
+    <Button layoutX="14.0" layoutY="11.0" mnemonicParsing="false" text="&lt;" onAction="#handleBack">
       <font>
         <Font name="System Bold" size="20.0" />
       </font>

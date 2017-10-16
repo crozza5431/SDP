@@ -32,6 +32,7 @@
     </columns>
   </TableView>
   <Button onAction="#handleCreateEntry" text="Create Entry" fx:id="createEntryBtn"/>
+  <Button layoutX="461.0" layoutY="10.0" mnemonicParsing="false" onAction="#processSearch" text="Search" />
   <Hyperlink fx:id="Back" font="$x1" onAction="#processBack" text="Go Back" textFill="RED" />
   <stylesheets>
     <URL value="@Login.css" />

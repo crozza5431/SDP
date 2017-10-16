@@ -37,6 +37,7 @@ public class ProfileController implements Initializable {
     @FXML protected void processLogout() {
         JournalTest1.getInstance().userLogout();
     }
+    
    
     @Override
     public void initialize(URL location, ResourceBundle resources) {

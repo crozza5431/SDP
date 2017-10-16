@@ -53,6 +53,10 @@ public class JournalController implements Initializable{
     public final Journal getJournal() {
         return JournalTest1.getInstance().getJournal();
     }
+    
+     @FXML protected void processSearch() {
+        JournalTest1.getInstance().gotoSearch();
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
