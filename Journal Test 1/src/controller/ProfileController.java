@@ -100,5 +100,8 @@ public class ProfileController implements Initializable {
         if(showAllChbx.isSelected()) {
             JournalTest1.getInstance().loadAllJournals();
         }
+        if (!showAllChbx.isSelected()) {
+            JournalTest1.getInstance().loadJournal();
+        }
     }
 }
