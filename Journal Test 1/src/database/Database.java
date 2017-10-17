@@ -462,9 +462,18 @@ public class Database
         if (hist == 0) {
             query += " AND History=?";
         }
-        
+        String[] words = keyword.split("/");
         if (!keyword.isEmpty()) {
-            query += " AND DATA LIKE ?";
+            if (words.length == 1) {
+                query += " AND DATA LIKE ?";
+            } 
+            else {
+                query += " AND (";
+                for (int i = 0; i < words.length - 1; i++) {
+                    query += "DATA LIKE ? OR ";
+                }
+                query += "DATA LIKE ?)";
+            }
         }
         if (bef != null && aft != null) {
             query += " AND date_created BETWEEN ? AND ?";
@@ -495,8 +504,10 @@ public class Database
                 count++;
             }
             if (!keyword.isEmpty()) {
-                ps.setString(count, "%" + keyword + "%");
-                count++;
+                for (String j : words) {
+                    ps.setString(count, "%" + j + "%");
+                    count++;
+                } 
             }
             if (aft != null && bef != null) {
                 ps.setString(count, aft);
