@@ -19,8 +19,8 @@
         <Font name="System Bold" size="20.0" fx:id="x1" />
       </font>
     </Button>
-    <Button font="$x1" layoutX="508.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleEditEntry" text="Edit" fx:id="editEntryBtn"/>
-    <Button onAction="#handleEntryHistory" text="View History" />
+    <Button fx:id="editEntryBtn" font="$x1" layoutX="508.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleEditEntry" text="Edit" />
+    <Button layoutX="412.0" layoutY="20.0" onAction="#handleEntryHistory" text="View History" />
     <Text fx:id="entryData" layoutX="16.0" layoutY="131.0" />
   </children>
 </AnchorPane>
