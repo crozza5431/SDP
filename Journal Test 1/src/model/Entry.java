@@ -7,6 +7,7 @@ package model;
 
 import java.util.*;
 import javafx.beans.property.*;
+import journal.test.pkg1.DateFormatter;
 
 /**
  *
@@ -16,14 +17,14 @@ public class Entry {
     private final int id;
     private final int journalID;
     private StringProperty name = new SimpleStringProperty();
-    private final String date;
+    private final Date date;
     private boolean hidden;
     private boolean deleted;
     private StringProperty entry = new SimpleStringProperty();
     private String reason;
     private boolean history;
     
-    public Entry(int id, int journalID, String name, String date, boolean hidden, boolean deleted, String data, String reason, boolean history) {
+    public Entry(int id, int journalID, String name, Date date, boolean hidden, boolean deleted, String data, String reason, boolean history) {
         this.id = id;
         this.journalID = journalID;
         this.name.set(name);
@@ -46,9 +47,9 @@ public class Entry {
         return entry.get();
     }
     
-    public String getDate() {
-        return date.toString();
-    }
+    public Date getDate() { return date; }
+
+    public String getDateFormatted() { return DateFormatter.Format(date); }
     
     public String getReason() {
         return reason;

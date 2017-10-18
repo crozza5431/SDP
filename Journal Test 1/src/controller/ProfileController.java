@@ -53,7 +53,7 @@ public class ProfileController implements Initializable {
         journalTable.setItems(JournalTest1.getInstance().getLoggedUser().getJournals());
         journalTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         nameClm.setCellValueFactory(new PropertyValueFactory<>("name"));
-        dateClm.setCellValueFactory(new PropertyValueFactory<>("date"));
+        dateClm.setCellValueFactory(new PropertyValueFactory<>("dateFormatted"));
         journalTable.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
                 rowMenu.hide();

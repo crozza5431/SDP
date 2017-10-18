@@ -10,6 +10,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import journal.test.pkg1.DateFormatter;
 
 
 /**
@@ -21,10 +22,10 @@ public class Journal {
     private final int id;
     private final int userID;
     private StringProperty name = new SimpleStringProperty();
-    private final String date;
+    private final Date date;
     private boolean deleted;
     
-    public Journal(int id, int userID, String name, String date, boolean deleted) {
+    public Journal(int id, int userID, String name, Date date, boolean deleted) {
         this.id = id;
         this.userID = userID;
         this.name.set(name);
@@ -34,9 +35,11 @@ public class Journal {
         //Entry.add(new Entry("My first entry", "Welcome!"));
     }
     
-    public String getDate(){
-        return date.toString();
+    public Date getDate(){
+        return date;
     }
+
+    public String getDateFormatted() { return DateFormatter.Format(date); }
     
     public String getName(){
         return name.get();
@@ -46,7 +49,8 @@ public class Journal {
         return id;
     }
     
-    public ObservableList<Entry> getEntries(){
+    public ObservableList<Entry> getEntries()
+    {
         return Entry;
     }
     

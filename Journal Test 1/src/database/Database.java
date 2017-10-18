@@ -133,7 +133,7 @@ public class Database
                 int jID = r.getInt("ID");
                 int jUserID = r.getInt("User_ID");
                 String jName = r.getString("Name");
-                String jDateCreated = dateCorrectionFromUTC(r.getTimestamp("Date_created"));
+                Date jDateCreated = dateCorrectionFromUTC(r.getTimestamp("Date_created"));
                 boolean deleted = r.getBoolean("Deleted");
                 if (!deleted) journals.add(new Journal(jID, jUserID, jName, jDateCreated, false));
             }
@@ -158,7 +158,7 @@ public class Database
                 int jID = r.getInt("ID");
                 int jUserID = r.getInt("User_ID");
                 String jName = r.getString("Name");
-                String jDateCreated = dateCorrectionFromUTC(r.getTimestamp("Date_created"));
+                Date jDateCreated = dateCorrectionFromUTC(r.getTimestamp("Date_created"));
                 boolean deleted = r.getBoolean("Deleted");
                 journals.add(new Journal(jID, jUserID, jName, jDateCreated, deleted));
             }
@@ -244,7 +244,7 @@ public class Database
                 int eID = r.getInt("ID");
                 int eJournalID = r.getInt("Journal_ID");
                 String eName = r.getString("Name");
-                String eDateCreated = dateCorrectionFromUTC(r.getTimestamp("Date_created"));
+                Date eDateCreated = dateCorrectionFromUTC(r.getTimestamp("Date_created"));
                 boolean hidden = r.getBoolean("Hidden");
                 boolean deleted = r.getBoolean("Deleted");
                 String data = r.getString("Data");
@@ -278,7 +278,7 @@ public class Database
                 int eID = r.getInt("ID");
                 int eJournalID = r.getInt("Journal_ID");
                 String eName = r.getString("Name");
-                String eDateCreated = dateCorrectionFromUTC(r.getTimestamp("Date_created"));
+                Date eDateCreated = dateCorrectionFromUTC(r.getTimestamp("Date_created"));
                 boolean hidden = r.getBoolean("Hidden");
                 boolean deleted = r.getBoolean("Deleted");
                 String data = r.getString("Data");
@@ -424,7 +424,7 @@ public class Database
                 int eID = r.getInt("ID");
                 int eJournalID = r.getInt("Journal_ID");
                 String eName = r.getString("Name");
-                String eDateCreated = dateCorrectionFromUTC(r.getTimestamp("Date_created"));
+                Date eDateCreated = dateCorrectionFromUTC(r.getTimestamp("Date_created"));
                 boolean hidden = r.getBoolean("Hidden");
                 boolean deleted = r.getBoolean("Deleted");
                 String data = r.getString("Data");
@@ -528,7 +528,7 @@ public class Database
                 int eID = r.getInt("ID");
                 int eJournalID = r.getInt("Journal_ID");
                 String eName = r.getString("Name");
-                String eDateCreated = dateCorrectionFromUTC(r.getTimestamp("Date_created"));
+                Date eDateCreated = dateCorrectionFromUTC(r.getTimestamp("Date_created"));
                 boolean hidden = r.getBoolean("Hidden");
                 boolean deleted = r.getBoolean("Deleted");
                 String data = r.getString("Data");
@@ -541,11 +541,10 @@ public class Database
     }
     
     //Converts UTC to local time
-    private static String dateCorrectionFromUTC(Date utcTime) 
+    private static Date dateCorrectionFromUTC(Date utcTime)
     {
         String timeZone = Calendar.getInstance().getTimeZone().getID();
         Date local = new Date(utcTime.getTime() + TimeZone.getTimeZone(timeZone).getOffset(utcTime.getTime()));
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("EEEE, d MMMM yyyy 'at' h:mm a z");
-        return dateFormatter.format(local);
+        return local;
     }
 }

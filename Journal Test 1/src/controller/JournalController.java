@@ -91,7 +91,7 @@ public class JournalController implements Initializable{
         entryTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         nameClm.setCellValueFactory(new PropertyValueFactory<>("name"));
         summaryClm.setCellValueFactory(new PropertyValueFactory<>("entry"));
-        dateClm.setCellValueFactory(new PropertyValueFactory<>("date"));
+        dateClm.setCellValueFactory(new PropertyValueFactory<>("dateFormatted"));
         //Double click event
         entryTable.setRowFactory(
                 new Callback<TableView<Entry>, TableRow<Entry>>() {
