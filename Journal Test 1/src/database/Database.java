@@ -430,9 +430,8 @@ public class Database
                 String data = r.getString("Data");
                 String reason = r.getString("Reason");
                 boolean history = r.getBoolean("History");
-                if (!deleted) {
-                    entries.add(new Entry(eID, eJournalID, eName, eDateCreated, hidden, false, data, reason, history));
-                }
+                entries.add(new Entry(eID, eJournalID, eName, eDateCreated, hidden, false, data, reason, history));
+                
             }
         }
         return entries;
