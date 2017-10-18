@@ -430,7 +430,7 @@ public class Database
                 String data = r.getString("Data");
                 String reason = r.getString("Reason");
                 boolean history = r.getBoolean("History");
-                entries.add(new Entry(eID, eJournalID, eName, eDateCreated, hidden, false, data, reason, history));
+                entries.add(new Entry(eID, eJournalID, eName, eDateCreated, hidden, deleted, data, reason, history));
                 
             }
         }

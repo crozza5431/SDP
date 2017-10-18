@@ -62,6 +62,9 @@ public class EntryHistoryController implements Initializable{
                     else if (!this.getItem().getHistory()){
                         setStyle("-fx-control-inner-background: lightsteelblue; ");
                     }
+                    else if (this.getItem().isDeleted()){
+                        setStyle("-fx-control-inner-background: lightcoral; ");
+                    }
                     else {
                         setStyle("");
                     }

@@ -194,8 +194,8 @@ public class JournalController implements Initializable{
         else {
             JournalTest1.getInstance().loadEntry();
         }
-    }
-
+    }   
+      
     private void handleshowAllAction(ActionEvent e) throws SQLException, InvalidObjectException {
         if(showAllChbx.isSelected() && hiddenChbx.isSelected()) {
             JournalTest1.getInstance().loadAllEntries(0);
