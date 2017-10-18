@@ -12,7 +12,6 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
 import javafx.scene.text.Text;
 import journal.test.pkg1.JournalTest1;
 
@@ -23,10 +22,8 @@ import journal.test.pkg1.JournalTest1;
 public class ViewEntryUneditableController implements Initializable{
     
     @FXML Text entryName;
-    @FXML TextArea entryData;
+    @FXML Text entryData;
     @FXML Button editEntryBtn;
-    @FXML Text reasonText;
-    @FXML TextArea reasonData;
     
     @FXML protected void handleEditEntry() {
         JournalTest1.getInstance().gotoEditEntry();
@@ -45,11 +42,6 @@ public class ViewEntryUneditableController implements Initializable{
     public void initialize(URL location, ResourceBundle resources) {
        entryName.setText(JournalTest1.getInstance().getCurrentEntry().getName());
        entryData.setText(JournalTest1.getInstance().getCurrentEntry().getEntry());
-       if(JournalTest1.getInstance().getCurrentEntry().getHistory()) {
-           reasonText.setVisible(true);
-           reasonData.setVisible(true);
-           reasonData.setText(JournalTest1.getInstance().getCurrentEntry().getReason());
-       }
        if(JournalTest1.getInstance().getCurrentEntry().isDeleted()) {
            editEntryBtn.setDisable(true);
        }
