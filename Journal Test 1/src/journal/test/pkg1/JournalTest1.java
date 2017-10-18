@@ -271,10 +271,7 @@ public class JournalTest1 extends Application {
     public void loadAllEntries(int showHidden) throws SQLException, InvalidObjectException {
         currentJournal.clearEntries();
         LinkedList<Entry> entries = Database.getAllEntries(currentJournal.getId(), showHidden);
-        for (Entry entry : entries)
-        {
-            currentJournal.addEntry(entry);
-        }
+        currentJournal.addEntries(entries);
     }
     
     public void loadAllJournals() throws SQLException, InvalidObjectException {

@@ -12,13 +12,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import journal.test.pkg1.DateFormatter;
 
+import static java.util.stream.Collectors.*;
+
 
 /**
  *
  * @author Caldiddy's PC
  */
 public class Journal {
-    private ObservableList<Entry> Entry = FXCollections.observableArrayList();
+    private ObservableList<Entry> Entries = FXCollections.observableArrayList();
     private final int id;
     private final int userID;
     private StringProperty name = new SimpleStringProperty();
@@ -32,7 +34,7 @@ public class Journal {
         this.date = date;
         this.deleted = deleted;
         //date = new Date(); 
-        //Entry.add(new Entry("My first entry", "Welcome!"));
+        //Entries.add(new Entries("My first entry", "Welcome!"));
     }
     
     public Date getDate(){
@@ -49,20 +51,38 @@ public class Journal {
         return id;
     }
     
-    public ObservableList<Entry> getEntries()
-    {
-        return Entry;
-    }
+    public ObservableList<Entry> getEntries() { return Entries; }
     
-    public void addEntry(Entry entry) {
-        Entry.add(entry);
+    public void addEntry(Entry entry)
+    {
+        Entries.add(entry);
+    }
+
+    public void addEntries(List<Entry> entries)
+    {
+    	Entries.addAll(entries);
     }
 
     public void clearEntries() {
-        Entry.clear();
+        Entries.clear();
     }
     
     public boolean isDeleted() {
         return deleted;
+    }
+
+    public void sortEntriesByDateAndGroupByID()
+    {
+    	Comparator<Entry> comparator = (o1, o2) -> o1.getDate().compareTo(o2.getDate());
+
+    	List<Entry> sortedEntries = Entries.stream()
+		    .sorted(comparator.reversed())
+		    .collect(groupingBy(Entry::getId, LinkedHashMap::new, toList()))
+		    .values().stream()
+		    .flatMap(Collection::stream)
+		    .collect(toList());
+
+    	Entries.clear();
+    	Entries.addAll(sortedEntries);
     }
 }

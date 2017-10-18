@@ -189,6 +189,7 @@ public class JournalController implements Initializable{
         }
         else if (showAllChbx.isSelected() && !hiddenChbx.isSelected()) {
             JournalTest1.getInstance().loadAllEntries(1);
+            JournalTest1.getInstance().getJournal().sortEntriesByDateAndGroupByID();
         }
         else {
             JournalTest1.getInstance().loadEntry();
