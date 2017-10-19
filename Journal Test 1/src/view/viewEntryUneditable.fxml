@@ -9,7 +9,7 @@
 
 <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ViewEntryUneditableController">
   <children>
-    <Text fx:id="entryName" layoutX="208.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0">
+    <Text fx:id="entryName" layoutX="75.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0">
       <font>
         <Font name="System Bold" size="30.0" />
       </font>
