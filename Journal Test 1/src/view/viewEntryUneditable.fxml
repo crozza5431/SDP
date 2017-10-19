@@ -7,7 +7,7 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="controller.ViewEntryUneditableController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ViewEntryUneditableController">
   <children>
     <Text fx:id="entryName" layoutX="208.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0">
       <font>
@@ -21,8 +21,8 @@
     </Button>
     <Button fx:id="editEntryBtn" font="$x1" layoutX="508.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleEditEntry" text="Edit" />
     <Button layoutX="412.0" layoutY="20.0" onAction="#handleEntryHistory" text="View History" />
-    <TextArea fx:id="entryData" layoutX="16.0" layoutY="131.0" />
-    <Text text="Reason: " fx:id="reason"/>
-    <TextArea fx:id="reasonTxt"  />
+    <TextArea fx:id="entryData" layoutX="68.0" layoutY="78.0" />
+    <Text fx:id="reason" layoutX="68.0" layoutY="284.0" text="Reason: " />
+    <TextArea fx:id="reasonTxt" layoutX="68.0" layoutY="288.0" prefHeight="50.0" />
   </children>
 </AnchorPane>
