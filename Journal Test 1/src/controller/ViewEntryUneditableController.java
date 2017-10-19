@@ -25,7 +25,6 @@ public class ViewEntryUneditableController implements Initializable{
     @FXML Text entryName;
     @FXML TextArea entryData;
     @FXML Button editEntryBtn;
-    @FXML Text reason;
     @FXML TextArea reasonTxt;
     
     @FXML protected void handleEditEntry() {
@@ -43,19 +42,13 @@ public class ViewEntryUneditableController implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        reasonTxt.setVisible(false);
-        reason.setVisible(false);
        entryName.setText(JournalTest1.getInstance().getCurrentEntry().getName());
        entryData.setText(JournalTest1.getInstance().getCurrentEntry().getEntry());
-       if(JournalTest1.getInstance().getCurrentEntry().isDeleted()) {
+       if(JournalTest1.getInstance().getCurrentEntry().isDeleted() || JournalTest1.getInstance().getCurrentEntry().getHistory()) {
            editEntryBtn.setDisable(true);
        }
-       if(JournalTest1.getInstance().getCurrentEntry().getHistory()) {
-           reason.setVisible(true);
-            reasonTxt.setVisible(true);
-            reasonTxt.setText(JournalTest1.getInstance().getCurrentEntry().getReason());
-            reasonTxt.setEditable(false);
-       }
+        reasonTxt.setText(JournalTest1.getInstance().getCurrentEntry().getReason());
+        reasonTxt.setEditable(false);
        entryData.setEditable(false);
     }
 }

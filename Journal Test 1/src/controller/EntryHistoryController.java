@@ -65,6 +65,9 @@ public class EntryHistoryController implements Initializable{
                     else if (this.getItem().isDeleted()){
                         setStyle("-fx-control-inner-background: lightcoral; ");
                     }
+                    else if (this.getItem().getHistory()){
+                        setStyle("-fx-control-inner-background: palegreen; ");
+                    }
                     else {
                         setStyle("");
                     }
@@ -77,7 +80,7 @@ public class EntryHistoryController implements Initializable{
               if (event.getClickCount() == 2 && (! row.isEmpty())) {
                       Entry rowData = row.getItem();
                       JournalTest1.getInstance().currentEntry(rowData);
-                      JournalTest1.getInstance().gotoViewHistory();
+                      JournalTest1.getInstance().gotoViewEntry();
               }
               });
               

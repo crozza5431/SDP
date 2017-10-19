@@ -37,6 +37,9 @@
       <font>
         <Font name="System Bold" size="16.0" />
       </font>
-    </Button>
+    </Button> 
   </children>
+  <stylesheets>
+    <URL value="@rest.css" />
+  </stylesheets>
 </AnchorPane>
