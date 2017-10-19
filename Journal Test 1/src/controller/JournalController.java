@@ -19,6 +19,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -40,6 +41,7 @@ public class JournalController implements Initializable{
     @FXML private TableColumn<Entry, String> nameClm;
     @FXML private TableColumn<Entry, String> summaryClm;
     @FXML private TableColumn<Entry, String> dateClm;
+    @FXML private Label userJournal;
     @FXML private CheckBox hiddenChbx;
     @FXML private CheckBox showAllChbx;
     @FXML private Button createEntryBtn;
@@ -64,6 +66,7 @@ public class JournalController implements Initializable{
         if (JournalTest1.getInstance().getJournal().isDeleted()) {
             createEntryBtn.setDisable(true);
         }
+        userJournal.setText(JournalTest1.getInstance().getJournal().getName()+ "'s Entries");
         hiddenChbx.setOnAction(e -> {
             try {
                 handleButtonAction(e);
